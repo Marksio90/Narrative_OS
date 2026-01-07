@@ -72,8 +72,8 @@ export default function TimelineModal({
 
     try {
       const url = event
-        ? `${API_URL}/api/canon/timeline/${event.id}`
-        : `${API_URL}/api/canon/timeline`
+        ? `${API_URL}/api/canon/event/${event.id}`
+        : `${API_URL}/api/canon/event`
 
       const method = event ? 'PUT' : 'POST'
 

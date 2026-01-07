@@ -226,7 +226,7 @@ export default function StoryBiblePage() {
 
   const loadTimelineEvents = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/canon/timeline?project_id=1`, {
+      const response = await fetch(`${API_URL}/api/canon/event?project_id=1`, {
         headers: {
           'Authorization': `Bearer ${session?.accessToken}`,
         },
@@ -286,7 +286,7 @@ export default function StoryBiblePage() {
       if (activeTab === 'locations') endpoint = `/api/canon/location/${id}`
       if (activeTab === 'threads') endpoint = `/api/canon/thread/${id}`
       if (activeTab === 'magic') endpoint = `/api/canon/magic/${id}`
-      if (activeTab === 'timeline') endpoint = `/api/canon/timeline/${id}`
+      if (activeTab === 'timeline') endpoint = `/api/canon/event/${id}`
 
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'DELETE',

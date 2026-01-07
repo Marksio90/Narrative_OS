@@ -10,14 +10,17 @@ interface MagicSystem {
   project_id: number
   name: string
   description: string
-  magic_type: 'hard' | 'soft' | 'hybrid'
-  power_source?: string
-  costs: string[]  // What using magic costs (energy, time, components, etc.)
-  limitations: string[]  // What magic cannot do
-  rules: string[]  // How magic works, laws of the system
-  practitioners?: string  // Who can use magic
-  manifestation?: string  // How magic appears/works
-  cultural_impact?: string  // How society views/uses magic
+  rule_type?: string  // magic, physics, divine, curse, etc.
+  laws: string[]  // Fundamental rules that ALWAYS apply
+  costs: string[]  // What using this requires/costs
+  limitations: string[]  // What it cannot do
+  exceptions: string[]  // Rare cases where rules don't apply
+  prohibitions: string[]  // What is strictly forbidden
+  mechanics?: string  // How it works in practice
+  manifestation: { [key: string]: any }  // How it appears, feels, looks
+  tags?: string[]  // Optional tags for categorization
+  claims?: { [key: string]: any }  // Canon claims
+  unknowns?: string[]  // Things we don't know yet
 }
 
 interface MagicModalProps {
@@ -39,31 +42,42 @@ export default function MagicModal({
     project_id: projectId,
     name: '',
     description: '',
-    magic_type: 'hybrid',
-    power_source: '',
+    rule_type: 'magic',
+    laws: [],
     costs: [],
     limitations: [],
-    rules: [],
-    practitioners: '',
-    manifestation: '',
-    cultural_impact: ''
+    exceptions: [],
+    prohibitions: [],
+    mechanics: '',
+    manifestation: {},
+    tags: [],
+    claims: {},
+    unknowns: []
   })
 
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Input states for adding new items to arrays
+  const [newLaw, setNewLaw] = useState('')
   const [newCost, setNewCost] = useState('')
   const [newLimitation, setNewLimitation] = useState('')
-  const [newRule, setNewRule] = useState('')
+  const [newException, setNewException] = useState('')
+  const [newProhibition, setNewProhibition] = useState('')
 
   useEffect(() => {
     if (magicSystem) {
       setFormData({
         ...magicSystem,
+        laws: magicSystem.laws || [],
         costs: magicSystem.costs || [],
         limitations: magicSystem.limitations || [],
-        rules: magicSystem.rules || []
+        exceptions: magicSystem.exceptions || [],
+        prohibitions: magicSystem.prohibitions || [],
+        manifestation: magicSystem.manifestation || {},
+        tags: magicSystem.tags || [],
+        claims: magicSystem.claims || {},
+        unknowns: magicSystem.unknowns || []
       })
     }
   }, [magicSystem])
@@ -102,7 +116,7 @@ export default function MagicModal({
     }
   }
 
-  const addArrayItem = (field: 'costs' | 'limitations' | 'rules', value: string, setter: (val: string) => void) => {
+  const addArrayItem = (field: 'laws' | 'costs' | 'limitations' | 'exceptions' | 'prohibitions', value: string, setter: (val: string) => void) => {
     if (!value.trim()) return
     const currentArray = formData[field] || []
     setFormData({
@@ -112,7 +126,7 @@ export default function MagicModal({
     setter('')
   }
 
-  const removeArrayItem = (field: 'costs' | 'limitations' | 'rules', index: number) => {
+  const removeArrayItem = (field: 'laws' | 'costs' | 'limitations' | 'exceptions' | 'prohibitions', index: number) => {
     const currentArray = formData[field] || []
     setFormData({
       ...formData,
@@ -120,27 +134,48 @@ export default function MagicModal({
     })
   }
 
-  const magicTypes = [
+  const ruleTypes = [
     {
-      value: 'hard',
-      label: 'Hard Magic',
-      color: 'blue',
-      icon: '⚙️',
-      description: 'Clear rules, predictable, cost-based'
-    },
-    {
-      value: 'soft',
-      label: 'Soft Magic',
+      value: 'magic',
+      label: 'Magic',
       color: 'purple',
       icon: '✨',
-      description: 'Mysterious, atmospheric, less defined'
+      description: 'Arcane spells and mystical forces'
     },
     {
-      value: 'hybrid',
-      label: 'Hybrid',
-      color: 'violet',
-      icon: '🌟',
-      description: 'Mix of hard and soft elements'
+      value: 'physics',
+      label: 'Physics',
+      color: 'blue',
+      icon: '⚛️',
+      description: 'Natural laws and physical constraints'
+    },
+    {
+      value: 'divine',
+      label: 'Divine',
+      color: 'yellow',
+      icon: '☀️',
+      description: 'Power from gods or cosmic forces'
+    },
+    {
+      value: 'curse',
+      label: 'Curse',
+      color: 'red',
+      icon: '💀',
+      description: 'Afflictions and dark powers'
+    },
+    {
+      value: 'technology',
+      label: 'Technology',
+      color: 'gray',
+      icon: '🔧',
+      description: 'Advanced tech or science-based systems'
+    },
+    {
+      value: 'psychic',
+      label: 'Psychic',
+      color: 'indigo',
+      icon: '🧠',
+      description: 'Mental powers and telepathy'
     },
   ]
 
@@ -213,20 +248,20 @@ export default function MagicModal({
             </div>
           </div>
 
-          {/* Magic Type */}
+          {/* Rule Type */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Atom className="h-5 w-5 text-indigo-600" />
-              <span>Magic Type</span>
+              <span>Rule Type</span>
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {magicTypes.map((type) => (
+              {ruleTypes.map((type) => (
                 <button
                   key={type.value}
                   type="button"
-                  onClick={() => setFormData({ ...formData, magic_type: type.value as any })}
+                  onClick={() => setFormData({ ...formData, rule_type: type.value })}
                   className={`p-4 rounded-lg border-2 transition text-left ${
-                    formData.magic_type === type.value
+                    formData.rule_type === type.value
                       ? `border-${type.color}-500 bg-${type.color}-50`
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
