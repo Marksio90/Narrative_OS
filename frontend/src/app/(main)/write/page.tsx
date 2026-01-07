@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAuth } from '@/lib/auth-context'
 import { useRouter } from 'next/navigation'
+import AICopilot from '@/components/AICopilot'
 import {
   FileText,
   Save,
@@ -60,6 +61,8 @@ export default function WritingStudioPage() {
   const [showSidebar, setShowSidebar] = useState(true)
   const [focusMode, setFocusMode] = useState(false)
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved')
+  const [showAICopilot, setShowAICopilot] = useState(false)
+  const [selectedText, setSelectedText] = useState('')
 
   // Writing Session
   const [session, setSession] = useState<WritingSession | null>(null)
@@ -439,6 +442,23 @@ export default function WritingStudioPage() {
             </button>
 
             <button
+              onClick={() => {
+                // Get selected text from editor
+                const selection = window.getSelection()?.toString() || ''
+                setSelectedText(selection)
+                setShowAICopilot(!showAICopilot)
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                showAICopilot
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              AI Copilot
+            </button>
+
+            <button
               onClick={() => setFocusMode(!focusMode)}
               className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
             >
@@ -602,6 +622,17 @@ export default function WritingStudioPage() {
           <EyeOff className="w-4 h-4" />
           Tryb skupienia • Naciśnij ESC aby wyjść
         </div>
+      )}
+
+      {/* AI Copilot */}
+      {showAICopilot && projectId && accessToken && (
+        <AICopilot
+          projectId={projectId}
+          accessToken={accessToken}
+          onClose={() => setShowAICopilot(false)}
+          selectedText={selectedText}
+          currentChapter={currentChapter?.chapter_number}
+        />
       )}
     </div>
   )
