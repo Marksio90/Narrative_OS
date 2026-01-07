@@ -18,6 +18,14 @@ from api.schemas.canon import (
     LocationCreate,
     LocationUpdate,
     LocationResponse,
+    # MagicRule
+    MagicRuleCreate,
+    MagicRuleUpdate,
+    MagicRuleResponse,
+    # Event
+    EventCreate,
+    EventUpdate,
+    EventResponse,
     # Promise
     PromiseCreate,
     PromiseUpdate,
@@ -226,6 +234,111 @@ async def delete_location(
     if not success:
         raise HTTPException(status_code=404, detail="Location not found")
     return MessageResponse(message="Location deleted successfully")
+
+
+# ===== MagicRule Endpoints =====
+
+@router.post("/magic", response_model=MagicRuleResponse, status_code=201)
+async def create_magic_rule(
+    data: MagicRuleCreate,
+    commit_message: Optional[str] = Query(None, description="Version commit message"),
+    service: CanonService = Depends(get_canon_service),
+):
+    """
+    Create a new magic rule or world law
+
+    Magic rules define HARD CONSTRAINTS on your world:
+    - Laws that ALWAYS apply
+    - Costs and limitations
+    - Rare exceptions (must be justified)
+    - What is strictly forbidden
+    """
+    try:
+        entity = service.create_entity(
+            entity_type="magic_rule",
+            project_id=data.project_id,
+            data=data.model_dump(exclude={"project_id"}),
+            commit_message=commit_message,
+        )
+        return entity
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/magic/{magic_id}", response_model=MagicRuleResponse)
+async def get_magic_rule(
+    magic_id: int,
+    service: CanonService = Depends(get_canon_service),
+):
+    """Get magic rule by ID"""
+    entity = service.get_entity("magic_rule", magic_id)
+    if not entity:
+        raise HTTPException(status_code=404, detail="Magic rule not found")
+    return entity
+
+
+@router.get("/magic", response_model=List[MagicRuleResponse])
+async def list_magic_rules(
+    project_id: int = Query(..., description="Project ID"),
+    rule_type: Optional[str] = Query(None, description="Filter by type: magic, physics, divine, curse, etc."),
+    tags: Optional[List[str]] = Query(None, description="Filter by tags"),
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    service: CanonService = Depends(get_canon_service),
+):
+    """List magic rules for a project"""
+    entities = service.list_entities(
+        entity_type="magic_rule",
+        project_id=project_id,
+        tags=tags,
+        limit=limit,
+        offset=offset,
+    )
+
+    # Filter by rule type if provided
+    if rule_type:
+        entities = [e for e in entities if e.rule_type == rule_type]
+
+    return entities
+
+
+@router.put("/magic/{magic_id}", response_model=MagicRuleResponse)
+async def update_magic_rule(
+    magic_id: int,
+    data: MagicRuleUpdate,
+    commit_message: Optional[str] = Query(None),
+    service: CanonService = Depends(get_canon_service),
+):
+    """Update magic rule"""
+    try:
+        entity = service.update_entity(
+            entity_type="magic_rule",
+            entity_id=magic_id,
+            data=data.model_dump(exclude_unset=True),
+            commit_message=commit_message,
+        )
+        return entity
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/magic/{magic_id}", response_model=MessageResponse)
+async def delete_magic_rule(
+    magic_id: int,
+    commit_message: Optional[str] = Query(None),
+    service: CanonService = Depends(get_canon_service),
+):
+    """Delete magic rule"""
+    success = service.delete_entity(
+        entity_type="magic_rule",
+        entity_id=magic_id,
+        commit_message=commit_message,
+    )
+    if not success:
+        raise HTTPException(status_code=404, detail="Magic rule not found")
+    return MessageResponse(message="Magic rule deleted successfully")
 
 
 # ===== Promise Endpoints =====
@@ -437,6 +550,128 @@ async def delete_thread(
     if not success:
         raise HTTPException(status_code=404, detail="Thread not found")
     return MessageResponse(message="Thread deleted successfully")
+
+
+# ===== Event (Timeline) Endpoints =====
+
+@router.post("/event", response_model=EventResponse, status_code=201)
+async def create_event(
+    data: EventCreate,
+    commit_message: Optional[str] = Query(None, description="Version commit message"),
+    service: CanonService = Depends(get_canon_service),
+):
+    """
+    Create a timeline event
+
+    Events track significant moments in your story timeline:
+    - Plot events, backstory, world events, character moments
+    - Causal relationships (causes/effects)
+    - Consequences and long-term impacts
+    - Participants and locations
+    """
+    try:
+        entity = service.create_entity(
+            entity_type="event",
+            project_id=data.project_id,
+            data=data.model_dump(exclude={"project_id"}),
+            commit_message=commit_message,
+        )
+        return entity
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get("/event/{event_id}", response_model=EventResponse)
+async def get_event(
+    event_id: int,
+    service: CanonService = Depends(get_canon_service),
+):
+    """Get event by ID"""
+    entity = service.get_entity("event", event_id)
+    if not entity:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return entity
+
+
+@router.get("/event", response_model=List[EventResponse])
+async def list_events(
+    project_id: int = Query(..., description="Project ID"),
+    chapter_number: Optional[int] = Query(None, description="Filter by chapter"),
+    location_id: Optional[int] = Query(None, description="Filter by location"),
+    impact_level_min: Optional[int] = Query(None, ge=0, le=100, description="Min impact level"),
+    tags: Optional[List[str]] = Query(None, description="Filter by tags"),
+    limit: int = Query(100, ge=1, le=500),
+    offset: int = Query(0, ge=0),
+    service: CanonService = Depends(get_canon_service),
+):
+    """
+    List events for a project
+
+    Events are returned in chronological order by chapter/scene
+    """
+    entities = service.list_entities(
+        entity_type="event",
+        project_id=project_id,
+        tags=tags,
+        limit=limit,
+        offset=offset,
+    )
+
+    # Filter by chapter
+    if chapter_number is not None:
+        entities = [e for e in entities if e.chapter_number == chapter_number]
+
+    # Filter by location
+    if location_id is not None:
+        entities = [e for e in entities if e.location_id == location_id]
+
+    # Filter by impact level
+    if impact_level_min is not None:
+        entities = [e for e in entities if e.impact_level >= impact_level_min]
+
+    # Sort chronologically
+    entities.sort(key=lambda e: (e.chapter_number or 0, e.scene_number or 0))
+
+    return entities
+
+
+@router.put("/event/{event_id}", response_model=EventResponse)
+async def update_event(
+    event_id: int,
+    data: EventUpdate,
+    commit_message: Optional[str] = Query(None),
+    service: CanonService = Depends(get_canon_service),
+):
+    """Update event"""
+    try:
+        entity = service.update_entity(
+            entity_type="event",
+            entity_id=event_id,
+            data=data.model_dump(exclude_unset=True),
+            commit_message=commit_message,
+        )
+        return entity
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/event/{event_id}", response_model=MessageResponse)
+async def delete_event(
+    event_id: int,
+    commit_message: Optional[str] = Query(None),
+    service: CanonService = Depends(get_canon_service),
+):
+    """Delete event"""
+    success = service.delete_entity(
+        entity_type="event",
+        entity_id=event_id,
+        commit_message=commit_message,
+    )
+    if not success:
+        raise HTTPException(status_code=404, detail="Event not found")
+    return MessageResponse(message="Event deleted successfully")
 
 
 # ===== Validation Endpoints =====
