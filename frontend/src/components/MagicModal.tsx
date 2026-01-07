@@ -137,45 +137,45 @@ export default function MagicModal({
   const ruleTypes = [
     {
       value: 'magic',
-      label: 'Magic',
+      label: 'Magia',
       color: 'purple',
       icon: '✨',
-      description: 'Arcane spells and mystical forces'
+      description: 'Zaklęcia i mistyczne siły'
     },
     {
       value: 'physics',
-      label: 'Physics',
+      label: 'Fizyka',
       color: 'blue',
       icon: '⚛️',
-      description: 'Natural laws and physical constraints'
+      description: 'Prawa natury i ograniczenia fizyczne'
     },
     {
       value: 'divine',
-      label: 'Divine',
+      label: 'Boska',
       color: 'yellow',
       icon: '☀️',
-      description: 'Power from gods or cosmic forces'
+      description: 'Moc bogów lub sił kosmicznych'
     },
     {
       value: 'curse',
-      label: 'Curse',
+      label: 'Klątwa',
       color: 'red',
       icon: '💀',
-      description: 'Afflictions and dark powers'
+      description: 'Przekleństwa i mroczne moce'
     },
     {
       value: 'technology',
-      label: 'Technology',
+      label: 'Technologia',
       color: 'gray',
       icon: '🔧',
-      description: 'Advanced tech or science-based systems'
+      description: 'Zaawansowana technologia lub nauka'
     },
     {
       value: 'psychic',
-      label: 'Psychic',
+      label: 'Psychika',
       color: 'indigo',
       icon: '🧠',
-      description: 'Mental powers and telepathy'
+      description: 'Moce mentalne i telepatia'
     },
   ]
 
@@ -190,10 +190,10 @@ export default function MagicModal({
             </div>
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                {magicSystem ? 'Edit Magic System' : 'New Magic System'}
+                {magicSystem ? 'Edytuj System Magii' : 'Nowy System Magii'}
               </h2>
               <p className="text-sm text-gray-600">
-                Define magic rules, costs, and limitations
+                Określ zasady magii, koszty i ograniczenia
               </p>
             </div>
           </div>
@@ -218,29 +218,29 @@ export default function MagicModal({
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Sparkles className="h-5 w-5 text-purple-600" />
-              <span>Basic Information</span>
+              <span>Podstawowe Informacje</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Magic System Name *
+                Nazwa Systemu Magii *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g., Elemental Bending, Rune Magic, Divine Power"
+                placeholder="np. Magia Żywiołów, Magia Runowa, Moc Boska"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description *
+                Opis *
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Brief overview of this magic system..."
+                placeholder="Krótki przegląd tego systemu magii..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                 rows={3}
                 required
@@ -252,7 +252,7 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Atom className="h-5 w-5 text-indigo-600" />
-              <span>Rule Type</span>
+              <span>Typ Zasady</span>
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {ruleTypes.map((type) => (

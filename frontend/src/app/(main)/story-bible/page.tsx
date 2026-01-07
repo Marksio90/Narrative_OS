@@ -245,18 +245,18 @@ export default function StoryBiblePage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading Story Bible...</p>
+          <p className="mt-4 text-gray-600">Ładowanie Biblii Fabuły...</p>
         </div>
       </div>
     )
   }
 
   const tabs = [
-    { id: 'characters' as Tab, name: 'Characters', icon: User, count: characters.length },
-    { id: 'locations' as Tab, name: 'Locations', icon: MapPin, count: locations.length },
-    { id: 'threads' as Tab, name: 'Plot Threads', icon: Sparkles, count: threads.length },
-    { id: 'magic' as Tab, name: 'Magic & Rules', icon: Wand2, count: magicSystems.length },
-    { id: 'timeline' as Tab, name: 'Timeline', icon: Clock, count: timelineEvents.length },
+    { id: 'characters' as Tab, name: 'Postacie', icon: User, count: characters.length },
+    { id: 'locations' as Tab, name: 'Lokacje', icon: MapPin, count: locations.length },
+    { id: 'threads' as Tab, name: 'Wątki Fabularne', icon: Sparkles, count: threads.length },
+    { id: 'magic' as Tab, name: 'Magia i Zasady', icon: Wand2, count: magicSystems.length },
+    { id: 'timeline' as Tab, name: 'Oś Czasu', icon: Clock, count: timelineEvents.length },
   ]
 
   const handleAddNew = () => {
@@ -312,10 +312,10 @@ export default function StoryBiblePage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center space-x-3">
                 <Book className="h-8 w-8 text-indigo-600" />
-                <span>Story Bible</span>
+                <span>Biblia Fabuły</span>
               </h1>
               <p className="mt-1 text-sm text-gray-600">
-                Your canon, characters, world, and narrative threads
+                Twój kanon, postacie, świat i wątki fabularne
               </p>
             </div>
             <button
@@ -323,7 +323,7 @@ export default function StoryBiblePage() {
               className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
             >
               <Plus className="h-5 w-5" />
-              <span>Add New</span>
+              <span>Dodaj Nowy</span>
             </button>
           </div>
 
