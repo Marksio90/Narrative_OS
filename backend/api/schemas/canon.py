@@ -210,6 +210,85 @@ class ThreadResponse(CanonEntityResponse):
     related_promises: List[int]
 
 
+# ===== MagicRule Schemas =====
+
+class MagicRuleCreate(CanonEntityCreate):
+    """Create magic rule request"""
+    rule_type: Optional[str] = Field(None, description="magic, physics, divine, curse, etc.")
+    laws: List[str] = Field(default_factory=list, description="Fundamental rules that ALWAYS apply")
+    costs: List[str] = Field(default_factory=list, description="What using this requires/costs")
+    limitations: List[str] = Field(default_factory=list, description="What it cannot do")
+    exceptions: List[str] = Field(default_factory=list, description="Rare cases where rules don't apply")
+    prohibitions: List[str] = Field(default_factory=list, description="What is strictly forbidden")
+    mechanics: Optional[str] = Field(None, description="How it works in practice")
+    manifestation: Dict[str, Any] = Field(default_factory=dict, description="How it appears, feels, looks")
+
+
+class MagicRuleUpdate(CanonEntityUpdate):
+    """Update magic rule request"""
+    rule_type: Optional[str] = None
+    laws: Optional[List[str]] = None
+    costs: Optional[List[str]] = None
+    limitations: Optional[List[str]] = None
+    exceptions: Optional[List[str]] = None
+    prohibitions: Optional[List[str]] = None
+    mechanics: Optional[str] = None
+    manifestation: Optional[Dict[str, Any]] = None
+
+
+class MagicRuleResponse(CanonEntityResponse):
+    """Magic rule response"""
+    rule_type: Optional[str]
+    laws: List[str]
+    costs: List[str]
+    limitations: List[str]
+    exceptions: List[str]
+    prohibitions: List[str]
+    mechanics: Optional[str]
+    manifestation: Dict[str, Any]
+
+
+# ===== Event Schemas =====
+
+class EventCreate(CanonEntityCreate):
+    """Create event request"""
+    chapter_number: Optional[int] = Field(None, ge=1, description="Chapter number where event occurs")
+    scene_number: Optional[int] = Field(None, ge=1, description="Scene number within chapter")
+    relative_time: Optional[str] = Field(None, description="e.g., '3 days before Chapter 1'")
+    causes: List[int] = Field(default_factory=list, description="Event IDs that caused this")
+    effects: List[int] = Field(default_factory=list, description="Event IDs caused by this")
+    consequences: List[Dict[str, Any]] = Field(default_factory=list, description="Detailed consequence objects")
+    participants: List[int] = Field(default_factory=list, description="Character IDs involved")
+    location_id: Optional[int] = Field(None, description="Location where event occurred")
+    impact_level: int = Field(50, ge=0, le=100, description="How significant (0-100)")
+
+
+class EventUpdate(CanonEntityUpdate):
+    """Update event request"""
+    chapter_number: Optional[int] = Field(None, ge=1)
+    scene_number: Optional[int] = Field(None, ge=1)
+    relative_time: Optional[str] = None
+    causes: Optional[List[int]] = None
+    effects: Optional[List[int]] = None
+    consequences: Optional[List[Dict[str, Any]]] = None
+    participants: Optional[List[int]] = None
+    location_id: Optional[int] = None
+    impact_level: Optional[int] = Field(None, ge=0, le=100)
+
+
+class EventResponse(CanonEntityResponse):
+    """Event response"""
+    chapter_number: Optional[int]
+    scene_number: Optional[int]
+    relative_time: Optional[str]
+    causes: List[int]
+    effects: List[int]
+    consequences: List[Dict[str, Any]]
+    participants: List[int]
+    location_id: Optional[int]
+    impact_level: int
+
+
 # ===== Version Schemas =====
 
 class CanonVersionResponse(BaseModel):

@@ -1,0 +1,554 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { X, Plus, Trash2, Sparkles, Zap, Shield, Users, AlertCircle, Atom } from 'lucide-react'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+
+interface MagicSystem {
+  id?: number
+  project_id: number
+  name: string
+  description: string
+  rule_type?: string  // magic, physics, divine, curse, etc.
+  laws: string[]  // Fundamental rules that ALWAYS apply
+  costs: string[]  // What using this requires/costs
+  limitations: string[]  // What it cannot do
+  exceptions: string[]  // Rare cases where rules don't apply
+  prohibitions: string[]  // What is strictly forbidden
+  mechanics?: string  // How it works in practice
+  manifestation: { [key: string]: any }  // How it appears, feels, looks
+  tags?: string[]  // Optional tags for categorization
+  claims?: { [key: string]: any }  // Canon claims
+  unknowns?: string[]  // Things we don't know yet
+}
+
+interface MagicModalProps {
+  magicSystem: MagicSystem | null
+  onClose: () => void
+  onSave: () => void
+  accessToken: string
+  projectId?: number
+}
+
+export default function MagicModal({
+  magicSystem,
+  onClose,
+  onSave,
+  accessToken,
+  projectId = 1
+}: MagicModalProps) {
+  const [formData, setFormData] = useState<MagicSystem>({
+    project_id: projectId,
+    name: '',
+    description: '',
+    rule_type: 'magic',
+    laws: [],
+    costs: [],
+    limitations: [],
+    exceptions: [],
+    prohibitions: [],
+    mechanics: '',
+    manifestation: {},
+    tags: [],
+    claims: {},
+    unknowns: []
+  })
+
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Input states for adding new items to arrays
+  const [newLaw, setNewLaw] = useState('')
+  const [newCost, setNewCost] = useState('')
+  const [newLimitation, setNewLimitation] = useState('')
+  const [newException, setNewException] = useState('')
+  const [newProhibition, setNewProhibition] = useState('')
+
+  useEffect(() => {
+    if (magicSystem) {
+      setFormData({
+        ...magicSystem,
+        laws: magicSystem.laws || [],
+        costs: magicSystem.costs || [],
+        limitations: magicSystem.limitations || [],
+        exceptions: magicSystem.exceptions || [],
+        prohibitions: magicSystem.prohibitions || [],
+        manifestation: magicSystem.manifestation || {},
+        tags: magicSystem.tags || [],
+        claims: magicSystem.claims || {},
+        unknowns: magicSystem.unknowns || []
+      })
+    }
+  }, [magicSystem])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSaving(true)
+    setError(null)
+
+    try {
+      const url = magicSystem
+        ? `${API_URL}/api/canon/magic/${magicSystem.id}`
+        : `${API_URL}/api/canon/magic`
+
+      const method = magicSystem ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Failed to save magic system')
+      }
+
+      onSave()
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const addArrayItem = (field: 'laws' | 'costs' | 'limitations' | 'exceptions' | 'prohibitions', value: string, setter: (val: string) => void) => {
+    if (!value.trim()) return
+    const currentArray = formData[field] || []
+    setFormData({
+      ...formData,
+      [field]: [...currentArray, value.trim()]
+    })
+    setter('')
+  }
+
+  const removeArrayItem = (field: 'laws' | 'costs' | 'limitations' | 'exceptions' | 'prohibitions', index: number) => {
+    const currentArray = formData[field] || []
+    setFormData({
+      ...formData,
+      [field]: currentArray.filter((_, i) => i !== index)
+    })
+  }
+
+  const ruleTypes = [
+    {
+      value: 'magic',
+      label: 'Magia',
+      color: 'purple',
+      icon: '✨',
+      description: 'Zaklęcia i mistyczne siły'
+    },
+    {
+      value: 'physics',
+      label: 'Fizyka',
+      color: 'blue',
+      icon: '⚛️',
+      description: 'Prawa natury i ograniczenia fizyczne'
+    },
+    {
+      value: 'divine',
+      label: 'Boska',
+      color: 'yellow',
+      icon: '☀️',
+      description: 'Moc bogów lub sił kosmicznych'
+    },
+    {
+      value: 'curse',
+      label: 'Klątwa',
+      color: 'red',
+      icon: '💀',
+      description: 'Przekleństwa i mroczne moce'
+    },
+    {
+      value: 'technology',
+      label: 'Technologia',
+      color: 'gray',
+      icon: '🔧',
+      description: 'Zaawansowana technologia lub nauka'
+    },
+    {
+      value: 'psychic',
+      label: 'Psychika',
+      color: 'indigo',
+      icon: '🧠',
+      description: 'Moce mentalne i telepatia'
+    },
+  ]
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full my-8">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+              <Sparkles className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {magicSystem ? 'Edytuj System Magii' : 'Nowy System Magii'}
+              </h2>
+              <p className="text-sm text-gray-600">
+                Określ zasady magii, koszty i ograniczenia
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+          {error && (
+            <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center space-x-2">
+              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Basic Info */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Sparkles className="h-5 w-5 text-purple-600" />
+              <span>Podstawowe Informacje</span>
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Nazwa Systemu Magii *
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="np. Magia Żywiołów, Magia Runowa, Moc Boska"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Opis *
+              </label>
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Krótki przegląd tego systemu magii..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                rows={3}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Rule Type */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Atom className="h-5 w-5 text-indigo-600" />
+              <span>Typ Zasady</span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {ruleTypes.map((type) => (
+                <button
+                  key={type.value}
+                  type="button"
+                  onClick={() => setFormData({ ...formData, rule_type: type.value })}
+                  className={`p-4 rounded-lg border-2 transition text-left ${
+                    formData.rule_type === type.value
+                      ? `border-${type.color}-500 bg-${type.color}-50`
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="text-2xl">{type.icon}</span>
+                    <span className="text-sm font-bold text-gray-900">{type.label}</span>
+                  </div>
+                  <p className="text-xs text-gray-600">{type.description}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Power Source */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Zap className="h-5 w-5 text-yellow-600" />
+              <span>Źródło Mocy</span>
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Skąd pochodzi magia?
+              </label>
+              <input
+                type="text"
+                value={formData.power_source || ''}
+                onChange={(e) => setFormData({ ...formData, power_source: e.target.value })}
+                placeholder="np. Naturalna energia, Boskie błogosławieństwo, Starożytne artefakty, Siła życiowa użytkownika"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+
+          {/* Costs */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Shield className="h-5 w-5 text-red-600" />
+              <span>Koszty i Konsekwencje</span>
+            </h3>
+            <p className="text-sm text-gray-600">
+              Co kosztuje użycie magii? (Energia, czas, materiały, poświęcenie, itp.)
+            </p>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={newCost}
+                onChange={(e) => setNewCost(e.target.value)}
+                placeholder="np. Wyczerpuje wytrzymałość, Wymaga rzadkich komponentów, Skraca życie"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('costs', newCost, setNewCost))}
+              />
+              <button
+                type="button"
+                onClick={() => addArrayItem('costs', newCost, setNewCost)}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              >
+                <Plus className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.costs.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">
+                  Nie zdefiniowano jeszcze kosztów
+                </p>
+              ) : (
+                formData.costs.map((cost, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg group hover:bg-red-100 transition"
+                  >
+                    <span className="text-sm text-gray-900">{cost}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeArrayItem('costs', idx)}
+                      className="opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Limitations */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <AlertCircle className="h-5 w-5 text-amber-600" />
+              <span>Ograniczenia i Restrykcje</span>
+            </h3>
+            <p className="text-sm text-gray-600">
+              Czego nie można zrobić tą magią? Twarde limity.
+            </p>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={newLimitation}
+                onChange={(e) => setNewLimitation(e.target.value)}
+                placeholder="np. Nie można stworzyć życia, Nieskuteczna przeciwko żelazu, Nie może wpływać na wolną wolę"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('limitations', newLimitation, setNewLimitation))}
+              />
+              <button
+                type="button"
+                onClick={() => addArrayItem('limitations', newLimitation, setNewLimitation)}
+                className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition"
+              >
+                <Plus className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.limitations.map((limit, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg group hover:bg-amber-100 transition"
+                >
+                  <span className="text-sm text-gray-900">{limit}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeArrayItem('limitations', idx)}
+                    className="opacity-0 group-hover:opacity-100 text-amber-600 hover:text-amber-800 transition"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Rules */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Sparkles className="h-5 w-5 text-blue-600" />
+              <span>Zasady i Prawa</span>
+            </h3>
+            <p className="text-sm text-gray-600">
+              Jak działa magia? Fundamentalne prawa i zasady.
+            </p>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                value={newRule}
+                onChange={(e) => setNewRule(e.target.value)}
+                placeholder="np. Magia podlega zasadzie zachowania energii, Silniejsze emocje = silniejsza magia"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('rules', newRule, setNewRule))}
+              />
+              <button
+                type="button"
+                onClick={() => addArrayItem('rules', newRule, setNewRule)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                <Plus className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {formData.rules.map((rule, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg group hover:bg-blue-100 transition"
+                >
+                  <span className="text-sm text-gray-900">{rule}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeArrayItem('rules', idx)}
+                    className="opacity-0 group-hover:opacity-100 text-blue-600 hover:text-blue-800 transition"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Practitioners */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Users className="h-5 w-5 text-green-600" />
+              <span>Praktycy i Dostęp</span>
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Kto może używać tej magii?
+              </label>
+              <textarea
+                value={formData.practitioners || ''}
+                onChange={(e) => setFormData({ ...formData, practitioners: e.target.value })}
+                placeholder="Wymagania, linie krwi, potrzebne szkolenie, ograniczenia dotyczące tego, kto może się nauczyć..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
+                rows={2}
+              />
+            </div>
+          </div>
+
+          {/* Manifestation */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Sparkles className="h-5 w-5 text-pink-600" />
+              <span>Manifestacja i Wygląd</span>
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Jak wygląda magia podczas użycia?
+              </label>
+              <textarea
+                value={formData.manifestation || ''}
+                onChange={(e) => setFormData({ ...formData, manifestation: e.target.value })}
+                placeholder="Efekty wizualne, dźwięki, odczucia, oznaki używania magii..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
+                rows={2}
+              />
+            </div>
+          </div>
+
+          {/* Cultural Impact */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
+              <Users className="h-5 w-5 text-purple-600" />
+              <span>Wpływ Kulturowy</span>
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Jak społeczeństwo postrzega i używa magii?
+              </label>
+              <textarea
+                value={formData.cultural_impact || ''}
+                onChange={(e) => setFormData({ ...formData, cultural_impact: e.target.value })}
+                placeholder="Postawy społeczne, status prawny, rola w życiu codziennym, systemy edukacji..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                rows={2}
+              />
+            </div>
+          </div>
+
+          {/* Summary Stats */}
+          {(formData.costs.length > 0 || formData.limitations.length > 0 || formData.rules.length > 0) && (
+            <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold text-red-600">{formData.costs.length}</p>
+                  <p className="text-sm text-gray-600">Koszty</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-amber-600">{formData.limitations.length}</p>
+                  <p className="text-sm text-gray-600">Ograniczenia</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-blue-600">{formData.rules.length}</p>
+                  <p className="text-sm text-gray-600">Zasady</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </form>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
+          <p className="text-sm text-gray-600">
+            * Pola wymagane
+          </p>
+          <div className="flex space-x-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition"
+              disabled={isSaving}
+            >
+              Anuluj
+            </button>
+            <button
+              onClick={handleSubmit}
+              disabled={isSaving || !formData.name || !formData.description}
+              className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+            >
+              {isSaving ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Zapisywanie...</span>
+                </>
+              ) : (
+                <span>Zapisz System Magii</span>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
