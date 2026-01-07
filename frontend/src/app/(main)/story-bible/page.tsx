@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation'
 import {
   User, MapPin, Sparkles, Book, Clock, Wand2,
   Plus, Search, Filter, ArrowUpDown, Edit2, Trash2,
-  Eye, Heart, Shield, Zap, Target, MessageSquare
+  Eye, Heart, Shield, Zap, Target, MessageSquare,
+  Download, Upload, AlertCircle, Users, X, FileJson
 } from 'lucide-react'
 import CharacterModal from '@/components/CharacterModal'
 import LocationModal from '@/components/LocationModal'
@@ -126,7 +127,14 @@ export default function StoryBiblePage() {
   const [showThreadModal, setShowThreadModal] = useState(false)
   const [showMagicModal, setShowMagicModal] = useState(false)
   const [showTimelineModal, setShowTimelineModal] = useState(false)
+  const [showImportModal, setShowImportModal] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
+
+  // Export/Import states
+  const [importFile, setImportFile] = useState<File | null>(null)
+  const [importOverwrite, setImportOverwrite] = useState(false)
+  const [importing, setImporting] = useState(false)
+  const [importResult, setImportResult] = useState<any>(null)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -303,6 +311,98 @@ export default function StoryBiblePage() {
     }
   }
 
+  const handleExport = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/canon/export/1`, {
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken}`,
+        },
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+
+        // Create filename with timestamp
+        const timestamp = new Date().toISOString().split('T')[0]
+        const filename = `biblia-fabuly-${timestamp}.json`
+
+        // Download JSON file
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+      } else {
+        alert('Błąd podczas eksportu')
+      }
+    } catch (error) {
+      console.error('Error exporting canon:', error)
+      alert('Błąd podczas eksportu')
+    }
+  }
+
+  const handleImport = async () => {
+    if (!importFile) {
+      alert('Wybierz plik do importu')
+      return
+    }
+
+    if (importOverwrite && !confirm('UWAGA: Tryb nadpisywania usunie WSZYSTKIE istniejące dane! Czy jesteś pewien?')) {
+      return
+    }
+
+    setImporting(true)
+    setImportResult(null)
+
+    try {
+      // Read file
+      const fileContent = await importFile.text()
+      const importData = JSON.parse(fileContent)
+
+      // Send to API
+      const response = await fetch(`${API_URL}/api/canon/import/1`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          entities: importData.entities,
+          overwrite: importOverwrite,
+          commit_message: `Import z ${importFile.name}`
+        }),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        setImportResult(result)
+        // Reload all data
+        await loadAllData()
+
+        if (result.success) {
+          setTimeout(() => {
+            setShowImportModal(false)
+            setImportFile(null)
+            setImportOverwrite(false)
+            setImportResult(null)
+          }, 3000)
+        }
+      } else {
+        setImportResult({ success: false, errors: [result.detail || 'Import failed'] })
+      }
+    } catch (error) {
+      console.error('Error importing canon:', error)
+      setImportResult({ success: false, errors: [String(error)] })
+    } finally {
+      setImporting(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Header */}
@@ -318,13 +418,31 @@ export default function StoryBiblePage() {
                 Twój kanon, postacie, świat i wątki fabularne
               </p>
             </div>
-            <button
-              onClick={handleAddNew}
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
-            >
-              <Plus className="h-5 w-5" />
-              <span>Dodaj Nowy</span>
-            </button>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={handleExport}
+                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition shadow-sm"
+                title="Eksportuj całą biblię fabuły jako JSON"
+              >
+                <Download className="h-5 w-5" />
+                <span>Eksportuj</span>
+              </button>
+              <button
+                onClick={() => setShowImportModal(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition shadow-sm"
+                title="Importuj biblię fabuły z JSON"
+              >
+                <Upload className="h-5 w-5" />
+                <span>Importuj</span>
+              </button>
+              <button
+                onClick={handleAddNew}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
+              >
+                <Plus className="h-5 w-5" />
+                <span>Dodaj Nowy</span>
+              </button>
+            </div>
           </div>
 
           {/* Tabs */}
@@ -499,6 +617,184 @@ export default function StoryBiblePage() {
           }}
           accessToken={session?.accessToken || ''}
         />
+      )}
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                  <Upload className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Importuj Biblię Fabuły</h2>
+                  <p className="text-sm text-gray-600">Wczytaj dane z pliku JSON</p>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setShowImportModal(false)
+                  setImportFile(null)
+                  setImportOverwrite(false)
+                  setImportResult(null)
+                }}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              {/* File Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Wybierz plik JSON *
+                </label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition">
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={(e) => setImportFile(e.target.files?.[0] || null)}
+                    className="hidden"
+                    id="import-file"
+                  />
+                  <label
+                    htmlFor="import-file"
+                    className="cursor-pointer flex flex-col items-center space-y-2"
+                  >
+                    <FileJson className="h-12 w-12 text-gray-400" />
+                    {importFile ? (
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{importFile.name}</p>
+                        <p className="text-xs text-gray-500">{(importFile.size / 1024).toFixed(2)} KB</p>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="text-sm font-medium text-gray-700">Kliknij aby wybrać plik</p>
+                        <p className="text-xs text-gray-500">Tylko pliki JSON</p>
+                      </div>
+                    )}
+                  </label>
+                </div>
+              </div>
+
+              {/* Overwrite Option */}
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <label className="flex items-start space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={importOverwrite}
+                    onChange={(e) => setImportOverwrite(e.target.checked)}
+                    className="mt-1 h-4 w-4 text-amber-600 border-gray-300 rounded focus:ring-amber-500"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-amber-900">Tryb nadpisywania (UWAGA!)</p>
+                    <p className="text-xs text-amber-700 mt-1">
+                      Usuń WSZYSTKIE istniejące dane przed importem. Ta operacja jest nieodwracalna!
+                    </p>
+                  </div>
+                </label>
+              </div>
+
+              {/* Import Result */}
+              {importResult && (
+                <div className={`rounded-lg p-4 ${importResult.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                  <div className="flex items-start space-x-3">
+                    {importResult.success ? (
+                      <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                        <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    ) : (
+                      <AlertCircle className="h-6 w-6 text-red-600 flex-shrink-0" />
+                    )}
+                    <div className="flex-1">
+                      <p className={`text-sm font-medium ${importResult.success ? 'text-green-900' : 'text-red-900'}`}>
+                        {importResult.success ? 'Import zakończony sukcesem!' : 'Import zakończony błędami'}
+                      </p>
+                      {importResult.imported_counts && (
+                        <div className="mt-2 text-xs text-green-700 space-y-1">
+                          <p>Zaimportowano {importResult.imported_counts.total} elementów:</p>
+                          <ul className="ml-4 space-y-0.5">
+                            {importResult.imported_counts.character > 0 && <li>• Postacie: {importResult.imported_counts.character}</li>}
+                            {importResult.imported_counts.location > 0 && <li>• Lokacje: {importResult.imported_counts.location}</li>}
+                            {importResult.imported_counts.magic_rule > 0 && <li>• Systemy magii: {importResult.imported_counts.magic_rule}</li>}
+                            {importResult.imported_counts.event > 0 && <li>• Wydarzenia: {importResult.imported_counts.event}</li>}
+                            {importResult.imported_counts.promise > 0 && <li>• Obietnice: {importResult.imported_counts.promise}</li>}
+                            {importResult.imported_counts.thread > 0 && <li>• Wątki: {importResult.imported_counts.thread}</li>}
+                          </ul>
+                        </div>
+                      )}
+                      {importResult.errors && importResult.errors.length > 0 && (
+                        <div className="mt-2 text-xs text-red-700 space-y-1">
+                          <p>Błędy:</p>
+                          <ul className="ml-4 space-y-0.5">
+                            {importResult.errors.map((error: string, idx: number) => (
+                              <li key={idx}>• {error}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {importResult.warnings && importResult.warnings.length > 0 && (
+                        <div className="mt-2 text-xs text-amber-700 space-y-1">
+                          <p>Ostrzeżenia:</p>
+                          <ul className="ml-4 space-y-0.5">
+                            {importResult.warnings.map((warning: string, idx: number) => (
+                              <li key={idx}>• {warning}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Info */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-start space-x-2">
+                  <AlertCircle className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-xs text-blue-700 space-y-1">
+                    <p><strong>Import działa tylko z plikami eksportowanymi z tej aplikacji.</strong></p>
+                    <p>• W trybie normalnym: dodaje nowe elementy do istniejących</p>
+                    <p>• W trybie nadpisywania: usuwa wszystkie dane i importuje od zera</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
+              <button
+                onClick={() => {
+                  setShowImportModal(false)
+                  setImportFile(null)
+                  setImportOverwrite(false)
+                  setImportResult(null)
+                }}
+                className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+              >
+                Anuluj
+              </button>
+              <button
+                onClick={handleImport}
+                disabled={!importFile || importing}
+                className={`px-6 py-2 rounded-lg transition font-medium ${
+                  !importFile || importing
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700'
+                }`}
+              >
+                {importing ? 'Importowanie...' : 'Importuj'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
