@@ -1,0 +1,25 @@
+# Modern Authentication Stack (2026)
+# FastAPI-Users: Production-ready auth for FastAPI
+fastapi-users[sqlalchemy]==13.0.0
+fastapi-users[oauth]==13.0.0
+
+# Async database support
+asyncpg==0.29.0  # PostgreSQL async driver
+sqlalchemy[asyncio]==2.0.25
+
+# Password hashing (modern, secure)
+argon2-cffi==23.1.0  # Better than bcrypt
+passlib[argon2]==1.7.4
+
+# JWT tokens
+python-jose[cryptography]==3.3.0
+pyjwt==2.8.0
+
+# Email verification (production-ready)
+fastapi-mail==1.4.1
+
+# Rate limiting
+slowapi==0.1.9
+
+# Session management
+itsdangerous==2.1.2
