@@ -15,6 +15,7 @@ import ThreadModal from '@/components/ThreadModal'
 import MagicModal from '@/components/MagicModal'
 import TimelineModal from '@/components/TimelineModal'
 import RelationshipsGraph from '@/components/RelationshipsGraph'
+import AITools from '@/components/AITools'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -137,6 +138,7 @@ export default function StoryBiblePage() {
   const [showTimelineModal, setShowTimelineModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
   const [showRelationshipsGraph, setShowRelationshipsGraph] = useState(false)
+  const [showAITools, setShowAITools] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
 
   // Export/Import states
@@ -429,8 +431,16 @@ export default function StoryBiblePage() {
             </div>
             <div className="flex items-center space-x-2">
               <button
+                onClick={() => setShowAITools(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition shadow-sm"
+                title="AI narzędzia: sprawdzanie spójności i sugestie"
+              >
+                <Sparkles className="h-5 w-5" />
+                <span>AI Narzędzia</span>
+              </button>
+              <button
                 onClick={() => setShowRelationshipsGraph(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition shadow-sm"
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
                 title="Zobacz graf relacji między postaciami"
               >
                 <Network className="h-5 w-5" />
@@ -820,6 +830,15 @@ export default function StoryBiblePage() {
         <RelationshipsGraph
           characters={characters}
           onClose={() => setShowRelationshipsGraph(false)}
+        />
+      )}
+
+      {/* AI Tools */}
+      {showAITools && (
+        <AITools
+          projectId={1}
+          accessToken={session?.accessToken || ''}
+          onClose={() => setShowAITools(false)}
         />
       )}
     </div>
