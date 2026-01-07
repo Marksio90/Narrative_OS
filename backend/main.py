@@ -60,7 +60,7 @@ async def health():
 
 # Import routers
 from api.routes import canon, contracts, promise_ledger, planner, qc, draft
-from api.routes import auth
+from api.routes import auth, permissions
 from api.schemas.user import UserRead, UserCreate
 
 # === Authentication Routes (FastAPI-Users) ===
@@ -92,6 +92,13 @@ app.include_router(
 app.include_router(
     auth.custom_router,
     tags=["Authentication"]
+)
+
+# === Permissions & Collaboration ===
+app.include_router(
+    permissions.router,
+    prefix="/api",
+    tags=["Permissions"]
 )
 
 # === Core Feature Routes ===
