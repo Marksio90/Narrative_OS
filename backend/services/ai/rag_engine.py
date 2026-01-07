@@ -53,7 +53,8 @@ class RAGEngine:
         project_id: int,
         db: Session,
         top_k: int = 10,
-        entity_types: Optional[List[str]] = None
+        entity_types: Optional[List[str]] = None,
+        filter_ids: Optional[Dict[str, List[int]]] = None
     ) -> List[CanonFact]:
         """
         Retrieve most relevant canon facts for a query
@@ -64,6 +65,7 @@ class RAGEngine:
             db: Database session
             top_k: Number of facts to return
             entity_types: Filter by entity type (default: all)
+            filter_ids: Filter by specific entity IDs (e.g., {'character_ids': [1, 3], 'location_ids': [2]})
 
         Returns:
             List of CanonFact objects ranked by relevance
@@ -75,7 +77,8 @@ class RAGEngine:
         canon_facts = await self._load_canon_entities(
             project_id,
             db,
-            entity_types
+            entity_types,
+            filter_ids
         )
 
         # Compute relevance scores
@@ -97,20 +100,26 @@ class RAGEngine:
         self,
         project_id: int,
         db: Session,
-        entity_types: Optional[List[str]]
+        entity_types: Optional[List[str]],
+        filter_ids: Optional[Dict[str, List[int]]] = None
     ) -> List[CanonFact]:
         """Load and embed all canon entities for a project"""
         facts = []
 
         # Characters
         if not entity_types or 'character' in entity_types:
+            # Build query with optional ID filtering
+            query_conditions = [
+                Character.project_id == project_id,
+                Character.deleted_at.is_(None)
+            ]
+
+            # Apply ID filter if provided
+            if filter_ids and filter_ids.get('character_ids'):
+                query_conditions.append(Character.id.in_(filter_ids['character_ids']))
+
             characters = db.execute(
-                select(Character).where(
-                    and_(
-                        Character.project_id == project_id,
-                        Character.deleted_at.is_(None)
-                    )
-                )
+                select(Character).where(and_(*query_conditions))
             ).scalars().all()
 
             for char in characters:
@@ -135,13 +144,18 @@ class RAGEngine:
 
         # Locations
         if not entity_types or 'location' in entity_types:
+            # Build query with optional ID filtering
+            query_conditions = [
+                Location.project_id == project_id,
+                Location.deleted_at.is_(None)
+            ]
+
+            # Apply ID filter if provided
+            if filter_ids and filter_ids.get('location_ids'):
+                query_conditions.append(Location.id.in_(filter_ids['location_ids']))
+
             locations = db.execute(
-                select(Location).where(
-                    and_(
-                        Location.project_id == project_id,
-                        Location.deleted_at.is_(None)
-                    )
-                )
+                select(Location).where(and_(*query_conditions))
             ).scalars().all()
 
             for loc in locations:
@@ -165,13 +179,18 @@ class RAGEngine:
 
         # Threads (plot threads)
         if not entity_types or 'thread' in entity_types:
+            # Build query with optional ID filtering
+            query_conditions = [
+                Thread.project_id == project_id,
+                Thread.deleted_at.is_(None)
+            ]
+
+            # Apply ID filter if provided
+            if filter_ids and filter_ids.get('thread_ids'):
+                query_conditions.append(Thread.id.in_(filter_ids['thread_ids']))
+
             threads = db.execute(
-                select(Thread).where(
-                    and_(
-                        Thread.project_id == project_id,
-                        Thread.deleted_at.is_(None)
-                    )
-                )
+                select(Thread).where(and_(*query_conditions))
             ).scalars().all()
 
             for thread in threads:
