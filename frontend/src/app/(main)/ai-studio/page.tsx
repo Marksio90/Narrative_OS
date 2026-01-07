@@ -4,7 +4,7 @@
  */
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Sparkles,
   Wand2,
@@ -16,9 +16,16 @@ import {
   TrendingUp,
   Copy,
   Download,
-  RefreshCw
+  RefreshCw,
+  User,
+  MapPin,
+  BookOpen,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 type GenerationMode = 'scene' | 'beats' | 'continue' | 'refine'
 type Preset = 'fast_draft' | 'balanced' | 'premium' | 'creative_burst' | 'canon_strict'
@@ -27,10 +34,31 @@ interface GenerationResult {
   text: string
   model_used: string
   tokens_used: number
-  cost: float
+  cost: number
   quality_score: number
   refinement_iterations: number
   metadata: any
+}
+
+interface CanonCharacter {
+  id: number
+  name: string
+  role: string
+  goals?: string[]
+}
+
+interface CanonLocation {
+  id: number
+  name: string
+  description: string
+  atmosphere?: string
+}
+
+interface CanonThread {
+  id: number
+  name: string
+  thread_type: string
+  status: string
 }
 
 export default function AIStudioPage() {
@@ -52,6 +80,79 @@ export default function AIStudioPage() {
   const [totalTokens, setTotalTokens] = useState(0)
   const [totalCost, setTotalCost] = useState(0)
 
+  // Canon data
+  const [characters, setCharacters] = useState<CanonCharacter[]>([])
+  const [locations, setLocations] = useState<CanonLocation[]>([])
+  const [threads, setThreads] = useState<CanonThread[]>([])
+  const [isLoadingCanon, setIsLoadingCanon] = useState(false)
+
+  // Selected canon for generation
+  const [selectedCharacterIds, setSelectedCharacterIds] = useState<number[]>([])
+  const [selectedLocationIds, setSelectedLocationIds] = useState<number[]>([])
+  const [selectedThreadIds, setSelectedThreadIds] = useState<number[]>([])
+
+  // Canon selector UI state
+  const [showCanonSelector, setShowCanonSelector] = useState(true)
+
+  // Load canon data on mount
+  useEffect(() => {
+    if (session?.accessToken) {
+      loadCanonData()
+    }
+  }, [session?.accessToken])
+
+  const loadCanonData = async () => {
+    setIsLoadingCanon(true)
+    try {
+      const accessToken = (session?.user as any)?.accessToken
+      const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+      }
+
+      // Load all canon entities in parallel
+      const [charsRes, locsRes, threadsRes] = await Promise.all([
+        fetch(`${API_URL}/api/canon/character?project_id=1`, { headers }),
+        fetch(`${API_URL}/api/canon/location?project_id=1`, { headers }),
+        fetch(`${API_URL}/api/canon/thread?project_id=1`, { headers })
+      ])
+
+      if (charsRes.ok) {
+        const data = await charsRes.json()
+        setCharacters(data)
+      }
+      if (locsRes.ok) {
+        const data = await locsRes.json()
+        setLocations(data)
+      }
+      if (threadsRes.ok) {
+        const data = await threadsRes.json()
+        setThreads(data)
+      }
+    } catch (error) {
+      console.error('Failed to load canon data:', error)
+    } finally {
+      setIsLoadingCanon(false)
+    }
+  }
+
+  const toggleCharacter = (id: number) => {
+    setSelectedCharacterIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+
+  const toggleLocation = (id: number) => {
+    setSelectedLocationIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+
+  const toggleThread = (id: number) => {
+    setSelectedThreadIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+
   const handleGenerate = async () => {
     setIsGenerating(true)
     setGenerationProgress('Planning scene structure...')
@@ -72,6 +173,11 @@ export default function AIStudioPage() {
             target_word_count: targetWordCount,
             pov_character_id: povCharacterId,
             preset: preset,
+            canon_context: {
+              character_ids: selectedCharacterIds,
+              location_ids: selectedLocationIds,
+              thread_ids: selectedThreadIds
+            }
           }),
         }
       )
@@ -254,6 +360,149 @@ export default function AIStudioPage() {
                 )
               })}
             </div>
+          </div>
+
+          {/* Canon Selector */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <button
+              onClick={() => setShowCanonSelector(!showCanonSelector)}
+              className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+            >
+              <div className="flex items-center space-x-2">
+                <BookOpen className="h-5 w-5 text-indigo-600" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Canon Context
+                </h3>
+                {(selectedCharacterIds.length + selectedLocationIds.length + selectedThreadIds.length) > 0 && (
+                  <span className="px-2 py-0.5 text-xs bg-indigo-100 text-indigo-700 rounded-full">
+                    {selectedCharacterIds.length + selectedLocationIds.length + selectedThreadIds.length} selected
+                  </span>
+                )}
+              </div>
+              {showCanonSelector ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+            </button>
+
+            {showCanonSelector && (
+              <div className="px-6 pb-6 space-y-4">
+                {isLoadingCanon ? (
+                  <div className="text-center py-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+                    <p className="text-sm text-gray-600 mt-2">Loading canon...</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Characters */}
+                    {characters.length > 0 && (
+                      <div>
+                        <div className="flex items-center space-x-2 mb-2">
+                          <User className="h-4 w-4 text-purple-600" />
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Characters ({selectedCharacterIds.length}/{characters.length})
+                          </span>
+                        </div>
+                        <div className="space-y-1 max-h-40 overflow-y-auto">
+                          {characters.map((char) => (
+                            <label
+                              key={char.id}
+                              className="flex items-center p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedCharacterIds.includes(char.id)}
+                                onChange={() => toggleCharacter(char.id)}
+                                className="mr-2 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                              />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">{char.name}</p>
+                                {char.role && (
+                                  <p className="text-xs text-gray-500">{char.role}</p>
+                                )}
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Locations */}
+                    {locations.length > 0 && (
+                      <div>
+                        <div className="flex items-center space-x-2 mb-2">
+                          <MapPin className="h-4 w-4 text-emerald-600" />
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Locations ({selectedLocationIds.length}/{locations.length})
+                          </span>
+                        </div>
+                        <div className="space-y-1 max-h-40 overflow-y-auto">
+                          {locations.map((loc) => (
+                            <label
+                              key={loc.id}
+                              className="flex items-center p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedLocationIds.includes(loc.id)}
+                                onChange={() => toggleLocation(loc.id)}
+                                className="mr-2 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                              />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">{loc.name}</p>
+                                {loc.atmosphere && (
+                                  <p className="text-xs text-gray-500">{loc.atmosphere}</p>
+                                )}
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Plot Threads */}
+                    {threads.length > 0 && (
+                      <div>
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Sparkles className="h-4 w-4 text-amber-600" />
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Plot Threads ({selectedThreadIds.length}/{threads.length})
+                          </span>
+                        </div>
+                        <div className="space-y-1 max-h-40 overflow-y-auto">
+                          {threads.map((thread) => (
+                            <label
+                              key={thread.id}
+                              className="flex items-center p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded cursor-pointer"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedThreadIds.includes(thread.id)}
+                                onChange={() => toggleThread(thread.id)}
+                                className="mr-2 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                              />
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-gray-900 dark:text-white">{thread.name}</p>
+                                <p className="text-xs text-gray-500 capitalize">
+                                  {thread.thread_type.replace('_', ' ')} • {thread.status}
+                                </p>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {characters.length === 0 && locations.length === 0 && threads.length === 0 && (
+                      <div className="text-center py-4">
+                        <BookOpen className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-600">No canon entities found</p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Visit Story Bible to add characters, locations, and threads
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Scene Parameters */}
