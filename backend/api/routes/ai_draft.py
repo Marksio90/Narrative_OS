@@ -18,6 +18,13 @@ router = APIRouter()
 
 
 # Request/Response Models
+class CanonContext(BaseModel):
+    """Canon entities to use for generation"""
+    character_ids: Optional[List[int]] = Field(None, description="Selected character IDs")
+    location_ids: Optional[List[int]] = Field(None, description="Selected location IDs")
+    thread_ids: Optional[List[int]] = Field(None, description="Selected plot thread IDs")
+
+
 class SceneGenerationRequest(BaseModel):
     """Request to generate a scene"""
     scene_description: str = Field(..., description="What should happen in this scene")
@@ -28,6 +35,7 @@ class SceneGenerationRequest(BaseModel):
     target_word_count: int = Field(1000, ge=100, le=5000, description="Target word count")
     style_reference: Optional[str] = Field(None, description="Sample text to match style")
     preset: str = Field("balanced", description="Generation preset (fast_draft, balanced, premium)")
+    canon_context: Optional[CanonContext] = Field(None, description="Selected canon entities to use")
 
 
 class BeatsExpansionRequest(BaseModel):
@@ -112,7 +120,8 @@ async def generate_scene(
             pov_character_id=request.pov_character_id,
             previous_scene_ids=request.previous_scene_ids,
             target_word_count=request.target_word_count,
-            style_reference=request.style_reference
+            style_reference=request.style_reference,
+            canon_context=request.canon_context
         )
 
         return GenerationResponse(

@@ -52,7 +52,8 @@ class DraftService:
         pov_character_id: Optional[int] = None,
         previous_scene_ids: Optional[List[int]] = None,
         target_word_count: int = 1000,
-        style_reference: Optional[str] = None
+        style_reference: Optional[str] = None,
+        canon_context: Optional[Any] = None
     ) -> GenerationResult:
         """
         Generate a complete scene with AI
@@ -81,11 +82,21 @@ class DraftService:
         # Retrieve relevant canon using RAG
         canon_facts = None
         if self.rag_engine:
+            # Extract filter IDs from canon_context if provided
+            filter_ids = None
+            if canon_context:
+                filter_ids = {
+                    'character_ids': getattr(canon_context, 'character_ids', None) or [],
+                    'location_ids': getattr(canon_context, 'location_ids', None) or [],
+                    'thread_ids': getattr(canon_context, 'thread_ids', None) or []
+                }
+
             canon_facts = await self.rag_engine.retrieve_relevant_canon(
                 query=scene_description,
                 project_id=project_id,
                 db=self.db,
-                top_k=15
+                top_k=15,
+                filter_ids=filter_ids
             )
 
             # Add canon summary to story context
