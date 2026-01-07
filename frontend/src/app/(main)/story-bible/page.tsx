@@ -11,6 +11,7 @@ import {
 import CharacterModal from '@/components/CharacterModal'
 import LocationModal from '@/components/LocationModal'
 import ThreadModal from '@/components/ThreadModal'
+import MagicModal from '@/components/MagicModal'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -69,6 +70,23 @@ interface PlotThread {
   updated_at: string
 }
 
+interface MagicSystem {
+  id: number
+  project_id: number
+  name: string
+  description: string
+  magic_type: 'hard' | 'soft' | 'hybrid'
+  power_source?: string
+  costs: string[]
+  limitations: string[]
+  rules: string[]
+  practitioners?: string
+  manifestation?: string
+  cultural_impact?: string
+  created_at: string
+  updated_at: string
+}
+
 type Tab = 'characters' | 'locations' | 'threads' | 'magic' | 'timeline'
 
 export default function StoryBiblePage() {
@@ -82,11 +100,13 @@ export default function StoryBiblePage() {
   const [characters, setCharacters] = useState<Character[]>([])
   const [locations, setLocations] = useState<Location[]>([])
   const [threads, setThreads] = useState<PlotThread[]>([])
+  const [magicSystems, setMagicSystems] = useState<MagicSystem[]>([])
 
   // Modal states
   const [showCharacterModal, setShowCharacterModal] = useState(false)
   const [showLocationModal, setShowLocationModal] = useState(false)
   const [showThreadModal, setShowThreadModal] = useState(false)
+  const [showMagicModal, setShowMagicModal] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
 
   // Redirect if not authenticated
@@ -110,7 +130,8 @@ export default function StoryBiblePage() {
       await Promise.all([
         loadCharacters(),
         loadLocations(),
-        loadThreads()
+        loadThreads(),
+        loadMagicSystems()
       ])
     } catch (error) {
       console.error('Error loading data:', error)
@@ -167,6 +188,22 @@ export default function StoryBiblePage() {
     }
   }
 
+  const loadMagicSystems = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/canon/magic?project_id=1`, {
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setMagicSystems(data)
+      }
+    } catch (error) {
+      console.error('Error loading magic systems:', error)
+    }
+  }
+
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -182,7 +219,7 @@ export default function StoryBiblePage() {
     { id: 'characters' as Tab, name: 'Characters', icon: User, count: characters.length },
     { id: 'locations' as Tab, name: 'Locations', icon: MapPin, count: locations.length },
     { id: 'threads' as Tab, name: 'Plot Threads', icon: Sparkles, count: threads.length },
-    { id: 'magic' as Tab, name: 'Magic & Rules', icon: Wand2, count: 0 },
+    { id: 'magic' as Tab, name: 'Magic & Rules', icon: Wand2, count: magicSystems.length },
     { id: 'timeline' as Tab, name: 'Timeline', icon: Clock, count: 0 },
   ]
 
@@ -191,6 +228,7 @@ export default function StoryBiblePage() {
     if (activeTab === 'characters') setShowCharacterModal(true)
     if (activeTab === 'locations') setShowLocationModal(true)
     if (activeTab === 'threads') setShowThreadModal(true)
+    if (activeTab === 'magic') setShowMagicModal(true)
   }
 
   const handleEdit = (item: any) => {
@@ -198,6 +236,7 @@ export default function StoryBiblePage() {
     if (activeTab === 'characters') setShowCharacterModal(true)
     if (activeTab === 'locations') setShowLocationModal(true)
     if (activeTab === 'threads') setShowThreadModal(true)
+    if (activeTab === 'magic') setShowMagicModal(true)
   }
 
   const handleDelete = async (id: number) => {
@@ -208,6 +247,7 @@ export default function StoryBiblePage() {
       if (activeTab === 'characters') endpoint = `/api/canon/character/${id}`
       if (activeTab === 'locations') endpoint = `/api/canon/location/${id}`
       if (activeTab === 'threads') endpoint = `/api/canon/thread/${id}`
+      if (activeTab === 'magic') endpoint = `/api/canon/magic/${id}`
 
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'DELETE',
@@ -327,10 +367,18 @@ export default function StoryBiblePage() {
             onDelete={handleDelete}
           />
         )}
-        {(activeTab === 'magic' || activeTab === 'timeline') && (
+        {activeTab === 'magic' && (
+          <MagicTab
+            magicSystems={magicSystems}
+            searchQuery={searchQuery}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
+        {activeTab === 'timeline' && (
           <div className="text-center py-12">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-              <Wand2 className="h-8 w-8 text-gray-400" />
+              <Clock className="h-8 w-8 text-gray-400" />
             </div>
             <p className="text-gray-600">Coming soon...</p>
           </div>
@@ -378,6 +426,21 @@ export default function StoryBiblePage() {
           onSave={() => {
             loadThreads()
             setShowThreadModal(false)
+            setEditingItem(null)
+          }}
+          accessToken={session?.accessToken || ''}
+        />
+      )}
+      {showMagicModal && (
+        <MagicModal
+          magicSystem={editingItem}
+          onClose={() => {
+            setShowMagicModal(false)
+            setEditingItem(null)
+          }}
+          onSave={() => {
+            loadMagicSystems()
+            setShowMagicModal(false)
             setEditingItem(null)
           }}
           accessToken={session?.accessToken || ''}
@@ -748,3 +811,140 @@ function ThreadCard({
   )
 }
 
+// Magic Tab Component
+function MagicTab({
+  magicSystems,
+  searchQuery,
+  onEdit,
+  onDelete
+}: {
+  magicSystems: MagicSystem[]
+  searchQuery: string
+  onEdit: (item: any) => void
+  onDelete: (id: number) => void
+}) {
+  const filtered = magicSystems.filter(m =>
+    m.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    m.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  if (filtered.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <Wand2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <p className="text-gray-600">No magic systems found</p>
+        <p className="text-sm text-gray-500 mt-1">Create your first magic system to define the rules of your world</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {filtered.map((magic) => (
+        <MagicCard
+          key={magic.id}
+          magicSystem={magic}
+          onEdit={() => onEdit(magic)}
+          onDelete={() => onDelete(magic.id)}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Magic Card Component
+function MagicCard({
+  magicSystem,
+  onEdit,
+  onDelete
+}: {
+  magicSystem: MagicSystem
+  onEdit: () => void
+  onDelete: () => void
+}) {
+  const typeConfig = {
+    hard: { icon: '⚙️', color: 'from-blue-500 to-indigo-600', label: 'Hard Magic' },
+    soft: { icon: '✨', color: 'from-purple-500 to-pink-600', label: 'Soft Magic' },
+    hybrid: { icon: '🌟', color: 'from-violet-500 to-fuchsia-600', label: 'Hybrid' },
+  }
+
+  const config = typeConfig[magicSystem.magic_type]
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition overflow-hidden">
+      {/* Header with gradient */}
+      <div className={`h-24 bg-gradient-to-br ${config.color} relative`}>
+        <div className="absolute -bottom-8 left-6">
+          <div className="w-16 h-16 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center text-3xl">
+            {config.icon}
+          </div>
+        </div>
+        <div className="absolute top-4 right-4">
+          <span className="px-3 py-1 bg-white bg-opacity-20 text-white text-xs font-medium rounded-full backdrop-blur-sm">
+            {config.label}
+          </span>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="pt-10 px-6 pb-6">
+        <div className="flex items-start justify-between mb-2">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900">{magicSystem.name}</h3>
+            {magicSystem.power_source && (
+              <p className="text-sm text-gray-600 flex items-center space-x-1 mt-1">
+                <Zap className="h-3 w-3" />
+                <span>{magicSystem.power_source}</span>
+              </p>
+            )}
+          </div>
+          <div className="flex space-x-1">
+            <button
+              onClick={onEdit}
+              className="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded transition"
+            >
+              <Edit2 className="h-4 w-4" />
+            </button>
+            <button
+              onClick={onDelete}
+              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {magicSystem.description && (
+          <p className="text-sm text-gray-600 mt-2 mb-4 line-clamp-2">
+            {magicSystem.description}
+          </p>
+        )}
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-100">
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <Shield className="h-4 w-4 text-red-600" />
+            </div>
+            <p className="text-xs text-gray-600">Costs</p>
+            <p className="text-sm font-semibold text-gray-900">{magicSystem.costs?.length || 0}</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <AlertCircle className="h-4 w-4 text-amber-600" />
+            </div>
+            <p className="text-xs text-gray-600">Limits</p>
+            <p className="text-sm font-semibold text-gray-900">{magicSystem.limitations?.length || 0}</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <Sparkles className="h-4 w-4 text-blue-600" />
+            </div>
+            <p className="text-xs text-gray-600">Rules</p>
+            <p className="text-sm font-semibold text-gray-900">{magicSystem.rules?.length || 0}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
