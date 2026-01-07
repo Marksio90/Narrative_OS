@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ReactNode } from 'react'
-import { BookOpen, Users, FileEdit, Target, Home } from 'lucide-react'
+import { BookOpen, Users, FileEdit, Target, Home, Book } from 'lucide-react'
 import UserNav from './UserNav'
 
 interface LayoutProps {
@@ -36,11 +36,11 @@ export default function Layout({ children }: LayoutProps) {
                 <span className="hidden md:inline">Projects</span>
               </Link>
               <Link
-                href="/canon"
+                href="/story-bible"
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
-                <BookOpen className="h-4 w-4" />
-                <span className="hidden md:inline">Canon</span>
+                <Book className="h-4 w-4" />
+                <span className="hidden md:inline">Story Bible</span>
               </Link>
               <Link
                 href="/planner"
@@ -48,20 +48,6 @@ export default function Layout({ children }: LayoutProps) {
               >
                 <Users className="h-4 w-4" />
                 <span className="hidden md:inline">Planner</span>
-              </Link>
-              <Link
-                href="/editor"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
-              >
-                <FileEdit className="h-4 w-4" />
-                <span className="hidden md:inline">Editor</span>
-              </Link>
-              <Link
-                href="/promises"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
-              >
-                <Target className="h-4 w-4" />
-                <span className="hidden md:inline">Promises</span>
               </Link>
               <Link
                 href="/ai-studio"
