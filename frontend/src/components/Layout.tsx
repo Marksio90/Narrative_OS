@@ -29,6 +29,13 @@ export default function Layout({ children }: LayoutProps) {
                 <span className="hidden md:inline">Home</span>
               </Link>
               <Link
+                href="/projects"
+                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
+              >
+                <BookOpen className="h-4 w-4" />
+                <span className="hidden md:inline">Projects</span>
+              </Link>
+              <Link
                 href="/canon"
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
