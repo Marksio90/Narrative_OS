@@ -101,6 +101,7 @@ export default function NarrativeDesktop() {
     { label: 'Biblia Fabuły', icon: Book, action: () => router.push('/story-bible'), shortcut: 'Ctrl+B' },
     { label: 'AI Asystent', icon: Sparkles, action: () => {}, shortcut: 'Ctrl+K' },
     { label: 'Statystyki', icon: BarChart3, action: () => router.push('/analytics'), shortcut: 'Ctrl+A' },
+    { label: 'Projekty', icon: Folder, action: () => router.push('/projects'), shortcut: 'Ctrl+P' },
   ]
 
   if (status === 'loading') {
@@ -124,7 +125,10 @@ export default function NarrativeDesktop() {
                 <span className="text-2xl font-bold text-white">Narrative OS</span>
               </div>
               <div className="h-8 w-px bg-white bg-opacity-20"></div>
-              <button className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition">
+              <button
+                onClick={() => router.push('/projects')}
+                className="flex items-center space-x-2 px-4 py-2 bg-white bg-opacity-10 hover:bg-opacity-20 rounded-lg transition"
+              >
                 <Folder className="h-4 w-4 text-purple-300" />
                 <span className="text-white font-medium">{currentProject?.name || 'Wybierz projekt'}</span>
               </button>
