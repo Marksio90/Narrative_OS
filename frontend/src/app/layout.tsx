@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
+import { QueryProvider } from '@/lib/query-client'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -13,7 +15,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionProvider>
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </SessionProvider>
+      </body>
     </html>
   )
 }
