@@ -59,7 +59,7 @@ async def health():
 
 
 # Import routers
-from api.routes import canon, contracts, promise_ledger, planner, qc, draft, export
+from api.routes import canon, contracts, promise_ledger, planner, qc, draft, export, ai_draft
 from api.routes import auth, permissions
 from api.schemas.user import UserRead, UserCreate
 
@@ -109,6 +109,7 @@ app.include_router(planner.router, prefix="/api/planner", tags=["Planner"])
 app.include_router(qc.router, prefix="/api/qc", tags=["Quality Control"])
 app.include_router(draft.router, prefix="/api/draft", tags=["Draft Generation"])
 app.include_router(export.router, prefix="/api/export", tags=["Export"])
+app.include_router(ai_draft.router, prefix="/api", tags=["AI Writing Assistant"])
 
 
 if __name__ == "__main__":
