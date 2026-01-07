@@ -63,6 +63,15 @@ export default function Layout({ children }: LayoutProps) {
                 <Target className="h-4 w-4" />
                 <span className="hidden md:inline">Promises</span>
               </Link>
+              <Link
+                href="/ai-studio"
+                className="flex items-center space-x-1 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition shadow-sm"
+              >
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span className="hidden md:inline font-medium">AI Studio</span>
+              </Link>
 
               {/* User Navigation */}
               <div className="ml-4 pl-4 border-l border-gray-200 dark:border-gray-700">
