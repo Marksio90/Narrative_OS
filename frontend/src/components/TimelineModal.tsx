@@ -120,31 +120,31 @@ export default function TimelineModal({
   const eventTypes = [
     {
       value: 'plot',
-      label: 'Plot Event',
+      label: 'Wydarzenie Fabularne',
       color: 'purple',
       icon: '📖',
-      description: 'Main story event'
+      description: 'Główne wydarzenie fabularne'
     },
     {
       value: 'backstory',
-      label: 'Backstory',
+      label: 'Przeszłość',
       color: 'gray',
       icon: '⏪',
-      description: 'Past event'
+      description: 'Wydarzenie z przeszłości'
     },
     {
       value: 'world',
-      label: 'World Event',
+      label: 'Wydarzenie Światowe',
       color: 'blue',
       icon: '🌍',
-      description: 'Historical/world-building'
+      description: 'Historyczne/tworzenie świata'
     },
     {
       value: 'character',
-      label: 'Character Moment',
+      label: 'Moment Postaci',
       color: 'green',
       icon: '👤',
-      description: 'Personal character event'
+      description: 'Osobiste wydarzenie postaci'
     },
   ]
 
@@ -159,10 +159,10 @@ export default function TimelineModal({
             </div>
             <div>
               <h2 className="text-2xl font-bold text-gray-900">
-                {event ? 'Edit Timeline Event' : 'New Timeline Event'}
+                {event ? 'Edytuj Wydarzenie na Osi Czasu' : 'Nowe Wydarzenie na Osi Czasu'}
               </h2>
               <p className="text-sm text-gray-600">
-                Track chronological events in your story
+                Śledź chronologiczne wydarzenia w swojej historii
               </p>
             </div>
           </div>
@@ -187,29 +187,29 @@ export default function TimelineModal({
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Calendar className="h-5 w-5 text-indigo-600" />
-              <span>Basic Information</span>
+              <span>Podstawowe Informacje</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Event Name *
+                Nazwa Wydarzenia *
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="e.g., The Battle of Winterfell, Sarah's Awakening, The Great Cataclysm"
+                placeholder="np. Bitwa o Winterfell, Przebudzenie Sary, Wielki Kataklizm"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 required
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description *
+                Opis *
               </label>
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="What happens in this event..."
+                placeholder="Co się dzieje w tym wydarzeniu..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"
                 rows={3}
                 required
@@ -221,7 +221,7 @@ export default function TimelineModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Zap className="h-5 w-5 text-amber-600" />
-              <span>Event Type</span>
+              <span>Typ Wydarzenia</span>
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {eventTypes.map((type) => (
@@ -249,30 +249,30 @@ export default function TimelineModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Clock className="h-5 w-5 text-blue-600" />
-              <span>When</span>
+              <span>Kiedy</span>
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Date/Time in Story
+                  Data/Czas w Historii
                 </label>
                 <input
                   type="text"
                   value={formData.date_in_story || ''}
                   onChange={(e) => setFormData({ ...formData, date_in_story: e.target.value })}
-                  placeholder="e.g., Year 1850, Spring, Day 3"
+                  placeholder="np. Rok 1850, Wiosna, Dzień 3"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Chapter Number
+                  Numer Rozdziału
                 </label>
                 <input
                   type="number"
                   value={formData.chapter_number || ''}
                   onChange={(e) => setFormData({ ...formData, chapter_number: e.target.value ? parseInt(e.target.value) : undefined })}
-                  placeholder="e.g., 15"
+                  placeholder="np. 15"
                   min="1"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -284,17 +284,17 @@ export default function TimelineModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <MapPin className="h-5 w-5 text-green-600" />
-              <span>Where</span>
+              <span>Gdzie</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location
+                Lokalizacja
               </label>
               <input
                 type="text"
                 value={formData.location || ''}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                placeholder="e.g., King's Landing, The Dark Forest, Sarah's apartment"
+                placeholder="np. Królewska Przystań, Mroczny Las, Mieszkanie Sary"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
@@ -304,17 +304,17 @@ export default function TimelineModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Users className="h-5 w-5 text-purple-600" />
-              <span>Who's Involved</span>
+              <span>Kto Bierze Udział</span>
             </h3>
             <p className="text-sm text-gray-600">
-              Characters participating in this event
+              Postacie biorące udział w tym wydarzeniu
             </p>
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={newParticipant}
                 onChange={(e) => setNewParticipant(e.target.value)}
-                placeholder="e.g., Jon Snow, Sarah Chen"
+                placeholder="np. Jon Snow, Sara Chen"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('participants', newParticipant, setNewParticipant))}
               />
@@ -329,7 +329,7 @@ export default function TimelineModal({
             <div className="space-y-2">
               {formData.participants.length === 0 ? (
                 <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">
-                  No participants added yet
+                  Nie dodano jeszcze uczestników
                 </p>
               ) : (
                 formData.participants.map((participant, idx) => (
@@ -355,17 +355,17 @@ export default function TimelineModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Zap className="h-5 w-5 text-orange-600" />
-              <span>Consequences & Results</span>
+              <span>Konsekwencje i Rezultaty</span>
             </h3>
             <p className="text-sm text-gray-600">
-              What resulted from this event? How did it change things?
+              Co wynikło z tego wydarzenia? Jak to zmieniło sytuację?
             </p>
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={newConsequence}
                 onChange={(e) => setNewConsequence(e.target.value)}
-                placeholder="e.g., The kingdom fell into chaos, Sarah discovered her powers"
+                placeholder="np. Królestwo popadło w chaos, Sara odkryła swoje moce"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('consequences', newConsequence, setNewConsequence))}
               />
@@ -380,7 +380,7 @@ export default function TimelineModal({
             <div className="space-y-2">
               {formData.consequences.length === 0 ? (
                 <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">
-                  No consequences added yet
+                  Nie dodano jeszcze konsekwencji
                 </p>
               ) : (
                 formData.consequences.map((consequence, idx) => (
@@ -411,11 +411,11 @@ export default function TimelineModal({
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
                   <p className="text-2xl font-bold text-purple-600">{formData.participants.length}</p>
-                  <p className="text-sm text-gray-600">Participants</p>
+                  <p className="text-sm text-gray-600">Uczestnicy</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-orange-600">{formData.consequences.length}</p>
-                  <p className="text-sm text-gray-600">Consequences</p>
+                  <p className="text-sm text-gray-600">Konsekwencje</p>
                 </div>
               </div>
             </div>
@@ -425,7 +425,7 @@ export default function TimelineModal({
         {/* Footer */}
         <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
           <p className="text-sm text-gray-600">
-            * Required fields
+            * Pola wymagane
           </p>
           <div className="flex space-x-3">
             <button
@@ -434,7 +434,7 @@ export default function TimelineModal({
               className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition"
               disabled={isSaving}
             >
-              Cancel
+              Anuluj
             </button>
             <button
               onClick={handleSubmit}
@@ -444,10 +444,10 @@ export default function TimelineModal({
               {isSaving ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Saving...</span>
+                  <span>Zapisywanie...</span>
                 </>
               ) : (
-                <span>Save Event</span>
+                <span>Zapisz Wydarzenie</span>
               )}
             </button>
           </div>

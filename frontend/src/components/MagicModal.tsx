@@ -280,17 +280,17 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Zap className="h-5 w-5 text-yellow-600" />
-              <span>Power Source</span>
+              <span>Źródło Mocy</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Where does magic come from?
+                Skąd pochodzi magia?
               </label>
               <input
                 type="text"
                 value={formData.power_source || ''}
                 onChange={(e) => setFormData({ ...formData, power_source: e.target.value })}
-                placeholder="e.g., Natural energy, Divine blessing, Ancient artifacts, User's life force"
+                placeholder="np. Naturalna energia, Boskie błogosławieństwo, Starożytne artefakty, Siła życiowa użytkownika"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
               />
             </div>
@@ -300,17 +300,17 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Shield className="h-5 w-5 text-red-600" />
-              <span>Costs & Consequences</span>
+              <span>Koszty i Konsekwencje</span>
             </h3>
             <p className="text-sm text-gray-600">
-              What does using magic cost? (Energy, time, materials, sacrifice, etc.)
+              Co kosztuje użycie magii? (Energia, czas, materiały, poświęcenie, itp.)
             </p>
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={newCost}
                 onChange={(e) => setNewCost(e.target.value)}
-                placeholder="e.g., Drains stamina, Requires rare components, Shortens lifespan"
+                placeholder="np. Wyczerpuje wytrzymałość, Wymaga rzadkich komponentów, Skraca życie"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('costs', newCost, setNewCost))}
               />
@@ -325,7 +325,7 @@ export default function MagicModal({
             <div className="space-y-2">
               {formData.costs.length === 0 ? (
                 <p className="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">
-                  No costs defined yet
+                  Nie zdefiniowano jeszcze kosztów
                 </p>
               ) : (
                 formData.costs.map((cost, idx) => (
@@ -351,17 +351,17 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <AlertCircle className="h-5 w-5 text-amber-600" />
-              <span>Limitations & Restrictions</span>
+              <span>Ograniczenia i Restrykcje</span>
             </h3>
             <p className="text-sm text-gray-600">
-              What cannot be done with this magic? Hard limits.
+              Czego nie można zrobić tą magią? Twarde limity.
             </p>
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={newLimitation}
                 onChange={(e) => setNewLimitation(e.target.value)}
-                placeholder="e.g., Cannot create life, Ineffective against iron, Cannot affect free will"
+                placeholder="np. Nie można stworzyć życia, Nieskuteczna przeciwko żelazu, Nie może wpływać na wolną wolę"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('limitations', newLimitation, setNewLimitation))}
               />
@@ -396,17 +396,17 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Sparkles className="h-5 w-5 text-blue-600" />
-              <span>Rules & Laws</span>
+              <span>Zasady i Prawa</span>
             </h3>
             <p className="text-sm text-gray-600">
-              How does magic work? Fundamental laws and rules.
+              Jak działa magia? Fundamentalne prawa i zasady.
             </p>
             <div className="flex space-x-2">
               <input
                 type="text"
                 value={newRule}
                 onChange={(e) => setNewRule(e.target.value)}
-                placeholder="e.g., Magic follows conservation of energy, Stronger emotions = stronger magic"
+                placeholder="np. Magia podlega zasadzie zachowania energii, Silniejsze emocje = silniejsza magia"
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addArrayItem('rules', newRule, setNewRule))}
               />
@@ -441,16 +441,16 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Users className="h-5 w-5 text-green-600" />
-              <span>Practitioners & Access</span>
+              <span>Praktycy i Dostęp</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Who can use this magic?
+                Kto może używać tej magii?
               </label>
               <textarea
                 value={formData.practitioners || ''}
                 onChange={(e) => setFormData({ ...formData, practitioners: e.target.value })}
-                placeholder="Requirements, bloodlines, training needed, restrictions on who can learn..."
+                placeholder="Wymagania, linie krwi, potrzebne szkolenie, ograniczenia dotyczące tego, kto może się nauczyć..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
                 rows={2}
               />
@@ -461,16 +461,16 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Sparkles className="h-5 w-5 text-pink-600" />
-              <span>Manifestation & Appearance</span>
+              <span>Manifestacja i Wygląd</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                How does magic appear when used?
+                Jak wygląda magia podczas użycia?
               </label>
               <textarea
                 value={formData.manifestation || ''}
                 onChange={(e) => setFormData({ ...formData, manifestation: e.target.value })}
-                placeholder="Visual effects, sounds, sensations, signs that magic is being used..."
+                placeholder="Efekty wizualne, dźwięki, odczucia, oznaki używania magii..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
                 rows={2}
               />
@@ -481,16 +481,16 @@ export default function MagicModal({
           <div className="space-y-3">
             <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
               <Users className="h-5 w-5 text-purple-600" />
-              <span>Cultural Impact</span>
+              <span>Wpływ Kulturowy</span>
             </h3>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                How does society view and use magic?
+                Jak społeczeństwo postrzega i używa magii?
               </label>
               <textarea
                 value={formData.cultural_impact || ''}
                 onChange={(e) => setFormData({ ...formData, cultural_impact: e.target.value })}
-                placeholder="Social attitudes, legal status, role in daily life, education systems..."
+                placeholder="Postawy społeczne, status prawny, rola w życiu codziennym, systemy edukacji..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                 rows={2}
               />
@@ -503,15 +503,15 @@ export default function MagicModal({
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p className="text-2xl font-bold text-red-600">{formData.costs.length}</p>
-                  <p className="text-sm text-gray-600">Costs</p>
+                  <p className="text-sm text-gray-600">Koszty</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-amber-600">{formData.limitations.length}</p>
-                  <p className="text-sm text-gray-600">Limitations</p>
+                  <p className="text-sm text-gray-600">Ograniczenia</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-blue-600">{formData.rules.length}</p>
-                  <p className="text-sm text-gray-600">Rules</p>
+                  <p className="text-sm text-gray-600">Zasady</p>
                 </div>
               </div>
             </div>
@@ -521,7 +521,7 @@ export default function MagicModal({
         {/* Footer */}
         <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
           <p className="text-sm text-gray-600">
-            * Required fields
+            * Pola wymagane
           </p>
           <div className="flex space-x-3">
             <button
@@ -530,7 +530,7 @@ export default function MagicModal({
               className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition"
               disabled={isSaving}
             >
-              Cancel
+              Anuluj
             </button>
             <button
               onClick={handleSubmit}
@@ -540,10 +540,10 @@ export default function MagicModal({
               {isSaving ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>Saving...</span>
+                  <span>Zapisywanie...</span>
                 </>
               ) : (
-                <span>Save Magic System</span>
+                <span>Zapisz System Magii</span>
               )}
             </button>
           </div>
