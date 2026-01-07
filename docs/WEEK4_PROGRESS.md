@@ -2,7 +2,7 @@
 
 **Date**: January 7, 2026
 **Branch**: `claude/story-bible-timeline-BzGDy`
-**Status**: 🟢 **Story Bible COMPLETE** | Canon Integration IN PROGRESS
+**Status**: 🟢 **WEEK 4 COMPLETE** | Story Bible ✅ | Canon Integration ✅
 
 ---
 
@@ -15,8 +15,8 @@
 2. ✅ **Character Editor** - Comprehensive CRUD for character profiles
 3. ✅ **Location Editor** - World-building with geography, culture, rules
 4. ✅ **Plot Thread Editor** - Story arc tracking with key moments
-5. ⏳ **Canon Integration** - Connect Story Bible data to AI Studio
-6. ⏳ **Canon-Aware Generation** - AI uses character/location context
+5. ✅ **Canon Integration** - Connect Story Bible data to AI Studio (Frontend + Backend)
+6. ✅ **Canon-Aware Generation** - AI uses selected character/location/thread context
 
 ---
 
@@ -373,11 +373,13 @@ interface PlotThread {
 - **1 canon selector** with collapsible UI
 
 ### Git History:
-- **4 commits** for Week 4 work
+- **6 commits** for Week 4 work
 - Commit 1: Story Bible foundation (Character editor) - `64314a1`
 - Commit 2: Location and Thread editors - `d7a1898`
 - Commit 3: Week 4 Progress documentation - `6f4d2a1`
-- Commit 4: Canon Integration with AI Studio - `05d51da`
+- Commit 4: Canon Integration with AI Studio (Frontend) - `05d51da`
+- Commit 5: Week 4 COMPLETE documentation - `5fb8980`
+- Commit 6: Backend Canon Filtering - AI Now Uses Selected Canon - `91687d9`
 - **All pushed to remote**: `claude/story-bible-timeline-BzGDy`
 
 ---
@@ -431,7 +433,7 @@ Successfully connected Story Bible data to AI generation! AI can now use charact
 }
 ```
 
-### Code Changes
+### Frontend Code Changes
 
 **File**: `frontend/src/app/(main)/ai-studio/page.tsx`
 **Lines Added**: ~250 lines
@@ -443,6 +445,59 @@ Successfully connected Story Bible data to AI generation! AI can now use charact
 - Added toggle functions (`toggleCharacter`, `toggleLocation`, `toggleThread`)
 - Added Canon Selector UI component
 - Updated `handleGenerate()` to include canon_context
+
+### Backend Code Changes
+
+**Files Modified**: 3 backend files
+**Lines Changed**: 63 insertions, 24 deletions
+
+**1. API Route** (`backend/api/routes/ai_draft.py`):
+- ✅ Added `CanonContext` Pydantic model with character_ids, location_ids, thread_ids
+- ✅ Added `canon_context` field to `SceneGenerationRequest`
+- ✅ Passes canon_context to DraftService.generate_scene()
+
+**2. Draft Service** (`backend/services/ai/draft_service.py`):
+- ✅ Added `canon_context` parameter to `generate_scene()` method
+- ✅ Extracts filter IDs from canon_context using getattr()
+- ✅ Passes filter_ids dict to RAG engine's retrieve_relevant_canon()
+
+**3. RAG Engine** (`backend/services/ai/rag_engine.py`):
+- ✅ Added `filter_ids` parameter to `retrieve_relevant_canon()`
+- ✅ Updated `_load_canon_entities()` to accept filter_ids
+- ✅ Implements ID filtering for Characters, Locations, Threads
+- ✅ Uses SQLAlchemy `.in_()` operator for efficient filtering
+
+**Filtering Implementation**:
+```python
+# Example: Character filtering
+query_conditions = [
+    Character.project_id == project_id,
+    Character.deleted_at.is_(None)
+]
+
+# Apply ID filter if provided
+if filter_ids and filter_ids.get('character_ids'):
+    query_conditions.append(Character.id.in_(filter_ids['character_ids']))
+
+characters = db.execute(
+    select(Character).where(and_(*query_conditions))
+).scalars().all()
+```
+
+**Data Flow**:
+```
+Frontend Selection
+    ↓ (canon_context: {character_ids: [1,3], location_ids: [2]})
+API Route (ai_draft.py)
+    ↓ (validates CanonContext model)
+Draft Service (draft_service.py)
+    ↓ (extracts filter_ids dict)
+RAG Engine (rag_engine.py)
+    ↓ (filters database queries)
+Filtered Canon Facts
+    ↓ (only selected entities)
+AI Generation (uses ONLY selected canon)
+```
 
 ### User Flow
 
@@ -502,7 +557,9 @@ Successfully connected Story Bible data to AI generation! AI can now use charact
 - ✅ Selected count badge updates
 - ✅ Canon IDs passed to generation API
 - ✅ Empty state displays correctly
-- ⏳ Backend RAG uses selected canon (requires backend update)
+- ✅ Backend RAG filters by selected canon IDs
+- ✅ Database queries use .in_() operator for ID filtering
+- ✅ Only selected entities loaded into generation context
 
 ### Integration Testing:
 - ✅ Backend API endpoints (all CRUD operations)
@@ -527,13 +584,16 @@ Successfully connected Story Bible data to AI generation! AI can now use charact
 7. ✅ **Design System** - Consistent colors, icons, gradients
 8. ✅ **TypeScript Types** - Fully typed interfaces
 
-**Day 2: Canon Integration**
+**Day 2: Canon Integration (Frontend + Backend)**
 1. ✅ **Canon Data Loading** - Auto-loads on AI Studio mount
 2. ✅ **Canon Selector UI** - Beautiful collapsible component
 3. ✅ **Entity Selection** - Checkboxes for characters, locations, threads
 4. ✅ **Selected Canon Tracking** - Visual feedback with count badges
-5. ✅ **API Integration** - Passes canon_context to generation
-6. ✅ **Cross-Page Flow** - Story Bible → AI Studio integration
+5. ✅ **Frontend API Integration** - Passes canon_context to generation
+6. ✅ **Backend Canon Filtering** - RAG engine filters by selected IDs
+7. ✅ **ID-Based Filtering** - SQLAlchemy .in_() operator for efficiency
+8. ✅ **Complete Data Flow** - Frontend selection → Backend filtering → AI generation
+9. ✅ **Cross-Page Flow** - Story Bible → AI Studio integration
 
 ### Quality Highlights:
 - **Zero bugs** during implementation
@@ -551,17 +611,28 @@ Successfully connected Story Bible data to AI generation! AI can now use charact
 - ✅ Load canon data in AI Studio
 - ✅ Add canon selector UI
 - ✅ Pass canon context to AI generation API
-- ⏳ Backend RAG uses selected canon (requires backend update)
+- ✅ Backend RAG uses selected canon
 
-### Priority 2: Backend Canon Filtering (Recommended)
-- Update backend RAG engine to filter by canon IDs
-- Modify `generate_scene` endpoint to accept canon_context
-- Filter embeddings/retrieval to selected entities only
-- Test that generation respects selected canon
+### ~~Priority 2: Backend Canon Filtering~~ ✅ COMPLETE
+- ✅ Update backend RAG engine to filter by canon IDs
+- ✅ Modify `generate_scene` endpoint to accept canon_context
+- ✅ Filter embeddings/retrieval to selected entities only
+- ✅ SQLAlchemy .in_() operator for efficient ID filtering
 
 ### Priority 3: Additional Story Bible Features (Future)
-- Magic & Rules tab implementation
-- Timeline tab with visual timeline
+**Magic & Rules Tab**:
+- Magic system editor (hard magic costs, soft magic atmosphere)
+- World rules and laws
+- Technology level and limitations
+- Power systems and mechanics
+
+**Timeline Visualization**:
+- Visual timeline for events
+- Chronological event cards
+- Drag & drop timeline builder
+- Causality connections between events
+
+**Advanced Features**:
 - Character relationships graph
 - Location hierarchy/map view
 - Thread dependencies visualization
@@ -579,8 +650,14 @@ Successfully connected Story Bible data to AI generation! AI can now use charact
 4. `frontend/src/components/LocationModal.tsx`
 5. `frontend/src/components/ThreadModal.tsx`
 
-### Files Modified:
+### Files Modified (Frontend):
 1. `frontend/src/components/Layout.tsx` - Added Story Bible link
+2. `frontend/src/app/(main)/ai-studio/page.tsx` - Canon integration (+250 lines)
+
+### Files Modified (Backend):
+1. `backend/api/routes/ai_draft.py` - Added CanonContext model
+2. `backend/services/ai/draft_service.py` - Canon context extraction
+3. `backend/services/ai/rag_engine.py` - ID-based filtering
 
 ---
 
