@@ -7,13 +7,14 @@ import {
   User, MapPin, Sparkles, Book, Clock, Wand2,
   Plus, Search, Filter, ArrowUpDown, Edit2, Trash2,
   Eye, Heart, Shield, Zap, Target, MessageSquare,
-  Download, Upload, AlertCircle, Users, X, FileJson
+  Download, Upload, AlertCircle, Users, X, FileJson, Network
 } from 'lucide-react'
 import CharacterModal from '@/components/CharacterModal'
 import LocationModal from '@/components/LocationModal'
 import ThreadModal from '@/components/ThreadModal'
 import MagicModal from '@/components/MagicModal'
 import TimelineModal from '@/components/TimelineModal'
+import RelationshipsGraph from '@/components/RelationshipsGraph'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -37,6 +38,13 @@ interface Character {
     starting_state: string
     goal_state: string
     key_transformations: string[]
+  }
+  relationships?: {
+    [characterName: string]: {
+      type: string
+      description?: string
+      strength?: number
+    }
   }
   created_at: string
   updated_at: string
@@ -128,6 +136,7 @@ export default function StoryBiblePage() {
   const [showMagicModal, setShowMagicModal] = useState(false)
   const [showTimelineModal, setShowTimelineModal] = useState(false)
   const [showImportModal, setShowImportModal] = useState(false)
+  const [showRelationshipsGraph, setShowRelationshipsGraph] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
 
   // Export/Import states
@@ -419,6 +428,15 @@ export default function StoryBiblePage() {
               </p>
             </div>
             <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setShowRelationshipsGraph(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition shadow-sm"
+                title="Zobacz graf relacji między postaciami"
+              >
+                <Network className="h-5 w-5" />
+                <span>Graf Relacji</span>
+              </button>
+              <div className="w-px h-8 bg-gray-300"></div>
               <button
                 onClick={handleExport}
                 className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition shadow-sm"
@@ -795,6 +813,14 @@ export default function StoryBiblePage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Relationships Graph */}
+      {showRelationshipsGraph && (
+        <RelationshipsGraph
+          characters={characters}
+          onClose={() => setShowRelationshipsGraph(false)}
+        />
       )}
     </div>
   )
