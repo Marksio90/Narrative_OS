@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ReactNode } from 'react'
 import { BookOpen, Users, FileEdit, Target, Home } from 'lucide-react'
+import UserNav from './UserNav'
 
 interface LayoutProps {
   children: ReactNode
@@ -22,39 +23,44 @@ export default function Layout({ children }: LayoutProps) {
             <div className="flex items-center space-x-6">
               <Link
                 href="/"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <Home className="h-4 w-4" />
-                <span>Home</span>
+                <span className="hidden md:inline">Home</span>
               </Link>
               <Link
                 href="/canon"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <BookOpen className="h-4 w-4" />
-                <span>Canon</span>
+                <span className="hidden md:inline">Canon</span>
               </Link>
               <Link
                 href="/planner"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <Users className="h-4 w-4" />
-                <span>Planner</span>
+                <span className="hidden md:inline">Planner</span>
               </Link>
               <Link
                 href="/editor"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <FileEdit className="h-4 w-4" />
-                <span>Editor</span>
+                <span className="hidden md:inline">Editor</span>
               </Link>
               <Link
                 href="/promises"
-                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <Target className="h-4 w-4" />
-                <span>Promises</span>
+                <span className="hidden md:inline">Promises</span>
               </Link>
+
+              {/* User Navigation */}
+              <div className="ml-4 pl-4 border-l border-gray-200 dark:border-gray-700">
+                <UserNav />
+              </div>
             </div>
           </div>
         </div>
