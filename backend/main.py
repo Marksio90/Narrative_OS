@@ -59,7 +59,7 @@ async def health():
 
 
 # Import routers
-from api.routes import canon, contracts, promise_ledger, planner, qc, draft, export, ai_draft
+from api.routes import canon, contracts, promise_ledger, planner, qc, draft, export, ai_draft, desktop
 from api.routes import auth, permissions
 from api.schemas.user import UserRead, UserCreate
 
@@ -102,6 +102,7 @@ app.include_router(
 )
 
 # === Core Feature Routes ===
+app.include_router(desktop.router, prefix="/api/desktop", tags=["Desktop"])
 app.include_router(canon.router, prefix="/api/canon", tags=["Canon"])
 app.include_router(contracts.router, prefix="/api/contracts", tags=["Contracts"])
 app.include_router(promise_ledger.router, prefix="/api/promises", tags=["Promise Ledger"])
