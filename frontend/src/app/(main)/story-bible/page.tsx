@@ -12,6 +12,7 @@ import CharacterModal from '@/components/CharacterModal'
 import LocationModal from '@/components/LocationModal'
 import ThreadModal from '@/components/ThreadModal'
 import MagicModal from '@/components/MagicModal'
+import TimelineModal from '@/components/TimelineModal'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -87,6 +88,22 @@ interface MagicSystem {
   updated_at: string
 }
 
+interface TimelineEvent {
+  id: number
+  project_id: number
+  name: string
+  description: string
+  event_type: 'plot' | 'backstory' | 'world' | 'character'
+  date_in_story?: string
+  chapter_number?: number
+  location?: string
+  participants: string[]
+  consequences: string[]
+  related_events?: number[]
+  created_at: string
+  updated_at: string
+}
+
 type Tab = 'characters' | 'locations' | 'threads' | 'magic' | 'timeline'
 
 export default function StoryBiblePage() {
@@ -101,12 +118,14 @@ export default function StoryBiblePage() {
   const [locations, setLocations] = useState<Location[]>([])
   const [threads, setThreads] = useState<PlotThread[]>([])
   const [magicSystems, setMagicSystems] = useState<MagicSystem[]>([])
+  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>([])
 
   // Modal states
   const [showCharacterModal, setShowCharacterModal] = useState(false)
   const [showLocationModal, setShowLocationModal] = useState(false)
   const [showThreadModal, setShowThreadModal] = useState(false)
   const [showMagicModal, setShowMagicModal] = useState(false)
+  const [showTimelineModal, setShowTimelineModal] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
 
   // Redirect if not authenticated
@@ -131,7 +150,8 @@ export default function StoryBiblePage() {
         loadCharacters(),
         loadLocations(),
         loadThreads(),
-        loadMagicSystems()
+        loadMagicSystems(),
+        loadTimelineEvents()
       ])
     } catch (error) {
       console.error('Error loading data:', error)
@@ -204,6 +224,22 @@ export default function StoryBiblePage() {
     }
   }
 
+  const loadTimelineEvents = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/canon/timeline?project_id=1`, {
+        headers: {
+          'Authorization': `Bearer ${session?.accessToken}`,
+        },
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setTimelineEvents(data)
+      }
+    } catch (error) {
+      console.error('Error loading timeline events:', error)
+    }
+  }
+
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -220,7 +256,7 @@ export default function StoryBiblePage() {
     { id: 'locations' as Tab, name: 'Locations', icon: MapPin, count: locations.length },
     { id: 'threads' as Tab, name: 'Plot Threads', icon: Sparkles, count: threads.length },
     { id: 'magic' as Tab, name: 'Magic & Rules', icon: Wand2, count: magicSystems.length },
-    { id: 'timeline' as Tab, name: 'Timeline', icon: Clock, count: 0 },
+    { id: 'timeline' as Tab, name: 'Timeline', icon: Clock, count: timelineEvents.length },
   ]
 
   const handleAddNew = () => {
@@ -229,6 +265,7 @@ export default function StoryBiblePage() {
     if (activeTab === 'locations') setShowLocationModal(true)
     if (activeTab === 'threads') setShowThreadModal(true)
     if (activeTab === 'magic') setShowMagicModal(true)
+    if (activeTab === 'timeline') setShowTimelineModal(true)
   }
 
   const handleEdit = (item: any) => {
@@ -237,6 +274,7 @@ export default function StoryBiblePage() {
     if (activeTab === 'locations') setShowLocationModal(true)
     if (activeTab === 'threads') setShowThreadModal(true)
     if (activeTab === 'magic') setShowMagicModal(true)
+    if (activeTab === 'timeline') setShowTimelineModal(true)
   }
 
   const handleDelete = async (id: number) => {
@@ -248,6 +286,7 @@ export default function StoryBiblePage() {
       if (activeTab === 'locations') endpoint = `/api/canon/location/${id}`
       if (activeTab === 'threads') endpoint = `/api/canon/thread/${id}`
       if (activeTab === 'magic') endpoint = `/api/canon/magic/${id}`
+      if (activeTab === 'timeline') endpoint = `/api/canon/timeline/${id}`
 
       const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'DELETE',
@@ -376,12 +415,12 @@ export default function StoryBiblePage() {
           />
         )}
         {activeTab === 'timeline' && (
-          <div className="text-center py-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-              <Clock className="h-8 w-8 text-gray-400" />
-            </div>
-            <p className="text-gray-600">Coming soon...</p>
-          </div>
+          <TimelineTab
+            events={timelineEvents}
+            searchQuery={searchQuery}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         )}
       </div>
 
@@ -441,6 +480,21 @@ export default function StoryBiblePage() {
           onSave={() => {
             loadMagicSystems()
             setShowMagicModal(false)
+            setEditingItem(null)
+          }}
+          accessToken={session?.accessToken || ''}
+        />
+      )}
+      {showTimelineModal && (
+        <TimelineModal
+          event={editingItem}
+          onClose={() => {
+            setShowTimelineModal(false)
+            setEditingItem(null)
+          }}
+          onSave={() => {
+            loadTimelineEvents()
+            setShowTimelineModal(false)
             setEditingItem(null)
           }}
           accessToken={session?.accessToken || ''}
@@ -942,6 +996,161 @@ function MagicCard({
             </div>
             <p className="text-xs text-gray-600">Rules</p>
             <p className="text-sm font-semibold text-gray-900">{magicSystem.rules?.length || 0}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Timeline Tab Component
+function TimelineTab({
+  events,
+  searchQuery,
+  onEdit,
+  onDelete
+}: {
+  events: TimelineEvent[]
+  searchQuery: string
+  onEdit: (item: any) => void
+  onDelete: (id: number) => void
+}) {
+  const filtered = events.filter(e =>
+    e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    e.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  // Sort by chapter number if available, otherwise by creation date
+  const sorted = [...filtered].sort((a, b) => {
+    if (a.chapter_number && b.chapter_number) {
+      return a.chapter_number - b.chapter_number
+    }
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  })
+
+  if (sorted.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+        <p className="text-gray-600">No timeline events found</p>
+        <p className="text-sm text-gray-500 mt-1">Create your first event to build your story's chronology</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-4">
+      {sorted.map((event, idx) => (
+        <TimelineCard
+          key={event.id}
+          event={event}
+          isFirst={idx === 0}
+          isLast={idx === sorted.length - 1}
+          onEdit={() => onEdit(event)}
+          onDelete={() => onDelete(event.id)}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Timeline Card Component
+function TimelineCard({
+  event,
+  isFirst,
+  isLast,
+  onEdit,
+  onDelete
+}: {
+  event: TimelineEvent
+  isFirst: boolean
+  isLast: boolean
+  onEdit: () => void
+  onDelete: () => void
+}) {
+  const typeConfig = {
+    plot: { color: 'from-purple-500 to-indigo-600', badge: 'bg-purple-100 text-purple-700', icon: '📖', label: 'Plot' },
+    backstory: { color: 'from-gray-500 to-slate-600', badge: 'bg-gray-100 text-gray-700', icon: '⏪', label: 'Backstory' },
+    world: { color: 'from-blue-500 to-cyan-600', badge: 'bg-blue-100 text-blue-700', icon: '🌍', label: 'World' },
+    character: { color: 'from-green-500 to-emerald-600', badge: 'bg-green-100 text-green-700', icon: '👤', label: 'Character' },
+  }
+
+  const config = typeConfig[event.event_type]
+
+  return (
+    <div className="flex items-start space-x-4">
+      {/* Timeline Line */}
+      <div className="flex flex-col items-center">
+        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${config.color} flex items-center justify-center text-2xl flex-shrink-0 shadow-lg`}>
+          {config.icon}
+        </div>
+        {!isLast && (
+          <div className="w-0.5 bg-gradient-to-b from-gray-300 to-gray-200 h-full min-h-[40px] flex-grow mt-2" />
+        )}
+      </div>
+
+      {/* Content Card */}
+      <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition p-6 mb-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1">
+            <div className="flex items-center space-x-2 mb-2">
+              <h3 className="text-lg font-bold text-gray-900">{event.name}</h3>
+              <span className={`px-2 py-1 text-xs font-medium rounded ${config.badge}`}>
+                {config.label}
+              </span>
+            </div>
+            {event.description && (
+              <p className="text-sm text-gray-600 mb-3">{event.description}</p>
+            )}
+
+            {/* Meta Info */}
+            <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+              {event.chapter_number && (
+                <span className="flex items-center space-x-1">
+                  <Book className="h-3 w-3" />
+                  <span>Ch. {event.chapter_number}</span>
+                </span>
+              )}
+              {event.date_in_story && (
+                <span className="flex items-center space-x-1">
+                  <Clock className="h-3 w-3" />
+                  <span>{event.date_in_story}</span>
+                </span>
+              )}
+              {event.location && (
+                <span className="flex items-center space-x-1">
+                  <MapPin className="h-3 w-3" />
+                  <span>{event.location}</span>
+                </span>
+              )}
+              {event.participants && event.participants.length > 0 && (
+                <span className="flex items-center space-x-1">
+                  <Users className="h-3 w-3" />
+                  <span>{event.participants.length} participants</span>
+                </span>
+              )}
+              {event.consequences && event.consequences.length > 0 && (
+                <span className="flex items-center space-x-1">
+                  <Zap className="h-3 w-3" />
+                  <span>{event.consequences.length} consequences</span>
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex space-x-1 flex-shrink-0 ml-4">
+            <button
+              onClick={onEdit}
+              className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition"
+            >
+              <Edit2 className="h-4 w-4" />
+            </button>
+            <button
+              onClick={onDelete}
+              className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </div>
