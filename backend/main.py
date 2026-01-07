@@ -59,12 +59,13 @@ async def health():
 
 
 # Import routers
-from api.routes import canon, contracts, promise_ledger
+from api.routes import canon, contracts, promise_ledger, planner
 
 # Include routers
 app.include_router(canon.router, prefix="/api/canon", tags=["Canon"])
 app.include_router(contracts.router, prefix="/api/contracts", tags=["Contracts"])
 app.include_router(promise_ledger.router, prefix="/api/promises", tags=["Promise Ledger"])
+app.include_router(planner.router, prefix="/api/planner", tags=["Planner"])
 
 # TODO: Add more routers as they're implemented
 # from api.routes import planner, draft, qc, export
