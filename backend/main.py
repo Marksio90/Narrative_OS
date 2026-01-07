@@ -58,13 +58,20 @@ async def health():
     return {"status": "healthy"}
 
 
-# Import routers (will be added incrementally)
-# from api.routes import canon, planner, draft, qc, export
-# app.include_router(canon.router, prefix="/api/canon", tags=["canon"])
-# app.include_router(planner.router, prefix="/api/planner", tags=["planner"])
-# app.include_router(draft.router, prefix="/api/draft", tags=["draft"])
-# app.include_router(qc.router, prefix="/api/qc", tags=["quality"])
-# app.include_router(export.router, prefix="/api/export", tags=["export"])
+# Import routers
+from api.routes import canon, contracts, promise_ledger
+
+# Include routers
+app.include_router(canon.router, prefix="/api/canon", tags=["Canon"])
+app.include_router(contracts.router, prefix="/api/contracts", tags=["Contracts"])
+app.include_router(promise_ledger.router, prefix="/api/promises", tags=["Promise Ledger"])
+
+# TODO: Add more routers as they're implemented
+# from api.routes import planner, draft, qc, export
+# app.include_router(planner.router, prefix="/api/planner", tags=["Planner"])
+# app.include_router(draft.router, prefix="/api/draft", tags=["Draft"])
+# app.include_router(qc.router, prefix="/api/qc", tags=["Quality"])
+# app.include_router(export.router, prefix="/api/export", tags=["Export"])
 
 
 if __name__ == "__main__":
