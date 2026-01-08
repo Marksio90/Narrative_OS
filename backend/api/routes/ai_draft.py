@@ -62,6 +62,63 @@ class RefinementRequest(BaseModel):
     preset: str = Field("balanced")
 
 
+class ConsistencyCheckRequest(BaseModel):
+    """Request to check canon consistency"""
+    text: str = Field(..., description="Text to check against canon")
+    chapter_number: Optional[int] = Field(None, description="Chapter context")
+    check_character_voice: bool = Field(True, description="Check character voice consistency")
+    check_worldbuilding: bool = Field(True, description="Check worldbuilding consistency")
+    check_plot_continuity: bool = Field(True, description="Check plot continuity")
+
+
+class ConsistencyIssue(BaseModel):
+    """A single consistency issue"""
+    type: str = Field(..., description="Type: character, worldbuilding, plot, voice, promise")
+    severity: str = Field(..., description="Severity: critical, warning, suggestion")
+    description: str = Field(..., description="What's inconsistent")
+    text_excerpt: Optional[str] = Field(None, description="Relevant text excerpt")
+    canon_reference: Optional[str] = Field(None, description="What canon says")
+    suggestion: Optional[str] = Field(None, description="How to fix")
+    line_number: Optional[int] = Field(None, description="Line in text")
+
+
+class ConsistencyCheckResponse(BaseModel):
+    """Response from consistency check"""
+    issues: List[ConsistencyIssue]
+    summary: str
+    overall_score: float = Field(..., ge=0, le=100, description="Consistency score 0-100")
+    critical_count: int
+    warning_count: int
+    suggestion_count: int
+
+
+class SuggestionsRequest(BaseModel):
+    """Request AI suggestions"""
+    text: str = Field(..., description="Text to analyze")
+    focus_areas: Optional[List[str]] = Field(
+        None,
+        description="What to focus on: pacing, tension, dialogue, description, emotion, etc."
+    )
+    chapter_number: Optional[int] = Field(None)
+
+
+class Suggestion(BaseModel):
+    """A single AI suggestion"""
+    category: str = Field(..., description="Category: pacing, dialogue, description, etc.")
+    priority: str = Field(..., description="Priority: high, medium, low")
+    suggestion: str = Field(..., description="The suggestion")
+    example: Optional[str] = Field(None, description="Example of improvement")
+    rationale: Optional[str] = Field(None, description="Why this helps")
+
+
+class SuggestionsResponse(BaseModel):
+    """Response from AI suggestions"""
+    suggestions: List[Suggestion]
+    summary: str
+    strengths: List[str] = Field(..., description="What works well")
+    opportunities: List[str] = Field(..., description="Areas for improvement")
+
+
 class GenerationResponse(BaseModel):
     """Response from generation"""
     text: str
@@ -388,3 +445,112 @@ async def estimate_usage(
         "estimated_time_minutes": round(total_time_seconds / 60, 1),
         "llm_calls_used": scene_count * 3,  # Approximate (plan + write + critique)
     }
+
+
+@router.post("/projects/{project_id}/ai/check-consistency", response_model=ConsistencyCheckResponse)
+async def check_consistency(
+    project_id: int,
+    request: ConsistencyCheckRequest,
+    user: User = Depends(require_project_access(min_role=CollaboratorRole.WRITER)),
+    db: Session = Depends(get_db)
+):
+    """
+    Check text for canon consistency issues
+
+    AI analyzes the text against:
+    - Character canon (behavioral limits, voice, goals, fears)
+    - Worldbuilding canon (locations, magic rules, restrictions)
+    - Plot continuity (promises, threads, timeline)
+    - Character voice consistency
+
+    Returns:
+    - List of issues with severity levels
+    - Suggestions for fixes
+    - Overall consistency score (0-100)
+
+    Requires WRITER access.
+    """
+    service = get_draft_service("canon_strict", db)
+
+    try:
+        # Use the service's check_consistency method
+        result = await service.check_consistency(
+            project_id=project_id,
+            text=request.text,
+            chapter_number=request.chapter_number,
+            check_character_voice=request.check_character_voice,
+            check_worldbuilding=request.check_worldbuilding,
+            check_plot_continuity=request.check_plot_continuity
+        )
+
+        # Count issues by severity
+        critical_count = sum(1 for i in result.issues if i.severity == "critical")
+        warning_count = sum(1 for i in result.issues if i.severity == "warning")
+        suggestion_count = sum(1 for i in result.issues if i.severity == "suggestion")
+
+        return ConsistencyCheckResponse(
+            issues=result.issues,
+            summary=result.summary,
+            overall_score=result.overall_score,
+            critical_count=critical_count,
+            warning_count=warning_count,
+            suggestion_count=suggestion_count
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Consistency check failed: {str(e)}"
+        )
+
+
+@router.post("/projects/{project_id}/ai/suggest", response_model=SuggestionsResponse)
+async def suggest_improvements(
+    project_id: int,
+    request: SuggestionsRequest,
+    user: User = Depends(require_project_access(min_role=CollaboratorRole.WRITER)),
+    db: Session = Depends(get_db)
+):
+    """
+    Get AI suggestions for improving text
+
+    AI analyzes the text for:
+    - Pacing issues
+    - Tension and stakes
+    - Dialogue quality
+    - Show vs tell balance
+    - Sensory details
+    - Emotional depth
+    - Character voice
+    - Scene structure
+
+    Suggestions are prioritized (high/medium/low) and include:
+    - What to improve
+    - Why it matters
+    - Example of better version
+
+    Requires WRITER access.
+    """
+    service = get_draft_service("balanced", db)
+
+    try:
+        # Use the service's suggest_improvements method
+        result = await service.suggest_improvements(
+            project_id=project_id,
+            text=request.text,
+            focus_areas=request.focus_areas,
+            chapter_number=request.chapter_number
+        )
+
+        return SuggestionsResponse(
+            suggestions=result.suggestions,
+            summary=result.summary,
+            strengths=result.strengths,
+            opportunities=result.opportunities
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Suggestions failed: {str(e)}"
+        )

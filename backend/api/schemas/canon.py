@@ -336,6 +336,44 @@ class EntityStatsResponse(BaseModel):
     total: int = 0
 
 
+# ===== Export/Import Schemas =====
+
+class CanonExportResponse(BaseModel):
+    """Full canon export for a project"""
+    project_id: int
+    exported_at: datetime
+    version: str = "1.0"
+    entities: Dict[str, List[Dict[str, Any]]] = Field(
+        default_factory=dict,
+        description="All canon entities grouped by type"
+    )
+    stats: EntityStatsResponse
+
+
+class CanonImportRequest(BaseModel):
+    """Canon import request"""
+    entities: Dict[str, List[Dict[str, Any]]] = Field(
+        ...,
+        description="Canon entities grouped by type (characters, locations, etc.)"
+    )
+    overwrite: bool = Field(
+        False,
+        description="If True, delete existing entities before import"
+    )
+    commit_message: Optional[str] = Field(
+        None,
+        description="Version commit message for this import"
+    )
+
+
+class CanonImportResponse(BaseModel):
+    """Canon import result"""
+    success: bool
+    imported_counts: EntityStatsResponse
+    errors: List[str] = Field(default_factory=list)
+    warnings: List[str] = Field(default_factory=list)
+
+
 # ===== Generic Response =====
 
 class MessageResponse(BaseModel):

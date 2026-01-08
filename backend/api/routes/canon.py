@@ -6,6 +6,7 @@ REST endpoints for Canon entity management
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from datetime import datetime
 
 from core.database.base import get_db
 from services.canon.service import CanonService
@@ -40,6 +41,10 @@ from api.schemas.canon import (
     ValidationResult,
     EntityStatsResponse,
     MessageResponse,
+    # Export/Import
+    CanonExportResponse,
+    CanonImportRequest,
+    CanonImportResponse,
 )
 
 router = APIRouter()
@@ -738,3 +743,139 @@ async def get_entity_stats(
     stats = service.get_entity_stats(project_id)
     stats["total"] = sum(stats.values())
     return stats
+
+
+# ===== Export/Import Endpoints =====
+
+@router.get("/export/{project_id}", response_model=CanonExportResponse)
+async def export_canon(
+    project_id: int,
+    service: CanonService = Depends(get_canon_service),
+):
+    """
+    Export all canon data for a project
+
+    Returns complete canon database as structured JSON:
+    - All characters, locations, magic rules, events, promises, threads
+    - Can be used for backups, templates, or sharing
+    - Import using POST /api/canon/import/{project_id}
+    """
+    try:
+        # Get all entity types
+        entity_types = ["character", "location", "magic_rule", "event", "promise", "thread"]
+        entities_by_type = {}
+
+        for entity_type in entity_types:
+            entities = service.list_entities(
+                entity_type=entity_type,
+                project_id=project_id,
+                limit=1000  # High limit for export
+            )
+
+            # Convert to dict for JSON serialization
+            entities_by_type[entity_type] = [
+                entity.model_dump() if hasattr(entity, 'model_dump') else dict(entity)
+                for entity in entities
+            ]
+
+        # Get stats
+        stats = service.get_entity_stats(project_id)
+        stats["total"] = sum(stats.values())
+
+        return CanonExportResponse(
+            project_id=project_id,
+            exported_at=datetime.utcnow(),
+            version="1.0",
+            entities=entities_by_type,
+            stats=stats
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
+
+
+@router.post("/import/{project_id}", response_model=CanonImportResponse)
+async def import_canon(
+    project_id: int,
+    data: CanonImportRequest,
+    service: CanonService = Depends(get_canon_service),
+):
+    """
+    Import canon data into a project
+
+    Accepts JSON export from /api/canon/export/{project_id}
+
+    Options:
+    - overwrite=false (default): Add to existing canon
+    - overwrite=true: Delete all existing canon first (DESTRUCTIVE!)
+
+    Returns counts of imported entities and any errors
+    """
+    errors = []
+    warnings = []
+    imported_counts = {
+        "character": 0,
+        "location": 0,
+        "magic_rule": 0,
+        "event": 0,
+        "promise": 0,
+        "thread": 0,
+        "total": 0
+    }
+
+    try:
+        # OVERWRITE MODE: Delete all existing entities
+        if data.overwrite:
+            entity_types = ["character", "location", "magic_rule", "event", "promise", "thread"]
+            for entity_type in entity_types:
+                existing = service.list_entities(
+                    entity_type=entity_type,
+                    project_id=project_id,
+                    limit=1000
+                )
+                for entity in existing:
+                    service.delete_entity(
+                        entity_type=entity_type,
+                        entity_id=entity.id,
+                        commit_message=f"Deleted during import (overwrite mode)"
+                    )
+            warnings.append(f"Overwrite mode: Deleted all existing canon entities")
+
+        # Import each entity type
+        for entity_type, entities_list in data.entities.items():
+            for entity_data in entities_list:
+                try:
+                    # Remove metadata fields that shouldn't be in create request
+                    clean_data = {k: v for k, v in entity_data.items()
+                                 if k not in ['id', 'created_at', 'updated_at', 'canon_version_id']}
+
+                    # Set project_id
+                    clean_data['project_id'] = project_id
+
+                    # Create entity
+                    service.create_entity(
+                        entity_type=entity_type,
+                        project_id=project_id,
+                        data=clean_data,
+                        commit_message=data.commit_message or f"Imported {entity_type}"
+                    )
+
+                    imported_counts[entity_type] = imported_counts.get(entity_type, 0) + 1
+
+                except Exception as e:
+                    errors.append(f"Failed to import {entity_type}: {str(e)}")
+
+        # Calculate total
+        imported_counts["total"] = sum(v for k, v in imported_counts.items() if k != "total")
+
+        success = len(errors) == 0 or imported_counts["total"] > 0
+
+        return CanonImportResponse(
+            success=success,
+            imported_counts=imported_counts,
+            errors=errors,
+            warnings=warnings
+        )
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
