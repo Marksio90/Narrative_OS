@@ -24,6 +24,7 @@ import {
   ChevronUp
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import DialogueConsistencyChecker from '@/components/DialogueConsistencyChecker'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -93,6 +94,9 @@ export default function AIStudioPage() {
 
   // Canon selector UI state
   const [showCanonSelector, setShowCanonSelector] = useState(true)
+
+  // Voice consistency checker state
+  const [showConsistencyChecker, setShowConsistencyChecker] = useState(false)
 
   // Load canon data on mount
   useEffect(() => {
@@ -686,6 +690,48 @@ export default function AIStudioPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Dialogue Consistency Checker */}
+          {result && result.text.includes('"') && session?.accessToken && (
+            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-4 cursor-pointer hover:from-purple-100 hover:to-pink-100 transition"
+                onClick={() => setShowConsistencyChecker(!showConsistencyChecker)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        Voice Consistency Analysis
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Check dialogue consistency with character fingerprints
+                      </p>
+                    </div>
+                  </div>
+                  <button className="p-2 hover:bg-purple-200 dark:hover:bg-purple-800 rounded-lg transition">
+                    {showConsistencyChecker ? (
+                      <ChevronUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {showConsistencyChecker && (
+                <div className="p-6">
+                  <DialogueConsistencyChecker
+                    generatedText={result.text}
+                    accessToken={(session?.user as any)?.accessToken || ''}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
