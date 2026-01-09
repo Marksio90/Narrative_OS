@@ -3,10 +3,11 @@ Canon Database Models
 
 All core narrative entities that form the "source of truth"
 """
-from sqlalchemy import Column, Integer, String, Text, JSON, ForeignKey, Enum, Float
+from sqlalchemy import Column, Integer, String, Text, JSON, ForeignKey, Enum, Float, DateTime
 from sqlalchemy.orm import relationship
 import enum
-from .base import Base, CanonEntityMixin
+from datetime import datetime
+from .base import Base, CanonEntityMixin, TimestampMixin
 from ..database.base import Base as SQLBase
 
 
@@ -312,3 +313,151 @@ class StyleProfile(Base, CanonEntityMixin):
 
     # Examples (for few-shot learning)
     example_paragraphs = Column(JSON, default=list, comment="Sample prose in this style")
+
+
+# === Voice Fingerprinting Models ===
+
+class CharacterVoiceFingerprint(Base, TimestampMixin):
+    """
+    Linguistic fingerprint for a character's dialogue
+    Analyzes patterns to ensure consistency across the novel
+    """
+    __tablename__ = "character_voice_fingerprints"
+
+    id = Column(Integer, primary_key=True, index=True)
+    character_id = Column(Integer, ForeignKey("characters.id", ondelete="CASCADE"), nullable=False, unique=True)
+
+    # Vocabulary Analysis
+    vocabulary_profile = Column(JSON, nullable=False, comment="""
+        {
+            'word_frequency': {word: count},
+            'avg_word_length': float,
+            'unique_word_ratio': float,
+            'rarity_score': float,
+            'top_words': [word1, word2, ...],
+            'avoided_words': [word1, word2, ...]
+        }
+    """)
+
+    # Syntax Analysis
+    syntax_profile = Column(JSON, nullable=False, comment="""
+        {
+            'avg_sentence_length': float,
+            'sentence_length_variance': float,
+            'complexity_score': float,
+            'question_frequency': float,
+            'exclamation_frequency': float,
+            'subordinate_clause_frequency': float
+        }
+    """)
+
+    # Linguistic Markers
+    linguistic_markers = Column(JSON, nullable=False, comment="""
+        {
+            'catchphrases': [str],
+            'filler_words': [str],
+            'sentence_starters': [str],
+            'quirks': [str],
+            'contractions_ratio': float,
+            'profanity_frequency': float
+        }
+    """)
+
+    # Emotional Baseline
+    emotional_baseline = Column(JSON, nullable=False, comment="""
+        {
+            'joy': float,
+            'anger': float,
+            'sadness': float,
+            'fear': float,
+            'surprise': float,
+            'neutral': float,
+            'dominant_emotion': str
+        }
+    """)
+
+    # Formality & Style
+    formality_score = Column(Float, nullable=False, comment="0-1, casual to formal")
+    confidence_score = Column(Float, nullable=False, comment="0-1, fingerprint reliability")
+
+    # Metadata
+    sample_count = Column(Integer, nullable=False, comment="Number of dialogue samples")
+    total_words = Column(Integer, nullable=False, comment="Total words analyzed")
+    last_analyzed_at = Column(DateTime, nullable=False)
+
+    # Relationship
+    character = relationship("Character", backref="voice_fingerprint")
+
+
+class DialogueLine(Base, TimestampMixin):
+    """
+    Extracted dialogue line with character attribution
+    Used to build voice fingerprints and train consistency models
+    """
+    __tablename__ = "dialogue_lines"
+
+    id = Column(Integer, primary_key=True, index=True)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
+    scene_id = Column(Integer, nullable=True, index=True, comment="Scene this dialogue is from")
+    character_id = Column(Integer, ForeignKey("characters.id", ondelete="CASCADE"), nullable=False, index=True)
+
+    # Content
+    text = Column(Text, nullable=False, comment="The dialogue text (without quotes)")
+    context = Column(Text, nullable=True, comment="Surrounding prose for context")
+
+    # Metadata
+    word_count = Column(Integer, nullable=False)
+    extracted_at = Column(DateTime, nullable=False)
+
+    # Relationships
+    character = relationship("Character", backref="dialogue_lines")
+
+
+class DialogueConsistencyScore(Base, TimestampMixin):
+    """
+    Consistency score for dialogue against character voice fingerprint
+    Tracks issues and provides suggestions for improvement
+    """
+    __tablename__ = "dialogue_consistency_scores"
+
+    id = Column(Integer, primary_key=True, index=True)
+    scene_id = Column(Integer, nullable=True, index=True, comment="Scene being checked")
+    character_id = Column(Integer, ForeignKey("characters.id", ondelete="CASCADE"), nullable=False, index=True)
+    fingerprint_id = Column(Integer, ForeignKey("character_voice_fingerprints.id", ondelete="CASCADE"), nullable=False, index=True)
+
+    # Scores
+    overall_score = Column(Float, nullable=False, index=True, comment="0-1, overall consistency")
+    vocabulary_score = Column(Float, nullable=False, comment="0-1, word choice consistency")
+    syntax_score = Column(Float, nullable=False, comment="0-1, sentence structure consistency")
+    formality_score = Column(Float, nullable=False, comment="0-1, formality match")
+    emotional_score = Column(Float, nullable=False, comment="0-1, emotional tone match")
+
+    # Issues & Suggestions
+    issues = Column(JSON, nullable=False, comment="""
+        [
+            {
+                'type': 'vocabulary'|'syntax'|'formality'|'emotion',
+                'severity': 'low'|'medium'|'high',
+                'description': str,
+                'line_number': int,
+                'problematic_text': str
+            }
+        ]
+    """)
+    suggestions = Column(JSON, nullable=False, comment="""
+        [
+            {
+                'issue_index': int,
+                'original_text': str,
+                'suggested_text': str,
+                'reason': str
+            }
+        ]
+    """)
+
+    # Metadata
+    dialogue_text = Column(Text, nullable=False, comment="The dialogue that was checked")
+
+    # Relationships
+    character = relationship("Character", backref="consistency_scores")
+    fingerprint = relationship("CharacterVoiceFingerprint", backref="consistency_scores")
