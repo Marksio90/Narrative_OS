@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { X, Plus, Trash2, User, Target, Heart, Shield, Zap, MessageSquare, TrendingUp } from 'lucide-react'
+import VoiceFingerprintPanel from './VoiceFingerprintPanel'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -648,6 +649,17 @@ export default function CharacterModal({
               </div>
             </div>
           </div>
+
+          {/* Voice Fingerprint Section - Only for existing characters */}
+          {character?.id && (
+            <div className="space-y-4 pt-6 border-t border-gray-200">
+              <VoiceFingerprintPanel
+                characterId={character.id}
+                characterName={formData.name || 'this character'}
+                accessToken={accessToken}
+              />
+            </div>
+          )}
         </form>
 
         {/* Footer */}
