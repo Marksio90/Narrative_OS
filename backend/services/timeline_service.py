@@ -648,3 +648,514 @@ class TimelineService:
         self.db.commit()
         self.db.refresh(event)
         return event
+
+    # ==================== Conflict Detection ====================
+
+    def detect_all_conflicts(self, project_id: int) -> Dict[str, int]:
+        """
+        Run all conflict detection algorithms
+
+        Returns counts of conflicts detected by type
+        """
+        counts = {
+            "overlap": self._detect_overlap_conflicts(project_id),
+            "character_conflicts": self._detect_character_conflicts(project_id),
+            "pacing_issues": self._detect_pacing_issues(project_id),
+            "continuity_errors": self._detect_continuity_errors(project_id),
+        }
+        return counts
+
+    def _detect_overlap_conflicts(self, project_id: int) -> int:
+        """
+        Detect events that overlap in the same chapter
+
+        Creates warnings when multiple high-magnitude events
+        occur in the same chapter.
+        """
+        # Get all events grouped by chapter
+        events = self.db.query(TimelineEvent).filter(
+            TimelineEvent.project_id == project_id,
+            TimelineEvent.is_visible == True
+        ).order_by(
+            TimelineEvent.chapter_number,
+            TimelineEvent.position_weight
+        ).all()
+
+        # Group by chapter
+        chapters: Dict[int, List[TimelineEvent]] = {}
+        for event in events:
+            if event.chapter_number not in chapters:
+                chapters[event.chapter_number] = []
+            chapters[event.chapter_number].append(event)
+
+        conflicts_created = 0
+
+        for chapter_num, chapter_events in chapters.items():
+            # Count major beats in this chapter
+            major_beats = [e for e in chapter_events if e.is_major_beat]
+
+            if len(major_beats) > 2:
+                # Too many major beats in one chapter
+                event_ids = [e.id for e in major_beats]
+
+                # Check if conflict already exists
+                existing = self.db.query(TimelineConflict).filter(
+                    TimelineConflict.project_id == project_id,
+                    TimelineConflict.conflict_type == ConflictType.OVERLAP,
+                    TimelineConflict.chapter_start == chapter_num,
+                    TimelineConflict.status == "open"
+                ).first()
+
+                if not existing:
+                    conflict = TimelineConflict(
+                        project_id=project_id,
+                        conflict_type=ConflictType.OVERLAP,
+                        severity=ConflictSeverity.WARNING,
+                        chapter_start=chapter_num,
+                        chapter_end=chapter_num,
+                        event_ids=event_ids,
+                        title=f"Chapter {chapter_num}: Too Many Major Events",
+                        description=f"Chapter {chapter_num} contains {len(major_beats)} major story beats. "
+                                  f"This may overwhelm the reader. Consider spreading events across chapters.",
+                        suggestions=[
+                            {
+                                "action": "move_event",
+                                "details": "Move one or more events to adjacent chapters for better pacing"
+                            }
+                        ],
+                        detection_method="overlap_detector",
+                        confidence=0.8
+                    )
+                    self.db.add(conflict)
+                    conflicts_created += 1
+
+            # Check for milestone clustering
+            milestones = [e for e in chapter_events if e.event_type == TimelineEventType.MILESTONE]
+            if len(milestones) > 3:
+                event_ids = [e.id for e in milestones]
+
+                existing = self.db.query(TimelineConflict).filter(
+                    TimelineConflict.project_id == project_id,
+                    TimelineConflict.conflict_type == ConflictType.OVERLAP,
+                    TimelineConflict.chapter_start == chapter_num,
+                    TimelineConflict.description.contains("milestones")
+                ).first()
+
+                if not existing:
+                    conflict = TimelineConflict(
+                        project_id=project_id,
+                        conflict_type=ConflictType.OVERLAP,
+                        severity=ConflictSeverity.INFO,
+                        chapter_start=chapter_num,
+                        chapter_end=chapter_num,
+                        event_ids=event_ids,
+                        title=f"Chapter {chapter_num}: Multiple Character Milestones",
+                        description=f"{len(milestones)} character arc milestones occur in this chapter. "
+                                  f"This is acceptable but verify it's intentional.",
+                        detection_method="overlap_detector",
+                        confidence=0.6
+                    )
+                    self.db.add(conflict)
+                    conflicts_created += 1
+
+        self.db.commit()
+        return conflicts_created
+
+    def _detect_character_conflicts(self, project_id: int) -> int:
+        """
+        Detect characters appearing in conflicting locations/events
+
+        Checks if a character has milestones or events that would
+        require them to be in multiple places simultaneously.
+        """
+        events = self.db.query(TimelineEvent).filter(
+            TimelineEvent.project_id == project_id,
+            TimelineEvent.is_visible == True
+        ).all()
+
+        # Group events by chapter and character
+        character_chapters: Dict[int, Dict[int, List[TimelineEvent]]] = {}
+
+        for event in events:
+            if not event.related_characters:
+                continue
+
+            chapter = event.chapter_number
+            if chapter not in character_chapters:
+                character_chapters[chapter] = {}
+
+            for char_id in event.related_characters:
+                if char_id not in character_chapters[chapter]:
+                    character_chapters[chapter][char_id] = []
+                character_chapters[chapter][char_id].append(event)
+
+        conflicts_created = 0
+
+        # Check for characters with too many concurrent events
+        for chapter_num, characters in character_chapters.items():
+            for char_id, char_events in characters.items():
+                if len(char_events) > 5:
+                    # Character is involved in many events this chapter
+                    event_ids = [e.id for e in char_events]
+
+                    existing = self.db.query(TimelineConflict).filter(
+                        TimelineConflict.project_id == project_id,
+                        TimelineConflict.conflict_type == ConflictType.CHARACTER_CONFLICT,
+                        TimelineConflict.chapter_start == chapter_num,
+                        TimelineConflict.event_ids.contains(event_ids[:1])  # Check if any event matches
+                    ).first()
+
+                    if not existing:
+                        conflict = TimelineConflict(
+                            project_id=project_id,
+                            conflict_type=ConflictType.CHARACTER_CONFLICT,
+                            severity=ConflictSeverity.WARNING,
+                            chapter_start=chapter_num,
+                            chapter_end=chapter_num,
+                            event_ids=event_ids,
+                            title=f"Chapter {chapter_num}: Character Over-Involved",
+                            description=f"Character (ID: {char_id}) is involved in {len(char_events)} events in this chapter. "
+                                      f"Verify this character can realistically participate in all these events.",
+                            suggestions=[
+                                {
+                                    "action": "review_events",
+                                    "details": "Review event timing and character availability"
+                                }
+                            ],
+                            detection_method="character_conflict_detector",
+                            confidence=0.7
+                        )
+                        self.db.add(conflict)
+                        conflicts_created += 1
+
+        self.db.commit()
+        return conflicts_created
+
+    def _detect_pacing_issues(self, project_id: int) -> int:
+        """
+        Detect pacing problems in the timeline
+
+        Identifies:
+        - Long stretches with no major events
+        - Too many events clustered together
+        - Uneven distribution of story beats
+        """
+        events = self.db.query(TimelineEvent).filter(
+            TimelineEvent.project_id == project_id,
+            TimelineEvent.is_visible == True,
+            TimelineEvent.is_major_beat == True
+        ).order_by(TimelineEvent.chapter_number).all()
+
+        if len(events) < 2:
+            return 0
+
+        conflicts_created = 0
+
+        # Check gaps between major events
+        for i in range(len(events) - 1):
+            current = events[i]
+            next_event = events[i + 1]
+
+            gap = next_event.chapter_number - current.chapter_number
+
+            # Large gap without major beats
+            if gap > 7:
+                existing = self.db.query(TimelineConflict).filter(
+                    TimelineConflict.project_id == project_id,
+                    TimelineConflict.conflict_type == ConflictType.PACING_ISSUE,
+                    TimelineConflict.chapter_start == current.chapter_number,
+                    TimelineConflict.chapter_end == next_event.chapter_number
+                ).first()
+
+                if not existing:
+                    conflict = TimelineConflict(
+                        project_id=project_id,
+                        conflict_type=ConflictType.PACING_ISSUE,
+                        severity=ConflictSeverity.WARNING,
+                        chapter_start=current.chapter_number,
+                        chapter_end=next_event.chapter_number,
+                        event_ids=[current.id, next_event.id],
+                        title=f"Pacing Gap: Chapters {current.chapter_number}-{next_event.chapter_number}",
+                        description=f"There's a {gap}-chapter gap between major story beats. "
+                                  f"Consider adding tension or conflict to maintain reader engagement.",
+                        suggestions=[
+                            {
+                                "action": "add_event",
+                                "details": "Add a plot complication, character development, or rising tension"
+                            }
+                        ],
+                        detection_method="pacing_detector",
+                        confidence=0.7
+                    )
+                    self.db.add(conflict)
+                    conflicts_created += 1
+
+        self.db.commit()
+        return conflicts_created
+
+    def _detect_continuity_errors(self, project_id: int) -> int:
+        """
+        Detect timeline continuity issues
+
+        Checks for:
+        - Character arcs that end before they begin
+        - Consequences that occur before their cause
+        - Events that reference future events
+        """
+        conflicts_created = 0
+
+        # Check character arcs
+        arcs = self.db.query(CharacterArc).filter(
+            CharacterArc.project_id == project_id
+        ).all()
+
+        for arc in arcs:
+            if arc.start_chapter and arc.end_chapter:
+                if arc.end_chapter < arc.start_chapter:
+                    # Arc ends before it begins
+                    existing = self.db.query(TimelineConflict).filter(
+                        TimelineConflict.project_id == project_id,
+                        TimelineConflict.conflict_type == ConflictType.CONTINUITY_ERROR,
+                        TimelineConflict.description.contains(f"Arc ID: {arc.id}")
+                    ).first()
+
+                    if not existing:
+                        conflict = TimelineConflict(
+                            project_id=project_id,
+                            conflict_type=ConflictType.CONTINUITY_ERROR,
+                            severity=ConflictSeverity.ERROR,
+                            chapter_start=arc.start_chapter,
+                            chapter_end=arc.end_chapter,
+                            event_ids=[],
+                            title=f"Character Arc Timeline Error",
+                            description=f"Character arc (Arc ID: {arc.id}) ends at chapter {arc.end_chapter} "
+                                      f"but starts at chapter {arc.start_chapter}. End must come after start.",
+                            suggestions=[
+                                {
+                                    "action": "edit_event",
+                                    "details": "Correct the start or end chapter for this arc"
+                                }
+                            ],
+                            detection_method="continuity_detector",
+                            confidence=1.0
+                        )
+                        self.db.add(conflict)
+                        conflicts_created += 1
+
+        # Check consequences and their sources
+        consequences = self.db.query(TimelineEvent).filter(
+            TimelineEvent.project_id == project_id,
+            TimelineEvent.event_type == TimelineEventType.CONSEQUENCE
+        ).all()
+
+        for consequence in consequences:
+            source_event_id = consequence.metadata.get("consequence", {}).get("source_event_id")
+            if source_event_id:
+                # Find source event in timeline
+                source = self.db.query(TimelineEvent).filter(
+                    TimelineEvent.project_id == project_id,
+                    TimelineEvent.source_id == source_event_id,
+                    TimelineEvent.event_type == TimelineEventType.STORY_EVENT
+                ).first()
+
+                if source and source.chapter_number > consequence.chapter_number:
+                    # Consequence occurs before its cause
+                    existing = self.db.query(TimelineConflict).filter(
+                        TimelineConflict.project_id == project_id,
+                        TimelineConflict.conflict_type == ConflictType.CONTINUITY_ERROR,
+                        TimelineConflict.event_ids.contains([consequence.id])
+                    ).first()
+
+                    if not existing:
+                        conflict = TimelineConflict(
+                            project_id=project_id,
+                            conflict_type=ConflictType.CONTINUITY_ERROR,
+                            severity=ConflictSeverity.CRITICAL,
+                            chapter_start=consequence.chapter_number,
+                            chapter_end=source.chapter_number,
+                            event_ids=[consequence.id, source.id],
+                            title=f"Consequence Before Cause",
+                            description=f"A consequence occurs in chapter {consequence.chapter_number} "
+                                      f"but its source event is in chapter {source.chapter_number}. "
+                                      f"Effects cannot precede their causes.",
+                            suggestions=[
+                                {
+                                    "action": "move_event",
+                                    "event_id": consequence.id,
+                                    "details": f"Move consequence to chapter {source.chapter_number + 1} or later"
+                                }
+                            ],
+                            detection_method="continuity_detector",
+                            confidence=1.0
+                        )
+                        self.db.add(conflict)
+                        conflicts_created += 1
+
+        self.db.commit()
+        return conflicts_created
+
+    # ==================== Conflict Management ====================
+
+    def get_conflicts(
+        self,
+        project_id: int,
+        conflict_types: Optional[List[ConflictType]] = None,
+        severities: Optional[List[ConflictSeverity]] = None,
+        status: Optional[str] = None,
+        chapter_range: Optional[tuple[int, int]] = None
+    ) -> List[TimelineConflict]:
+        """Get timeline conflicts with filtering"""
+        query = self.db.query(TimelineConflict).filter(
+            TimelineConflict.project_id == project_id
+        )
+
+        if conflict_types:
+            query = query.filter(TimelineConflict.conflict_type.in_(conflict_types))
+
+        if severities:
+            query = query.filter(TimelineConflict.severity.in_(severities))
+
+        if status:
+            query = query.filter(TimelineConflict.status == status)
+
+        if chapter_range:
+            start, end = chapter_range
+            query = query.filter(
+                or_(
+                    and_(
+                        TimelineConflict.chapter_start >= start,
+                        TimelineConflict.chapter_start <= end
+                    ),
+                    and_(
+                        TimelineConflict.chapter_end >= start,
+                        TimelineConflict.chapter_end <= end
+                    )
+                )
+            )
+
+        return query.order_by(
+            TimelineConflict.severity.desc(),
+            TimelineConflict.chapter_start
+        ).all()
+
+    def resolve_conflict(
+        self,
+        conflict_id: int,
+        resolution_note: Optional[str] = None,
+        user_id: Optional[int] = None
+    ) -> Optional[TimelineConflict]:
+        """Mark a conflict as resolved"""
+        conflict = self.db.query(TimelineConflict).filter(
+            TimelineConflict.id == conflict_id
+        ).first()
+
+        if not conflict:
+            return None
+
+        conflict.status = "resolved"
+        conflict.resolution_note = resolution_note
+        conflict.resolved_at = datetime.utcnow()
+        conflict.resolved_by_user_id = user_id
+
+        self.db.commit()
+        self.db.refresh(conflict)
+        return conflict
+
+    def ignore_conflict(self, conflict_id: int) -> Optional[TimelineConflict]:
+        """Mark a conflict as ignored (user acknowledges but won't fix)"""
+        conflict = self.db.query(TimelineConflict).filter(
+            TimelineConflict.id == conflict_id
+        ).first()
+
+        if not conflict:
+            return None
+
+        conflict.status = "ignored"
+        self.db.commit()
+        self.db.refresh(conflict)
+        return conflict
+
+    # ==================== Views & Bookmarks ====================
+
+    def save_view(
+        self,
+        project_id: int,
+        name: str,
+        config: Dict[str, Any],
+        user_id: Optional[int] = None,
+        description: Optional[str] = None,
+        is_default: bool = False
+    ) -> TimelineView:
+        """Save a timeline view configuration"""
+        view = TimelineView(
+            project_id=project_id,
+            user_id=user_id,
+            name=name,
+            description=description,
+            config=config,
+            is_default=is_default
+        )
+        self.db.add(view)
+        self.db.commit()
+        self.db.refresh(view)
+        return view
+
+    def get_views(
+        self,
+        project_id: int,
+        user_id: Optional[int] = None
+    ) -> List[TimelineView]:
+        """Get saved views for a project"""
+        query = self.db.query(TimelineView).filter(
+            TimelineView.project_id == project_id
+        )
+
+        if user_id:
+            query = query.filter(
+                or_(
+                    TimelineView.user_id == user_id,
+                    TimelineView.is_shared == True
+                )
+            )
+
+        return query.order_by(
+            TimelineView.is_default.desc(),
+            TimelineView.last_used_at.desc()
+        ).all()
+
+    def create_bookmark(
+        self,
+        project_id: int,
+        user_id: int,
+        chapter_number: int,
+        title: str,
+        notes: Optional[str] = None,
+        color: str = "#FFD700"
+    ) -> TimelineBookmark:
+        """Create a bookmark on the timeline"""
+        bookmark = TimelineBookmark(
+            project_id=project_id,
+            user_id=user_id,
+            chapter_number=chapter_number,
+            title=title,
+            notes=notes,
+            color=color
+        )
+        self.db.add(bookmark)
+        self.db.commit()
+        self.db.refresh(bookmark)
+        return bookmark
+
+    def get_bookmarks(
+        self,
+        project_id: int,
+        user_id: int
+    ) -> List[TimelineBookmark]:
+        """Get user's bookmarks for a project"""
+        return self.db.query(TimelineBookmark).filter(
+            TimelineBookmark.project_id == project_id,
+            TimelineBookmark.user_id == user_id
+        ).order_by(
+            TimelineBookmark.sort_order,
+            TimelineBookmark.chapter_number
+        ).all()
