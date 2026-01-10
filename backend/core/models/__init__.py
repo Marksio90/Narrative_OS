@@ -35,6 +35,20 @@ from .timeline import (
     ConflictType,
     ConflictSeverity,
 )
+from .agent_collaboration import (
+    Agent,
+    AgentTask,
+    AgentConversation,
+    AgentMessage,
+    AgentMemory,
+    AgentVote,
+    AgentType,
+    AgentRole,
+    TaskStatus,
+    TaskPriority,
+    ConflictResolutionStrategy,
+    MemoryType,
+)
 
 __all__ = [
     # Base
@@ -81,4 +95,17 @@ __all__ = [
     "TimelineLayer",
     "ConflictType",
     "ConflictSeverity",
+    # Agent Collaboration
+    "Agent",
+    "AgentTask",
+    "AgentConversation",
+    "AgentMessage",
+    "AgentMemory",
+    "AgentVote",
+    "AgentType",
+    "AgentRole",
+    "TaskStatus",
+    "TaskPriority",
+    "ConflictResolutionStrategy",
+    "MemoryType",
 ]
