@@ -59,7 +59,7 @@ async def health():
 
 
 # Import routers
-from api.routes import canon, contracts, promise_ledger, planner, qc, draft, export, ai_draft, desktop, projects, chapters, voice_fingerprint, consequences, character_arcs, timeline
+from api.routes import canon, contracts, promise_ledger, planner, qc, draft, export, ai_draft, desktop, projects, chapters, voice_fingerprint, consequences, character_arcs, timeline, agent_collaboration
 from api.routes import auth, permissions
 from api.schemas.user import UserRead, UserCreate
 
@@ -117,6 +117,7 @@ app.include_router(voice_fingerprint.router, prefix="/api/voice", tags=["Voice F
 app.include_router(consequences.router, prefix="/api/consequences", tags=["Consequence Simulator"])
 app.include_router(character_arcs.router, prefix="/api/character-arcs", tags=["Character Arcs"])
 app.include_router(timeline.router, prefix="/api", tags=["Timeline Visualizer"])
+app.include_router(agent_collaboration.router, prefix="/api", tags=["Agent Collaboration"])
 
 
 if __name__ == "__main__":
