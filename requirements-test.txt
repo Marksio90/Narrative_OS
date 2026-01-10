@@ -1,0 +1,21 @@
+# Testing dependencies for Agent Collaboration System
+
+# Core testing framework
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-asyncio==0.21.1
+
+# API testing
+httpx==0.25.2
+fastapi[all]==0.104.1
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.13.0
+
+# Coverage reporting
+coverage==7.3.2
+
+# Additional utilities
+faker==20.1.0
+freezegun==1.4.0
