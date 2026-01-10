@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import DialogueConsistencyChecker from '@/components/DialogueConsistencyChecker'
+import ActiveConsequencesPanel from '@/components/ActiveConsequencesPanel'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -508,6 +509,12 @@ export default function AIStudioPage() {
               </div>
             )}
           </div>
+
+          {/* Active Consequences Panel */}
+          <ActiveConsequencesPanel
+            projectId={1}
+            currentChapter={undefined}
+          />
 
           {/* Scene Parameters */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
