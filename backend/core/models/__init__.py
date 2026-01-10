@@ -14,6 +14,17 @@ from .canon import (
     StyleProfile,
 )
 from .planner import BookArc, Chapter, Scene, CanonContract
+from .consequences import StoryEvent, Consequence, EventEntity
+from .character_arcs import (
+    CharacterArc,
+    ArcMilestone,
+    EmotionalState,
+    GoalProgress,
+    RelationshipEvolution,
+    ArcType,
+    MilestoneType,
+    GoalStatus,
+)
 
 __all__ = [
     # Base
@@ -38,4 +49,17 @@ __all__ = [
     "Chapter",
     "Scene",
     "CanonContract",
+    # Consequences
+    "StoryEvent",
+    "Consequence",
+    "EventEntity",
+    # Character Arcs
+    "CharacterArc",
+    "ArcMilestone",
+    "EmotionalState",
+    "GoalProgress",
+    "RelationshipEvolution",
+    "ArcType",
+    "MilestoneType",
+    "GoalStatus",
 ]
