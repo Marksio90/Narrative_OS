@@ -10,8 +10,8 @@ export default function HomePage() {
             Narrative OS
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            AI-powered narrative platform for serious fiction writers.
-            Maintain structural consistency across 300-600 page novels.
+            Platforma narracyjna AI dla poważnych pisarzy fikcji.
+            Utrzymuj spójność strukturalną w powieściach 300-600 stron.
           </p>
         </header>
 
@@ -22,10 +22,10 @@ export default function HomePage() {
           >
             <BookOpen className="w-12 h-12 text-blue-600 mb-4" />
             <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-              Canon Studio
+              Studio Kanonu
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              Define and manage your story bible: characters, locations, factions, magic rules, and more.
+              Definiuj i zarządzaj biblią swojej historii: postacie, lokacje, frakcje, zasady magii i więcej.
             </p>
           </Link>
 
@@ -35,10 +35,10 @@ export default function HomePage() {
           >
             <Users className="w-12 h-12 text-green-600 mb-4" />
             <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-              Planner
+              Planer
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              Structure your story with 3-level planning: Book Arc, Chapters, and Scene Cards.
+              Strukturyzuj swoją historię z 3-poziomowym planem: Łuk Książki, Rozdziały i Karty Scen.
             </p>
           </Link>
 
@@ -48,10 +48,10 @@ export default function HomePage() {
           >
             <FileEdit className="w-12 h-12 text-purple-600 mb-4" />
             <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-              Editor
+              Edytor
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              Generate prose scene-by-scene with multi-agent quality control and validation.
+              Generuj prozę scena po scenie z multi-agentową kontrolą jakości i walidacją.
             </p>
           </Link>
 
@@ -61,17 +61,17 @@ export default function HomePage() {
           >
             <Target className="w-12 h-12 text-orange-600 mb-4" />
             <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">
-              Promise Ledger
+              Księga Obietnic
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              Track narrative promises and payoffs. Never abandon a setup or miss a deadline.
+              Śledź narracyjne obietnice i wypłaty. Nigdy nie porzucaj setupu ani nie przegap terminu.
             </p>
           </Link>
         </div>
 
         <footer className="text-center mt-16 text-gray-600 dark:text-gray-400">
           <p className="text-sm">
-            Built for fantasy and thriller authors writing 300-600 page novels.
+            Stworzone dla autorów fantasy i thrillerów piszących powieści 300-600 stron.
           </p>
         </footer>
       </div>

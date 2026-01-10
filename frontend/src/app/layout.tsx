@@ -3,8 +3,8 @@ import { ClientProviders } from '@/components/ClientProviders'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Narrative OS - AI-Powered Narrative Platform',
-  description: 'Structural consistency tools for serious fiction writers',
+  title: 'Narrative OS - Platforma Narracyjna AI',
+  description: 'Narzędzia spójności strukturalnej dla poważnych pisarzy fikcji',
 }
 
 export default function RootLayout({
