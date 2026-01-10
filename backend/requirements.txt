@@ -6,10 +6,11 @@ pydantic-settings==2.1.0
 python-dotenv==1.0.0
 
 # Database
-sqlalchemy==2.0.25
+sqlalchemy[asyncio]==2.0.25
 alembic==1.13.1
 psycopg2-binary==2.9.9
 pgvector==0.2.4
+asyncpg==0.29.0
 
 # Redis & Workers
 redis==5.0.1
@@ -17,12 +18,14 @@ rq==1.15.1
 
 # HTTP & API
 httpx==0.26.0
-python-multipart==0.0.6
+python-multipart==0.0.9
 
 # Security & Auth
 python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+passlib[bcrypt,argon2]==1.7.4
 python-dateutil==2.8.2
+argon2-cffi==23.1.0
+pyjwt==2.8.0
 
 # Export
 python-docx==1.1.0
@@ -45,28 +48,8 @@ pytest-asyncio==0.23.3
 black==24.1.1
 ruff==0.1.14
 mypy==1.8.0
-# Modern Authentication Stack (2026)
-# FastAPI-Users: Production-ready auth for FastAPI
-fastapi-users[sqlalchemy]==13.0.0
-fastapi-users[oauth]==13.0.0
-
-# Async database support
-asyncpg==0.29.0  # PostgreSQL async driver
-sqlalchemy[asyncio]==2.0.25
-
-# Password hashing (modern, secure)
-argon2-cffi==23.1.0  # Better than bcrypt
-passlib[argon2]==1.7.4
-
-# JWT tokens
-python-jose[cryptography]==3.3.0
-pyjwt==2.8.0
-
-# Email verification (production-ready)
+# Modern Authentication Stack
+fastapi-users[sqlalchemy,oauth]==13.0.0
 fastapi-mail==1.4.1
-
-# Rate limiting
 slowapi==0.1.9
-
-# Session management
 itsdangerous==2.1.2
