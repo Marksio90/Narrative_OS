@@ -478,3 +478,383 @@ class CharacterArcService:
                 latest.trajectory = 'stable'
 
         self.db.commit()
+
+    # ==================== AI-Powered Analysis ====================
+
+    async def analyze_arc_health(self, arc_id: int) -> Dict[str, Any]:
+        """
+        Use AI to analyze if character arc is well-paced and consistent
+        """
+        arc = self.get_arc(arc_id)
+        if not arc:
+            raise ValueError(f"Arc {arc_id} not found")
+
+        character = self.db.query(Character).filter(Character.id == arc.character_id).first()
+        milestones = self.get_arc_milestones(arc_id)
+        emotional_states = self.get_emotional_journey(arc.character_id, arc.start_chapter, arc.current_chapter)
+
+        # Build analysis prompt
+        prompt = f"""Analyze the health of this character arc:
+
+Character: {character.name}
+Arc Type: {arc.arc_type.value}
+Arc Name: {arc.name}
+Description: {arc.description or 'N/A'}
+
+Progress: {arc.completion_percentage}%  (Chapter {arc.current_chapter} of {arc.end_chapter or 'unknown'})
+
+Starting State:
+{json.dumps(arc.starting_state, indent=2)}
+
+Target Ending State:
+{json.dumps(arc.ending_state, indent=2)}
+
+Milestones Achieved ({len(milestones)}):
+{self._format_milestones_for_ai(milestones)}
+
+Emotional Journey:
+{self._format_emotional_journey_for_ai(emotional_states)}
+
+Analyze:
+1. Is the arc progressing at a good pace? Too fast/slow?
+2. Are character changes consistent and believable?
+3. Are there missing milestones that should be present?
+4. Does the emotional journey support the arc type?
+5. What's the arc health score (0-100)?
+
+Return JSON with:
+{{
+    "pacing_score": 0-1,
+    "consistency_score": 0-1,
+    "arc_health_score": 0-100,
+    "is_on_track": true/false,
+    "issues": [str],
+    "suggestions": [str],
+    "missing_milestones": [str],
+    "strengths": [str]
+}}
+"""
+
+        response = self.client.messages.create(
+            model="claude-opus-4-20250514",
+            max_tokens=2000,
+            temperature=0.3,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        # Parse response
+        analysis_text = response.content[0].text
+        analysis = self._extract_json_from_response(analysis_text)
+
+        # Update arc with scores
+        arc.pacing_score = analysis.get('pacing_score', 0.5)
+        arc.consistency_score = analysis.get('consistency_score', 0.5)
+        arc.is_on_track = analysis.get('is_on_track', True)
+        arc.validation_notes = analysis.get('issues', []) + analysis.get('suggestions', [])
+
+        self.db.commit()
+
+        return analysis
+
+    async def detect_milestone_from_scene(
+        self,
+        arc_id: int,
+        scene_text: str,
+        chapter_number: int,
+        story_event_id: Optional[int] = None,
+    ) -> Optional[ArcMilestone]:
+        """
+        Analyze scene text to detect if it contains a character arc milestone
+        """
+        arc = self.get_arc(arc_id)
+        if not arc:
+            raise ValueError(f"Arc {arc_id} not found")
+
+        character = self.db.query(Character).filter(Character.id == arc.character_id).first()
+
+        prompt = f"""Analyze this scene for character development milestone:
+
+Character: {character.name}
+Arc Type: {arc.arc_type.value}
+Arc Progress: {arc.completion_percentage}%
+
+Scene (Chapter {chapter_number}):
+{scene_text[:2000]}
+
+Does this scene contain a significant character development milestone for {character.name}?
+
+If YES, identify:
+- Milestone type (catalyst, crisis, revelation, turning_point, breakthrough, climax, resolution, etc.)
+- Brief title (max 50 chars)
+- What changed in the character
+- Emotional impact (0-1)
+- Significance to overall arc (0-1)
+
+If NO, return: {{"is_milestone": false}}
+
+If YES, return JSON:
+{{
+    "is_milestone": true,
+    "milestone_type": "revelation",
+    "title": "Sarah realizes she can trust again",
+    "character_change": "Overcame trust issues from past betrayal",
+    "emotional_impact": 0.8,
+    "significance": 0.9,
+    "description": "Longer description of what happened"
+}}
+"""
+
+        response = self.client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=1000,
+            temperature=0.5,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        result = self._extract_json_from_response(response.content[0].text)
+
+        if not result.get('is_milestone', False):
+            return None
+
+        # Create milestone
+        try:
+            milestone_type = MilestoneType(result['milestone_type'])
+        except ValueError:
+            milestone_type = MilestoneType.TURNING_POINT  # Default
+
+        milestone = self.add_milestone(
+            arc_id=arc_id,
+            chapter_number=chapter_number,
+            milestone_type=milestone_type,
+            title=result.get('title', 'Character Development Moment'),
+            description=result.get('description'),
+            emotional_impact=result.get('emotional_impact', 0.5),
+            character_change=result.get('character_change'),
+            story_event_id=story_event_id,
+        )
+
+        milestone.ai_analysis = {
+            'detected_from_scene': True,
+            'confidence': 0.8,
+            'full_analysis': result,
+        }
+        self.db.commit()
+
+        return milestone
+
+    async def extract_emotional_state_from_scene(
+        self,
+        character_id: int,
+        chapter_number: int,
+        scene_text: str,
+        arc_id: Optional[int] = None,
+    ) -> Optional[EmotionalState]:
+        """
+        Use AI to extract character's emotional state from scene text
+        """
+        character = self.db.query(Character).filter(Character.id == character_id).first()
+        if not character:
+            return None
+
+        prompt = f"""Extract {character.name}'s emotional state from this scene:
+
+Scene (Chapter {chapter_number}):
+{scene_text[:2000]}
+
+Analyze {character.name}'s emotional state. Return JSON:
+{{
+    "dominant_emotion": "fear" | "anger" | "joy" | "sadness" | "hope" | etc,
+    "secondary_emotions": ["emotion1", "emotion2"],
+    "intensity": 0-1 (how intense is the emotion),
+    "valence": -1 to 1 (negative to positive),
+    "mental_state": "clarity" | "confusion" | "determination" | etc,
+    "stress_level": 0-1,
+    "confidence_level": 0-1,
+    "triggers": [
+        {{"event": "what triggered this", "impact": 0-1}}
+    ],
+    "inner_conflict": "brief description of internal struggle"
+}}
+
+If {character.name} is not in the scene or emotions are unclear, return: {{"present": false}}
+"""
+
+        response = self.client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=800,
+            temperature=0.4,
+            messages=[{"role": "user", "content": prompt}]
+        )
+
+        result = self._extract_json_from_response(response.content[0].text)
+
+        if not result.get('present', True):
+            return None
+
+        # Create emotional state
+        emotional_state = self.track_emotional_state(
+            character_id=character_id,
+            chapter_number=chapter_number,
+            dominant_emotion=result.get('dominant_emotion', 'neutral'),
+            intensity=result.get('intensity', 0.5),
+            valence=result.get('valence', 0.0),
+            arc_id=arc_id,
+            secondary_emotions=result.get('secondary_emotions', []),
+            triggers=result.get('triggers', []),
+            mental_state=result.get('mental_state'),
+            stress_level=result.get('stress_level'),
+            confidence_level=result.get('confidence_level'),
+        )
+
+        emotional_state.detected_from_text = True
+        emotional_state.ai_confidence = 0.8
+        self.db.commit()
+
+        return emotional_state
+
+    async def generate_arc_report(self, arc_id: int) -> Dict[str, Any]:
+        """
+        Generate comprehensive arc analysis report
+        """
+        arc = self.get_arc(arc_id)
+        if not arc:
+            raise ValueError(f"Arc {arc_id} not found")
+
+        character = self.db.query(Character).filter(Character.id == arc.character_id).first()
+        milestones = self.get_arc_milestones(arc_id)
+        emotional_journey = self.get_emotional_journey(arc.character_id, arc.start_chapter, arc.current_chapter)
+        goals = self.get_character_goals(arc.character_id, active_only=False)
+
+        # AI-powered health analysis
+        health_analysis = await self.analyze_arc_health(arc_id)
+
+        return {
+            'arc': {
+                'id': arc.id,
+                'name': arc.name,
+                'type': arc.arc_type.value,
+                'progress': arc.completion_percentage,
+                'chapter_range': f"{arc.start_chapter}-{arc.end_chapter or '?'}",
+                'is_complete': arc.is_complete,
+                'is_on_track': arc.is_on_track,
+            },
+            'character': {
+                'id': character.id,
+                'name': character.name,
+            },
+            'health': health_analysis,
+            'milestones': {
+                'total': len(milestones),
+                'achieved': sum(1 for m in milestones if m.is_achieved),
+                'list': [
+                    {
+                        'chapter': m.chapter_number,
+                        'type': m.milestone_type.value,
+                        'title': m.title,
+                        'impact': m.emotional_impact,
+                        'achieved': m.is_achieved,
+                    }
+                    for m in milestones
+                ],
+            },
+            'emotional_journey': {
+                'data_points': len(emotional_journey),
+                'dominant_emotions': self._analyze_emotion_frequency(emotional_journey),
+                'intensity_avg': sum(e.intensity for e in emotional_journey if e.intensity) / len(emotional_journey) if emotional_journey else 0,
+                'valence_trend': self._calculate_valence_trend(emotional_journey),
+            },
+            'goals': {
+                'total': len(goals),
+                'active': sum(1 for g in goals if g.status in [GoalStatus.ACTIVE, GoalStatus.IN_PROGRESS]),
+                'achieved': sum(1 for g in goals if g.status == GoalStatus.ACHIEVED),
+                'failed': sum(1 for g in goals if g.status == GoalStatus.FAILED),
+            },
+        }
+
+    # ==================== Helper Methods for AI ====================
+
+    def _format_milestones_for_ai(self, milestones: List[ArcMilestone]) -> str:
+        """Format milestones for AI prompt"""
+        if not milestones:
+            return "No milestones yet"
+
+        lines = []
+        for m in milestones:
+            lines.append(
+                f"- Ch {m.chapter_number}: {m.milestone_type.value.upper()} - {m.title}"
+            )
+            if m.character_change:
+                lines.append(f"  Change: {m.character_change}")
+
+        return "\n".join(lines)
+
+    def _format_emotional_journey_for_ai(self, states: List[EmotionalState]) -> str:
+        """Format emotional states for AI prompt"""
+        if not states:
+            return "No emotional data yet"
+
+        lines = []
+        for state in states:
+            lines.append(
+                f"- Ch {state.chapter_number}: {state.dominant_emotion} "
+                f"(intensity: {state.intensity:.1f}, valence: {state.valence:+.1f})"
+            )
+
+        return "\n".join(lines)
+
+    def _extract_json_from_response(self, text: str) -> Dict:
+        """Extract JSON from AI response"""
+        # Try to find JSON in response
+        import re
+
+        # Look for JSON block
+        json_match = re.search(r'```json\s*(\{.*?\})\s*```', text, re.DOTALL)
+        if json_match:
+            try:
+                return json.loads(json_match.group(1))
+            except json.JSONDecodeError:
+                pass
+
+        # Try parsing entire response as JSON
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            # Look for first JSON object
+            json_match = re.search(r'\{.*\}', text, re.DOTALL)
+            if json_match:
+                try:
+                    return json.loads(json_match.group(0))
+                except json.JSONDecodeError:
+                    pass
+
+        return {}
+
+    def _analyze_emotion_frequency(self, states: List[EmotionalState]) -> Dict[str, int]:
+        """Count frequency of emotions"""
+        freq = {}
+        for state in states:
+            if state.dominant_emotion:
+                freq[state.dominant_emotion] = freq.get(state.dominant_emotion, 0) + 1
+        return dict(sorted(freq.items(), key=lambda x: x[1], reverse=True))
+
+    def _calculate_valence_trend(self, states: List[EmotionalState]) -> str:
+        """Calculate if emotions are getting more positive or negative"""
+        if len(states) < 3:
+            return 'insufficient_data'
+
+        valences = [s.valence for s in states if s.valence is not None]
+        if len(valences) < 3:
+            return 'insufficient_data'
+
+        # Compare first third vs last third
+        first_third = sum(valences[: len(valences) // 3]) / (len(valences) // 3)
+        last_third = sum(valences[-(len(valences) // 3) :]) / (len(valences) // 3)
+
+        diff = last_third - first_third
+
+        if diff > 0.2:
+            return 'improving'
+        elif diff < -0.2:
+            return 'declining'
+        else:
+            return 'stable'
