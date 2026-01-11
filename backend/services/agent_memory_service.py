@@ -16,7 +16,7 @@ from typing import List, Optional, Dict, Any, Tuple
 from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_, func, desc
 
-from backend.core.models import (
+from core.models import (
     Agent, AgentMemory, AgentTask, AgentConversation,
     MemoryType, TaskStatus
 )

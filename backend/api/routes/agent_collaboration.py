@@ -8,15 +8,15 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from backend.core.database import get_db
-from backend.core.models import (
+from core.database.base import get_db
+from core.models import (
     Agent, AgentTask, AgentConversation, AgentMessage,
     AgentMemory, AgentVote, AgentType, TaskStatus
 )
-from backend.services.agent_orchestration_service import AgentOrchestrationService
-from backend.services.agent_memory_service import AgentMemoryService
-from backend.services.specialized_agents import AgentFactory
-from backend.api.schemas.agent_collaboration import *
+from services.agent_orchestration_service import AgentOrchestrationService
+from services.agent_memory_service import AgentMemoryService
+from services.specialized_agents import AgentFactory
+from api.schemas.agent_collaboration import *
 
 
 router = APIRouter()
