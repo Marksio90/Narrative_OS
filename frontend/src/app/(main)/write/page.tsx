@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAuth } from '@/lib/auth-context'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import AICopilot from '@/components/AICopilot'
 import {
   FileText,
@@ -48,6 +49,8 @@ interface WritingSession {
 export default function WritingStudioPage() {
   const { user, accessToken } = useAuth()
   const router = useRouter()
+  const t = useTranslations('write')
+  const tCommon = useTranslations('common')
 
   const [projectId, setProjectId] = useState<number | null>(null)
   const [chapters, setChapters] = useState<Chapter[]>([])
@@ -269,7 +272,7 @@ export default function WritingStudioPage() {
 
       if (response.ok) {
         setAutoSaveStatus('saved')
-        alert('Rozdział zapisany!')
+        alert(t('chapterSaved'))
       }
     } catch (error) {
       console.error('Save failed:', error)
@@ -288,7 +291,7 @@ export default function WritingStudioPage() {
     if (!projectId) return
 
     const newChapterNumber = chapters.length + 1
-    const title = prompt('Tytuł nowego rozdziału:', `Rozdział ${newChapterNumber}`)
+    const title = prompt(`${t('chapter', { number: newChapterNumber })}:`, t('chapter', { number: newChapterNumber }))
 
     if (!title) return
 
@@ -367,7 +370,7 @@ export default function WritingStudioPage() {
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-400 mt-4">Ładowanie...</p>
+          <p className="text-gray-400 mt-4">{tCommon('loading')}</p>
         </div>
       </div>
     )
@@ -384,14 +387,14 @@ export default function WritingStudioPage() {
               className="flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
             >
               <ChevronLeft className="w-4 h-4 text-gray-300" />
-              <span className="text-sm text-gray-300">Pulpit</span>
+              <span className="text-sm text-gray-300">{t('back')}</span>
             </button>
 
             <div className="h-6 w-px bg-gray-700"></div>
 
             <h1 className="text-xl font-bold text-white flex items-center gap-2">
               <FileText className="w-6 h-6 text-purple-400" />
-              Studio Pisania
+              {t('title')}
             </h1>
           </div>
 
@@ -400,11 +403,11 @@ export default function WritingStudioPage() {
             <div className="flex items-center gap-6 px-4 py-2 bg-gray-700 rounded-lg">
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-green-400" />
-                <span className="text-sm text-gray-300">{wordCount} słów</span>
+                <span className="text-sm text-gray-300">{t('words', { count: wordCount })}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Target className="w-4 h-4 text-blue-400" />
-                <span className="text-sm text-gray-300">{targetWords} cel</span>
+                <span className="text-sm text-gray-300">{t('target', { count: targetWords })}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-orange-400" />
@@ -417,17 +420,17 @@ export default function WritingStudioPage() {
               {autoSaveStatus === 'saved' ? (
                 <>
                   <CheckCircle2 className="w-4 h-4 text-green-400" />
-                  <span className="text-xs text-gray-300">Zapisano</span>
+                  <span className="text-xs text-gray-300">{t('saved')}</span>
                 </>
               ) : autoSaveStatus === 'saving' ? (
                 <>
                   <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-xs text-gray-300">Zapisywanie...</span>
+                  <span className="text-xs text-gray-300">{t('saving')}</span>
                 </>
               ) : (
                 <>
                   <Circle className="w-4 h-4 text-yellow-400" />
-                  <span className="text-xs text-gray-300">Niezapisane</span>
+                  <span className="text-xs text-gray-300">{t('unsaved')}</span>
                 </>
               )}
             </div>
@@ -438,7 +441,7 @@ export default function WritingStudioPage() {
               className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
             >
               <Save className="w-4 h-4" />
-              Zapisz
+              {tCommon('save')}
             </button>
 
             <button
@@ -455,7 +458,7 @@ export default function WritingStudioPage() {
               }`}
             >
               <Sparkles className="w-4 h-4" />
-              Asystent AI
+              {t('aiCopilot')}
             </button>
 
             <button
@@ -483,7 +486,7 @@ export default function WritingStudioPage() {
                 className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
               >
                 <Plus className="w-4 h-4" />
-                Nowy Rozdział
+                {t('newChapter')}
               </button>
             </div>
 
@@ -500,8 +503,8 @@ export default function WritingStudioPage() {
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-sm">
-                      Rozdział {chapter.chapter_number}
-                      {chapter.scene_number && ` - Scena ${chapter.scene_number}`}
+                      {t('chapterLabel')} {chapter.chapter_number}
+                      {chapter.scene_number && ` - ${t('scene')} ${chapter.scene_number}`}
                     </span>
                     <span className={getStatusColor(chapter.status)}>
                       {getStatusIcon(chapter.status)}
@@ -509,8 +512,8 @@ export default function WritingStudioPage() {
                   </div>
                   <p className="text-xs opacity-80 mb-1">{chapter.title}</p>
                   <div className="flex items-center justify-between text-xs opacity-60">
-                    <span>{chapter.word_count} słów</span>
-                    <span>{new Date(chapter.last_edited_at).toLocaleDateString('pl-PL')}</span>
+                    <span>{t('wordsCount', { count: chapter.word_count })}</span>
+                    <span>{new Date(chapter.last_edited_at).toLocaleDateString()}</span>
                   </div>
                 </button>
               ))}
@@ -518,8 +521,8 @@ export default function WritingStudioPage() {
               {chapters.length === 0 && (
                 <div className="text-center py-12">
                   <Book className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                  <p className="text-gray-400 text-sm">Brak rozdziałów</p>
-                  <p className="text-gray-500 text-xs mt-1">Stwórz pierwszy rozdział</p>
+                  <p className="text-gray-400 text-sm">{t('noChapters')}</p>
+                  <p className="text-gray-500 text-xs mt-1">{t('createFirstChapter')}</p>
                 </div>
               )}
             </div>
@@ -540,8 +543,8 @@ export default function WritingStudioPage() {
                     className="text-2xl font-bold text-white bg-transparent border-none focus:outline-none w-full"
                   />
                   <p className="text-sm text-gray-400 mt-1">
-                    Rozdział {currentChapter.chapter_number} • {wordCount} / {targetWords} słów •{' '}
-                    {Math.round((wordCount / targetWords) * 100)}% ukończone
+                    {t('chapterLabel')} {currentChapter.chapter_number} • {t('wordsCount', { count: wordCount })} / {targetWords} •{' '}
+                    {Math.round((wordCount / targetWords) * 100)}% {t('completed')}
                   </p>
                 </div>
               )}
@@ -552,7 +555,7 @@ export default function WritingStudioPage() {
                   ref={editorRef}
                   value={content}
                   onChange={handleContentChange}
-                  placeholder="Zacznij pisać swoją historię..."
+                  placeholder={t('startWriting')}
                   className={`w-full h-full p-8 bg-gray-900 text-gray-100 focus:outline-none resize-none font-serif text-lg leading-relaxed ${
                     focusMode ? 'max-w-4xl mx-auto' : ''
                   }`}
@@ -567,7 +570,7 @@ export default function WritingStudioPage() {
               {!focusMode && (
                 <div className="bg-gray-800 border-t border-gray-700 p-4">
                   <div className="flex items-center justify-between mb-2 text-sm">
-                    <span className="text-gray-400">Postęp rozdziału</span>
+                    <span className="text-gray-400">{t('chapterProgress')}</span>
                     <span className="text-purple-400 font-semibold">
                       {Math.min(100, Math.round((wordCount / targetWords) * 100))}%
                     </span>
@@ -587,13 +590,13 @@ export default function WritingStudioPage() {
             <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
                 <FileText className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <p className="text-gray-400 text-lg mb-2">Wybierz rozdział lub stwórz nowy</p>
+                <p className="text-gray-400 text-lg mb-2">{t('selectOrCreate')}</p>
                 <button
                   onClick={handleCreateChapter}
                   className="flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors mx-auto"
                 >
                   <Plus className="w-5 h-5" />
-                  Stwórz pierwszy rozdział
+                  {t('createFirstChapter')}
                 </button>
               </div>
             </div>
@@ -620,7 +623,7 @@ export default function WritingStudioPage() {
       {focusMode && (
         <div className="absolute top-4 right-4 bg-gray-800 bg-opacity-90 backdrop-blur-sm border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-300 flex items-center gap-2">
           <EyeOff className="w-4 h-4" />
-          Tryb skupienia • Naciśnij ESC aby wyjść
+          {t('focusModeHint')}
         </div>
       )}
 

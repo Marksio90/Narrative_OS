@@ -8,12 +8,14 @@ import { useState } from 'react'
 import { Download, ArrowLeft, FileText, BookOpen, FileType, Info } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import ExportModal from '@/components/ExportModal'
 
 export default function ProjectExportPage() {
   const params = useParams()
   const projectId = parseInt(params.id as string)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const t = useTranslations('export')
 
   // Mock project data - in production, fetch from API
   const project = {
@@ -33,13 +35,13 @@ export default function ProjectExportPage() {
         className="inline-flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Powrót do Projektu</span>
+        <span>{t('backToProject')}</span>
       </Link>
 
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Eksportuj Manuskrypt
+          {t('title')}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">{project.title}</p>
       </div>
@@ -47,19 +49,19 @@ export default function ProjectExportPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Rozdziały</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('chapters')}</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {project.chapterCount}
           </p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Słowa</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('words')}</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {project.wordCount.toLocaleString()}
           </p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Szac. Strony</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{t('estimatedPages')}</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {project.estimatedPages}
           </p>
@@ -69,7 +71,7 @@ export default function ProjectExportPage() {
       {/* Export formats */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Dostępne Formaty Eksportu
+          {t('availableFormats')}
         </h2>
 
         <div className="space-y-4">
@@ -83,17 +85,17 @@ export default function ProjectExportPage() {
                 Microsoft Word (.docx)
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Edytowalny dokument z profesjonalnym formatowaniem manuskryptu
+                {t('docxDescription')}
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Edytowalny
+                  {t('editable')}
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Spis Treści
+                  {t('tableOfContents')}
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Standardowy Format
+                  {t('standardFormat')}
                 </span>
               </div>
             </div>
@@ -109,17 +111,17 @@ export default function ProjectExportPage() {
                 EPUB (.epub)
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Format e-booka kompatybilny ze wszystkimi głównymi czytnikami
+                {t('epubDescription')}
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Czytniki
+                  {t('readers')}
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Responsywny
+                  {t('responsive')}
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Menu Nawigacji
+                  {t('navigationMenu')}
                 </span>
               </div>
             </div>
@@ -135,17 +137,17 @@ export default function ProjectExportPage() {
                 PDF (.pdf)
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Uniwersalny format, idealny do drukowania i archiwizacji
+                {t('pdfDescription')}
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Gotowy do druku
+                  {t('printReady')}
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Numery Stron
+                  {t('pageNumbers')}
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Stały Układ
+                  {t('fixedLayout')}
                 </span>
               </div>
             </div>
@@ -158,8 +160,7 @@ export default function ProjectExportPage() {
         <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
         <div className="flex-1">
           <p className="text-sm text-blue-900 dark:text-blue-200">
-            Wszystkie eksporty zawierają stronę tytułową, organizację rozdziałów i profesjonalne formatowanie.
-            Możesz dostosować opcje takie jak prolog, epilog i spis treści.
+            {t('infoText')}
           </p>
         </div>
       </div>
@@ -170,7 +171,7 @@ export default function ProjectExportPage() {
         className="w-full flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-medium text-lg shadow-lg"
       >
         <Download className="h-5 w-5" />
-        <span>Eksportuj Manuskrypt</span>
+        <span>{t('exportButton')}</span>
       </button>
 
       {/* Export Modal */}

@@ -5,6 +5,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   Sparkles,
   Wand2,
@@ -65,6 +66,8 @@ interface CanonThread {
 
 export default function AIStudioPage() {
   const { data: session } = useSession()
+  const t = useTranslations('aiStudio')
+  const tCommon = useTranslations('common')
   const [mode, setMode] = useState<GenerationMode>('scene')
   const [preset, setPreset] = useState<Preset>('balanced')
 
