@@ -12,8 +12,8 @@ import Button from '@/components/Button'
 import Input from '@/components/Input'
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.string().email('Nieprawidłowy adres email'),
+  password: z.string().min(8, 'Hasło musi mieć co najmniej 8 znaków'),
 })
 
 type LoginFormData = z.infer<typeof loginSchema>
@@ -43,7 +43,7 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        setError('Nieprawidłowy email lub hasło')
         setIsLoading(false)
         return
       }
@@ -53,7 +53,7 @@ export default function LoginPage() {
       router.push(callbackUrl)
       router.refresh()
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      setError('Wystąpił błąd. Spróbuj ponownie.')
       setIsLoading(false)
     }
   }
@@ -74,10 +74,10 @@ export default function LoginPage() {
             <span className="text-2xl font-bold text-white">N</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Welcome back
+            Witaj ponownie
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Sign in to continue writing your story
+            Zaloguj się aby kontynuować pisanie historii
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export default function LoginPage() {
               disabled={isLoading}
             >
               <Chrome className="h-5 w-5" />
-              <span>Continue with Google</span>
+              <span>Kontynuuj z Google</span>
             </Button>
 
             <Button
@@ -104,7 +104,7 @@ export default function LoginPage() {
               disabled={isLoading}
             >
               <Github className="h-5 w-5" />
-              <span>Continue with GitHub</span>
+              <span>Kontynuuj z GitHub</span>
             </Button>
           </div>
 
@@ -115,7 +115,7 @@ export default function LoginPage() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white/80 dark:bg-gray-800/80 text-gray-500">
-                Or continue with email
+                Lub kontynuuj z emailem
               </span>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function LoginPage() {
                 <input
                   {...register('email')}
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="ty@przykład.com"
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   disabled={isLoading}
                 />
@@ -151,7 +151,7 @@ export default function LoginPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
-                Password
+                Hasło
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -177,7 +177,7 @@ export default function LoginPage() {
                   className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-gray-600 dark:text-gray-400">
-                  Remember me
+                  Zapamiętaj mnie
                 </span>
               </label>
 
@@ -185,7 +185,7 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
               >
-                Forgot password?
+                Zapomniałeś hasła?
               </Link>
             </div>
 
@@ -197,10 +197,10 @@ export default function LoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Signing in...</span>
+                  <span>Logowanie...</span>
                 </>
               ) : (
-                <span>Sign in</span>
+                <span>Zaloguj się</span>
               )}
             </Button>
           </form>
@@ -208,12 +208,12 @@ export default function LoginPage() {
 
         {/* Sign up link */}
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Don't have an account?{' '}
+          Nie masz konta?{' '}
           <Link
             href="/register"
             className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            Sign up for free
+            Zarejestruj się za darmo
           </Link>
         </p>
       </div>

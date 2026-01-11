@@ -27,7 +27,7 @@ export default function TimelineControls({
         <button
           onClick={onZoomOut}
           className="p-2 hover:bg-gray-100 rounded transition-colors group relative"
-          title="Zoom Out"
+          title="Oddal"
         >
           <ZoomOut className="w-5 h-5 text-gray-700" />
         </button>
@@ -43,7 +43,7 @@ export default function TimelineControls({
         <button
           onClick={onZoomIn}
           className="p-2 hover:bg-gray-100 rounded transition-colors group relative"
-          title="Zoom In"
+          title="Przybliż"
         >
           <ZoomIn className="w-5 h-5 text-gray-700" />
         </button>
@@ -55,7 +55,7 @@ export default function TimelineControls({
         <button
           onClick={onFitToView}
           className="p-2 hover:bg-gray-100 rounded transition-colors group relative"
-          title="Fit to View"
+          title="Dopasuj do Widoku"
         >
           <Maximize2 className="w-5 h-5 text-gray-700" />
         </button>
@@ -64,7 +64,7 @@ export default function TimelineControls({
         <button
           onClick={onResetView}
           className="p-2 hover:bg-gray-100 rounded transition-colors group relative"
-          title="Reset View"
+          title="Resetuj Widok"
         >
           <RotateCcw className="w-5 h-5 text-gray-700" />
         </button>
@@ -82,11 +82,11 @@ export default function TimelineControls({
 
           {showHint && (
             <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg z-50">
-              <div className="font-semibold mb-1">Navigation Tips:</div>
+              <div className="font-semibold mb-1">Wskazówki Nawigacji:</div>
               <ul className="space-y-1 text-gray-300">
-                <li>• Scroll: Zoom in/out</li>
-                <li>• Ctrl+Drag: Pan view</li>
-                <li>• Drag events: Move chapters</li>
+                <li>• Przewijanie: Przybliż/Oddal</li>
+                <li>• Ctrl+Przeciągnij: Przesuń widok</li>
+                <li>• Przeciągnij wydarzenia: Przenieś rozdziały</li>
               </ul>
               <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-1">
                 <div className="border-4 border-transparent border-t-gray-900" />

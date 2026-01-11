@@ -185,7 +185,7 @@ export default function TimelinePage() {
   if (loading && events.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading timeline...</div>
+        <div className="text-gray-600">Ładowanie osi czasu...</div>
       </div>
     )
   }
@@ -201,8 +201,8 @@ export default function TimelinePage() {
                 <Calendar className="w-6 h-6 text-indigo-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Timeline Visualizer</h1>
-                <p className="text-sm text-gray-600">Interactive story timeline with conflict detection</p>
+                <h1 className="text-2xl font-bold text-gray-900">Wizualizator Osi Czasu</h1>
+                <p className="text-sm text-gray-600">Interaktywna oś czasu historii z wykrywaniem konfliktów</p>
               </div>
             </div>
 
@@ -217,7 +217,7 @@ export default function TimelinePage() {
                 }`}
               >
                 <Filter className="w-4 h-4" />
-                Filters
+                Filtry
               </button>
 
               <button
@@ -229,7 +229,7 @@ export default function TimelinePage() {
                 }`}
               >
                 <AlertTriangle className="w-4 h-4" />
-                Conflicts ({conflicts.length})
+                Konflikty ({conflicts.length})
               </button>
 
               <button
@@ -238,7 +238,7 @@ export default function TimelinePage() {
                 className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
-                {syncing ? 'Syncing...' : 'Sync'}
+                {syncing ? 'Synchronizacja...' : 'Synchronizuj'}
               </button>
             </div>
           </div>
@@ -247,24 +247,24 @@ export default function TimelinePage() {
           {stats && (
             <div className="mt-4 grid grid-cols-2 md:grid-cols-6 gap-4">
               <div className="bg-gray-50 rounded-lg p-3">
-                <div className="text-xs text-gray-600">Total Events</div>
+                <div className="text-xs text-gray-600">Łącznie Wydarzeń</div>
                 <div className="text-2xl font-bold text-gray-900">{stats.total_events}</div>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-3">
-                <div className="text-xs text-gray-600">Major Beats</div>
+                <div className="text-xs text-gray-600">Główne Punkty</div>
                 <div className="text-2xl font-bold text-indigo-600">{stats.major_beats_count}</div>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-3">
-                <div className="text-xs text-gray-600">Chapters</div>
+                <div className="text-xs text-gray-600">Rozdziały</div>
                 <div className="text-2xl font-bold text-gray-900">
                   {stats.chapter_range[0]}-{stats.chapter_range[1]}
                 </div>
               </div>
 
               <div className="bg-gray-50 rounded-lg p-3">
-                <div className="text-xs text-gray-600">Open Conflicts</div>
+                <div className="text-xs text-gray-600">Otwarte Konflikty</div>
                 <div className={`text-2xl font-bold ${
                   stats.open_conflicts > 0 ? 'text-orange-600' : 'text-green-600'
                 }`}>
@@ -273,7 +273,7 @@ export default function TimelinePage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg p-3">
-                <div className="text-xs text-gray-600">Pacing Score</div>
+                <div className="text-xs text-gray-600">Ocena Tempa</div>
                 <div className="text-2xl font-bold text-blue-600">
                   {stats.pacing_score ? (stats.pacing_score * 100).toFixed(0) : 'N/A'}
                   {stats.pacing_score && '%'}
@@ -281,7 +281,7 @@ export default function TimelinePage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg p-3">
-                <div className="text-xs text-gray-600">Layers Active</div>
+                <div className="text-xs text-gray-600">Aktywne Warstwy</div>
                 <div className="text-2xl font-bold text-purple-600">{filters.layers.length}</div>
               </div>
             </div>
