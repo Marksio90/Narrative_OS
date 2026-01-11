@@ -220,8 +220,8 @@ class AgentTask(Base, TimestampMixin):
     user_feedback = Column(Text, nullable=True)
     user_rating = Column(Float, nullable=True)  # 0-5 stars
 
-    # Metadata
-    metadata = Column(JSON, default=dict)
+    # Metadata (renamed from 'metadata' to avoid SQLAlchemy conflict)
+    task_metadata = Column(JSON, default=dict)
 
     # Relationships
     agent = relationship("Agent", back_populates="tasks", foreign_keys=[agent_id])
@@ -291,10 +291,10 @@ class AgentConversation(Base, TimestampMixin):
     voting_deadline = Column(DateTime, nullable=True)
     winning_option_id = Column(Integer, nullable=True)
 
-    # Metadata
+    # Metadata (renamed from 'metadata' to avoid SQLAlchemy conflict)
     started_at = Column(DateTime, default=datetime.utcnow)
     ended_at = Column(DateTime, nullable=True)
-    metadata = Column(JSON, default=dict)
+    conversation_metadata = Column(JSON, default=dict)
 
     # Relationships
     messages = relationship("AgentMessage", back_populates="conversation", cascade="all, delete-orphan", order_by="AgentMessage.created_at")

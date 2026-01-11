@@ -238,7 +238,7 @@ async def update_chapter(
             commit_message=commit_message or f"Version {chapter.version}",
             content_snapshot=chapter.content,
             word_count_snapshot=chapter.word_count,
-            metadata_snapshot=chapter.metadata,
+            metadata_snapshot=chapter.chapter_metadata,
             author_id=user.id,
             is_autosave=False,
         )
@@ -287,7 +287,7 @@ async def autosave_chapter(
             commit_message=f"Autosave {autosave_count + 1}",
             content_snapshot=autosave_data.content,
             word_count_snapshot=autosave_data.word_count,
-            metadata_snapshot=chapter.metadata,
+            metadata_snapshot=chapter.chapter_metadata,
             author_id=user.id,
             is_autosave=True,
         )
@@ -387,7 +387,7 @@ async def restore_chapter_version(
     # Restore content
     chapter.content = version.content_snapshot
     chapter.word_count = version.word_count_snapshot
-    chapter.metadata = version.metadata_snapshot
+    chapter.chapter_metadata = version.metadata_snapshot
     chapter.version += 1
     chapter.last_edited_at = datetime.utcnow()
 
@@ -431,7 +431,7 @@ async def start_writing_session(
         project_id=project_id,
         chapter_id=session_data.chapter_id,
         started_at=datetime.utcnow(),
-        metadata=session_data.metadata,
+        session_metadata=session_data.metadata,
     )
 
     db.add(session)
@@ -509,8 +509,8 @@ async def end_writing_session(
 
     # Add session notes
     if session_data.session_notes:
-        session.metadata = {
-            **session.metadata,
+        session.session_metadata = {
+            **session.session_metadata,
             "session_notes": session_data.session_notes
         }
 
