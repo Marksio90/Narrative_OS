@@ -67,22 +67,7 @@ class Project(Base, TimestampMixin):
     project_metadata = Column(JSON, default=dict)
 
 
-class User(Base, TimestampMixin):
-    """
-    User/Author
-    """
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(255), unique=True, nullable=False, index=True)
-    username = Column(String(100), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
-
-    # Subscription tier
-    tier = Column(String(50), default="free")  # free, pro, studio
-
-    # Settings
-    settings = Column(JSON, default=dict)
+# Note: User model moved to core/models/user.py (modern FastAPI-Users implementation)
 
 
 class CanonVersion(Base, TimestampMixin):
