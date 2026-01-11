@@ -1,0 +1,268 @@
+{
+  "common": {
+    "loading": "Ładowanie...",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "create": "Utwórz",
+    "search": "Szukaj",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "previous": "Poprzedni",
+    "close": "Zamknij",
+    "confirm": "Potwierdź",
+    "error": "Błąd",
+    "success": "Sukces",
+    "warning": "Ostrzeżenie",
+    "info": "Informacja"
+  },
+  "navigation": {
+    "home": "Strona główna",
+    "desktop": "Pulpit",
+    "projects": "Projekty",
+    "storyBible": "Biblia Fabuły",
+    "write": "Pisz",
+    "timeline": "Oś Czasu",
+    "agents": "Agenci",
+    "analytics": "Analityka",
+    "settings": "Ustawienia",
+    "profile": "Profil",
+    "logout": "Wyloguj"
+  },
+  "auth": {
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "logout": "Wyloguj",
+    "email": "Adres Email",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź Hasło",
+    "name": "Imię",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "rememberMe": "Zapamiętaj mnie",
+    "alreadyHaveAccount": "Masz już konto?",
+    "dontHaveAccount": "Nie masz konta?",
+    "or": "lub",
+    "continueWithGoogle": "Kontynuuj z Google",
+    "continueWithGithub": "Kontynuuj z Github"
+  },
+  "profile": {
+    "title": "Ustawienia Profilu",
+    "subtitle": "Zarządzaj informacjami o koncie i preferencjami",
+    "fullName": "Pełne Imię",
+    "emailAddress": "Adres Email",
+    "memberSince": "Członek od",
+    "saveChanges": "Zapisz Zmiany",
+    "saving": "Zapisywanie...",
+    "dangerZone": "Strefa Zagrożenia",
+    "dangerZoneWarning": "Po usunięciu konta nie ma odwrotu. Upewnij się, że jesteś pewien.",
+    "deleteAccount": "Usuń Konto",
+    "updateSuccess": "Profil zaktualizowany pomyślnie!",
+    "updateError": "Nie udało się zaktualizować profilu. Spróbuj ponownie."
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "subtitle": "Zarządzaj preferencjami aplikacji i powiadomieniami",
+    "notifications": {
+      "title": "Powiadomienia",
+      "email": "Powiadomienia Email",
+      "emailDescription": "Otrzymuj powiadomienia email o swoich projektach",
+      "push": "Powiadomienia Push",
+      "pushDescription": "Otrzymuj powiadomienia push na swoich urządzeniach",
+      "weeklyDigest": "Tygodniowe Podsumowanie",
+      "weeklyDigestDescription": "Otrzymuj cotygodniowe podsumowanie postępów"
+    },
+    "appearance": {
+      "title": "Wygląd",
+      "theme": "Motyw",
+      "light": "Jasny",
+      "dark": "Ciemny",
+      "system": "Systemowy",
+      "language": "Język"
+    },
+    "privacy": {
+      "title": "Prywatność",
+      "publicProfile": "Publiczny Profil",
+      "publicProfileDescription": "Zezwalaj innym na przeglądanie twojego profilu",
+      "showActivity": "Pokaż Aktywność",
+      "showActivityDescription": "Wyświetlaj swoją ostatnią aktywność współpracownikom"
+    },
+    "saveSuccess": "Ustawienia zapisane pomyślnie!",
+    "saveError": "Nie udało się zapisać ustawień"
+  },
+  "usage": {
+    "title": "Użycie i Rozliczenia",
+    "subtitle": "Śledź miesięczne użycie i zarządzaj subskrypcją",
+    "llmCalls": "Wywołania LLM",
+    "storageUsed": "Użyta Przestrzeń",
+    "generationStatus": "Status Generowania",
+    "active": "Aktywny",
+    "limited": "Ograniczony",
+    "readyToGenerate": "Gotowy do generowania",
+    "limitReached": "Osiągnięto miesięczny limit",
+    "monthlyUsage": "Miesięczne Użycie",
+    "llmApiCalls": "Wywołania API LLM",
+    "storage": "Przestrzeń (MB)",
+    "billingHistory": "Historia Rozliczeń",
+    "managePayment": "Zarządzaj Metodami Płatności",
+    "noBillingHistory": "Brak historii rozliczeń",
+    "invoicesAppear": "Twoje faktury pojawią się tutaj po przejściu na plan płatny",
+    "upgradePlan": "Uaktualnij Plan",
+    "readyForMore": "Gotowy na więcej?",
+    "upgradePromo": "Przejdź na PRO dla 10x więcej wywołań LLM i 10x więcej przestrzeni",
+    "viewPricing": "Zobacz Plany Cenowe",
+    "approachingLimit": "Zbliżasz się do miesięcznego limitu!",
+    "upgradeRecommended": "Rozważ uaktualnienie, aby uniknąć osiągnięcia limitów",
+    "resourcesAvailable": "Dużo dostępnych zasobów",
+    "loadError": "Nie udało się załadować statystyk użycia. Spróbuj ponownie później."
+  },
+  "storyBible": {
+    "title": "Biblia Fabuły",
+    "subtitle": "Zarządzaj postaciami, lokacjami, wątkami i światem",
+    "deleteConfirm": "Czy na pewno chcesz usunąć ten element?",
+    "importError": "Import nie powiódł się",
+    "searchPlaceholder": "Szukaj {tab}...",
+    "noCharacters": "Nie znaleziono postaci",
+    "createFirstCharacter": "Utwórz swoją pierwszą postać, aby rozpocząć",
+    "noLocations": "Nie znaleziono lokacji",
+    "createFirstLocation": "Utwórz swoją pierwszą lokację, aby rozpocząć",
+    "noThreads": "Nie znaleziono wątków fabularnych",
+    "createFirstThread": "Utwórz swój pierwszy wątek fabularny, aby rozpocząć",
+    "noMagic": "Nie znaleziono systemów magii",
+    "createFirstMagic": "Utwórz swój pierwszy system magii, aby rozpocząć",
+    "noTimeline": "Nie znaleziono wydarzeń na osi czasu",
+    "createFirstEvent": "Utwórz swoje pierwsze wydarzenie, aby rozpocząć"
+  },
+  "aiStudio": {
+    "title": "Studio Pisania AI",
+    "subtitle": "Wieloagentowe generowanie prozy AI z RAG i iteracyjnym udoskonalaniem",
+    "tokensUsed": "Użyte Tokeny",
+    "cost": "Koszt (USD)",
+    "quality": "Jakość",
+    "presets": {
+      "fastDraft": "Szybki Szkic",
+      "fastDraftDesc": "Szybkie generowanie (~15s)",
+      "balanced": "Zrównoważony",
+      "balancedDesc": "Świetna jakość (~30s)",
+      "premiumQuality": "Jakość Premium",
+      "premiumQualityDesc": "Najlepsza jakość (~60s)",
+      "creative": "Kreatywny",
+      "creativeDesc": "Maksymalna kreatywność (~45s)",
+      "precise": "Precyzyjny",
+      "preciseDesc": "Wierność kanonu (~50s)"
+    },
+    "canonContext": "Kontekst Kanonu",
+    "characters": "Postacie",
+    "locations": "Lokacje",
+    "plotThreads": "Wątki Fabularne",
+    "planningStructure": "Planowanie struktury sceny...",
+    "writingProse": "Pisanie prozy...",
+    "refining": "Udoskonalanie i polerowanie...",
+    "generatedProse": "Wygenerowana Proza",
+    "qualityScore": "Jakość: {score}/10",
+    "refinements": "{count} udoskonaleń"
+  },
+  "characterArcs": {
+    "title": "Śledzenie Łuków Postaci",
+    "subtitle": "Śledź rozwój postaci i emocjonalne podróże",
+    "overview": {
+      "characters": "Postacie",
+      "totalArcs": "Całkowita Liczba Łuków",
+      "onTrack": "Na Dobrej Drodze",
+      "averageProgress": "Średni Postęp"
+    },
+    "arcTypes": {
+      "positiveChange": "Pozytywna Zmiana",
+      "negativeChange": "Negatywna Zmiana",
+      "flatArc": "Płaski Łuk",
+      "transformation": "Transformacja",
+      "redemption": "Odkupienie",
+      "corruption": "Korupcja",
+      "disillusionment": "Rozczarowanie",
+      "comingOfAge": "Dojrzewanie",
+      "tragic": "Łuk Tragiczny"
+    },
+    "status": {
+      "onTrack": "Na Dobrej Drodze",
+      "offTrack": "Poza Planem"
+    },
+    "metrics": {
+      "pacing": "Tempo: {score}",
+      "consistency": "Spójność: {score}"
+    },
+    "tabs": {
+      "timeline": "Oś Czasu Łuku",
+      "emotional": "Podróż Emocjonalna",
+      "goals": "Cele i Kamienie Milowe"
+    }
+  },
+  "write": {
+    "title": "Studio Pisania",
+    "back": "Pulpit",
+    "words": "{count} słów",
+    "target": "{count} cel",
+    "saved": "Zapisano",
+    "saving": "Zapisywanie...",
+    "unsaved": "Niezapisane",
+    "aiCopilot": "Asystent AI",
+    "newChapter": "Nowy Rozdział",
+    "chapter": "Rozdział {number}",
+    "scene": "Scena {number}",
+    "noChapters": "Brak rozdziałów",
+    "createFirstChapter": "Stwórz pierwszy rozdział",
+    "chapterProgress": "Postęp rozdziału",
+    "selectOrCreate": "Wybierz rozdział lub stwórz nowy",
+    "startWriting": "Zacznij pisać swoją historię...",
+    "chapterSaved": "Rozdział zapisany!",
+    "focusMode": "Tryb skupienia",
+    "focusModeHint": "Tryb skupienia • Naciśnij ESC aby wyjść"
+  },
+  "export": {
+    "title": "Eksportuj Manuskrypt",
+    "backToProject": "Powrót do Projektu",
+    "stats": {
+      "chapters": "Rozdziały",
+      "words": "Słowa",
+      "estimatedPages": "Szac. Strony"
+    },
+    "availableFormats": "Dostępne Formaty Eksportu",
+    "formats": {
+      "docx": {
+        "name": "Microsoft Word (.docx)",
+        "description": "Edytowalny dokument z profesjonalnym formatowaniem manuskryptu",
+        "features": {
+          "editable": "Edytowalny",
+          "toc": "Spis Treści",
+          "standard": "Standardowy Format"
+        }
+      },
+      "epub": {
+        "name": "EPUB (.epub)",
+        "description": "Format e-booka kompatybilny ze wszystkimi głównymi czytnikami",
+        "features": {
+          "readers": "Czytniki",
+          "responsive": "Responsywny",
+          "navigation": "Menu Nawigacji"
+        }
+      },
+      "pdf": {
+        "name": "PDF (.pdf)",
+        "description": "Uniwersalny format, idealny do drukowania i archiwizacji",
+        "features": {
+          "printReady": "Gotowy do druku",
+          "pageNumbers": "Numery Stron",
+          "fixedLayout": "Stały Układ"
+        }
+      }
+    },
+    "info": "Wszystkie eksporty zawierają stronę tytułową, organizację rozdziałów i profesjonalne formatowanie. Możesz dostosować opcje takie jak prolog, epilog i spis treści.",
+    "exportButton": "Eksportuj Manuskrypt"
+  },
+  "validation": {
+    "required": "To pole jest wymagane",
+    "emailInvalid": "Nieprawidłowy adres email",
+    "passwordMin": "Hasło musi mieć co najmniej {min} znaków",
+    "nameMin": "Imię musi mieć co najmniej {min} znaki",
+    "passwordMismatch": "Hasła nie pasują do siebie"
+  }
+}

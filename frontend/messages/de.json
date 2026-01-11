@@ -1,0 +1,268 @@
+{
+  "common": {
+    "loading": "Wird geladen...",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "search": "Suchen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "warning": "Warnung",
+    "info": "Information"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "desktop": "Desktop",
+    "projects": "Projekte",
+    "storyBible": "Geschichtsbibel",
+    "write": "Schreiben",
+    "timeline": "Zeitachse",
+    "agents": "Agenten",
+    "analytics": "Analytics",
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "logout": "Abmelden"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "confirmPassword": "Passwort bestätigen",
+    "name": "Name",
+    "forgotPassword": "Passwort vergessen?",
+    "rememberMe": "Angemeldet bleiben",
+    "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+    "dontHaveAccount": "Haben Sie noch kein Konto?",
+    "or": "oder",
+    "continueWithGoogle": "Mit Google fortfahren",
+    "continueWithGithub": "Mit Github fortfahren"
+  },
+  "profile": {
+    "title": "Profileinstellungen",
+    "subtitle": "Verwalten Sie Ihre Kontoinformationen und Einstellungen",
+    "fullName": "Vollständiger Name",
+    "emailAddress": "E-Mail-Adresse",
+    "memberSince": "Mitglied seit",
+    "saveChanges": "Änderungen speichern",
+    "saving": "Wird gespeichert...",
+    "dangerZone": "Gefahrenzone",
+    "dangerZoneWarning": "Sobald Sie Ihr Konto löschen, gibt es kein Zurück mehr. Bitte seien Sie sicher.",
+    "deleteAccount": "Konto löschen",
+    "updateSuccess": "Profil erfolgreich aktualisiert!",
+    "updateError": "Profil konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "subtitle": "Verwalten Sie Ihre Anwendungseinstellungen und Benachrichtigungen",
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "email": "E-Mail-Benachrichtigungen",
+      "emailDescription": "Erhalten Sie E-Mail-Updates zu Ihren Projekten",
+      "push": "Push-Benachrichtigungen",
+      "pushDescription": "Erhalten Sie Push-Benachrichtigungen auf Ihren Geräten",
+      "weeklyDigest": "Wöchentliche Zusammenfassung",
+      "weeklyDigestDescription": "Erhalten Sie eine wöchentliche Zusammenfassung Ihres Fortschritts"
+    },
+    "appearance": {
+      "title": "Erscheinungsbild",
+      "theme": "Design",
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System",
+      "language": "Sprache"
+    },
+    "privacy": {
+      "title": "Datenschutz",
+      "publicProfile": "Öffentliches Profil",
+      "publicProfileDescription": "Anderen erlauben, Ihr Profil anzuzeigen",
+      "showActivity": "Aktivität anzeigen",
+      "showActivityDescription": "Ihre letzte Aktivität für Mitarbeiter anzeigen"
+    },
+    "saveSuccess": "Einstellungen erfolgreich gespeichert!",
+    "saveError": "Einstellungen konnten nicht gespeichert werden"
+  },
+  "usage": {
+    "title": "Nutzung & Abrechnung",
+    "subtitle": "Verfolgen Sie Ihre monatliche Nutzung und verwalten Sie Ihr Abonnement",
+    "llmCalls": "LLM-Aufrufe",
+    "storageUsed": "Verwendeter Speicher",
+    "generationStatus": "Generierungsstatus",
+    "active": "Aktiv",
+    "limited": "Begrenzt",
+    "readyToGenerate": "Bereit zum Generieren",
+    "limitReached": "Monatliches Limit erreicht",
+    "monthlyUsage": "Monatliche Nutzung",
+    "llmApiCalls": "LLM-API-Aufrufe",
+    "storage": "Speicher (MB)",
+    "billingHistory": "Abrechnungsverlauf",
+    "managePayment": "Zahlungsmethoden verwalten",
+    "noBillingHistory": "Noch kein Abrechnungsverlauf",
+    "invoicesAppear": "Ihre Rechnungen werden hier angezeigt, wenn Sie auf einen kostenpflichtigen Plan upgraden",
+    "upgradePlan": "Plan upgraden",
+    "readyForMore": "Bereit für mehr?",
+    "upgradePromo": "Upgraden Sie auf PRO für 10x mehr LLM-Aufrufe und 10x mehr Speicher",
+    "viewPricing": "Preispläne anzeigen",
+    "approachingLimit": "Sie nähern sich Ihrem monatlichen Limit!",
+    "upgradeRecommended": "Erwägen Sie ein Upgrade, um das Erreichen von Limits zu vermeiden",
+    "resourcesAvailable": "Viele Ressourcen verfügbar",
+    "loadError": "Nutzungsstatistiken konnten nicht geladen werden. Bitte versuchen Sie es später erneut."
+  },
+  "storyBible": {
+    "title": "Geschichtsbibel",
+    "subtitle": "Verwalten Sie Charaktere, Orte, Handlungsstränge und Welt",
+    "deleteConfirm": "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
+    "importError": "Import fehlgeschlagen",
+    "searchPlaceholder": "{tab} suchen...",
+    "noCharacters": "Keine Charaktere gefunden",
+    "createFirstCharacter": "Erstellen Sie Ihren ersten Charakter, um zu beginnen",
+    "noLocations": "Keine Orte gefunden",
+    "createFirstLocation": "Erstellen Sie Ihren ersten Ort, um zu beginnen",
+    "noThreads": "Keine Handlungsstränge gefunden",
+    "createFirstThread": "Erstellen Sie Ihren ersten Handlungsstrang, um zu beginnen",
+    "noMagic": "Keine Magiesysteme gefunden",
+    "createFirstMagic": "Erstellen Sie Ihr erstes Magiesystem, um zu beginnen",
+    "noTimeline": "Keine Zeitachsen-Ereignisse gefunden",
+    "createFirstEvent": "Erstellen Sie Ihr erstes Ereignis, um zu beginnen"
+  },
+  "aiStudio": {
+    "title": "KI-Schreibstudio",
+    "subtitle": "Multi-Agenten-KI-Prosagenerierung mit RAG und iterativer Verfeinerung",
+    "tokensUsed": "Verwendete Tokens",
+    "cost": "Kosten (USD)",
+    "quality": "Qualität",
+    "presets": {
+      "fastDraft": "Schneller Entwurf",
+      "fastDraftDesc": "Schnelle Generierung (~15s)",
+      "balanced": "Ausgewogen",
+      "balancedDesc": "Großartige Qualität (~30s)",
+      "premiumQuality": "Premium-Qualität",
+      "premiumQualityDesc": "Beste Qualität (~60s)",
+      "creative": "Kreativ",
+      "creativeDesc": "Maximale Kreativität (~45s)",
+      "precise": "Präzise",
+      "preciseDesc": "Kanontreue (~50s)"
+    },
+    "canonContext": "Kanonkontext",
+    "characters": "Charaktere",
+    "locations": "Orte",
+    "plotThreads": "Handlungsstränge",
+    "planningStructure": "Szenenstruktur planen...",
+    "writingProse": "Prosa schreiben...",
+    "refining": "Verfeinern und polieren...",
+    "generatedProse": "Generierte Prosa",
+    "qualityScore": "Qualität: {score}/10",
+    "refinements": "{count} Verfeinerungen"
+  },
+  "characterArcs": {
+    "title": "Charakterbogen-Verfolgung",
+    "subtitle": "Verfolgen Sie Charakterentwicklung und emotionale Reisen",
+    "overview": {
+      "characters": "Charaktere",
+      "totalArcs": "Gesamte Bögen",
+      "onTrack": "Auf Kurs",
+      "averageProgress": "Durchschnittlicher Fortschritt"
+    },
+    "arcTypes": {
+      "positiveChange": "Positive Veränderung",
+      "negativeChange": "Negative Veränderung",
+      "flatArc": "Flacher Bogen",
+      "transformation": "Transformation",
+      "redemption": "Erlösung",
+      "corruption": "Korruption",
+      "disillusionment": "Desillusionierung",
+      "comingOfAge": "Erwachsenwerden",
+      "tragic": "Tragischer Bogen"
+    },
+    "status": {
+      "onTrack": "Auf Kurs",
+      "offTrack": "Vom Kurs abgekommen"
+    },
+    "metrics": {
+      "pacing": "Tempo: {score}",
+      "consistency": "Konsistenz: {score}"
+    },
+    "tabs": {
+      "timeline": "Bogen-Zeitachse",
+      "emotional": "Emotionale Reise",
+      "goals": "Ziele & Meilensteine"
+    }
+  },
+  "write": {
+    "title": "Schreibstudio",
+    "back": "Desktop",
+    "words": "{count} Wörter",
+    "target": "{count} Ziel",
+    "saved": "Gespeichert",
+    "saving": "Wird gespeichert...",
+    "unsaved": "Nicht gespeichert",
+    "aiCopilot": "KI-Copilot",
+    "newChapter": "Neues Kapitel",
+    "chapter": "Kapitel {number}",
+    "scene": "Szene {number}",
+    "noChapters": "Keine Kapitel",
+    "createFirstChapter": "Erstes Kapitel erstellen",
+    "chapterProgress": "Kapitelfortschritt",
+    "selectOrCreate": "Wählen Sie ein Kapitel aus oder erstellen Sie ein neues",
+    "startWriting": "Beginnen Sie, Ihre Geschichte zu schreiben...",
+    "chapterSaved": "Kapitel gespeichert!",
+    "focusMode": "Fokusmodus",
+    "focusModeHint": "Fokusmodus • Drücken Sie ESC zum Beenden"
+  },
+  "export": {
+    "title": "Manuskript exportieren",
+    "backToProject": "Zurück zum Projekt",
+    "stats": {
+      "chapters": "Kapitel",
+      "words": "Wörter",
+      "estimatedPages": "Geschätzte Seiten"
+    },
+    "availableFormats": "Verfügbare Exportformate",
+    "formats": {
+      "docx": {
+        "name": "Microsoft Word (.docx)",
+        "description": "Bearbeitbares Dokument mit professioneller Manuskriptformatierung",
+        "features": {
+          "editable": "Bearbeitbar",
+          "toc": "Inhaltsverzeichnis",
+          "standard": "Standardformat"
+        }
+      },
+      "epub": {
+        "name": "EPUB (.epub)",
+        "description": "E-Book-Format kompatibel mit allen gängigen E-Readern",
+        "features": {
+          "readers": "E-Reader",
+          "responsive": "Responsive",
+          "navigation": "Navigationsmenü"
+        }
+      },
+      "pdf": {
+        "name": "PDF (.pdf)",
+        "description": "Universelles Format, perfekt zum Drucken und Archivieren",
+        "features": {
+          "printReady": "Druckfertig",
+          "pageNumbers": "Seitenzahlen",
+          "fixedLayout": "Festes Layout"
+        }
+      }
+    },
+    "info": "Alle Exporte enthalten Deckblatt, Kapitelorganisation und professionelle Formatierung. Sie können Optionen wie Prolog, Epilog und Inhaltsverzeichnis anpassen.",
+    "exportButton": "Manuskript exportieren"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "emailInvalid": "Ungültige E-Mail-Adresse",
+    "passwordMin": "Passwort muss mindestens {min} Zeichen lang sein",
+    "nameMin": "Name muss mindestens {min} Zeichen lang sein",
+    "passwordMismatch": "Passwörter stimmen nicht überein"
+  }
+}

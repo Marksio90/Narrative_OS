@@ -1,0 +1,268 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  "navigation": {
+    "home": "Home",
+    "desktop": "Desktop",
+    "projects": "Projects",
+    "storyBible": "Story Bible",
+    "write": "Write",
+    "timeline": "Timeline",
+    "agents": "Agents",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Sign In",
+    "register": "Sign Up",
+    "logout": "Logout",
+    "email": "Email Address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "forgotPassword": "Forgot password?",
+    "rememberMe": "Remember me",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGithub": "Continue with Github"
+  },
+  "profile": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your account information and preferences",
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "memberSince": "Member since",
+    "saveChanges": "Save Changes",
+    "saving": "Saving...",
+    "dangerZone": "Danger Zone",
+    "dangerZoneWarning": "Once you delete your account, there is no going back. Please be certain.",
+    "deleteAccount": "Delete Account",
+    "updateSuccess": "Profile updated successfully!",
+    "updateError": "Failed to update profile. Please try again."
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Manage your application preferences and notifications",
+    "notifications": {
+      "title": "Notifications",
+      "email": "Email Notifications",
+      "emailDescription": "Receive email updates about your projects",
+      "push": "Push Notifications",
+      "pushDescription": "Get push notifications on your devices",
+      "weeklyDigest": "Weekly Digest",
+      "weeklyDigestDescription": "Receive a weekly summary of your progress"
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "language": "Language"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "publicProfile": "Public Profile",
+      "publicProfileDescription": "Allow others to view your profile",
+      "showActivity": "Show Activity",
+      "showActivityDescription": "Display your recent activity to collaborators"
+    },
+    "saveSuccess": "Settings saved successfully!",
+    "saveError": "Failed to save settings"
+  },
+  "usage": {
+    "title": "Usage & Billing",
+    "subtitle": "Track your monthly usage and manage your subscription",
+    "llmCalls": "LLM Calls",
+    "storageUsed": "Storage Used",
+    "generationStatus": "Generation Status",
+    "active": "Active",
+    "limited": "Limited",
+    "readyToGenerate": "Ready to generate",
+    "limitReached": "Monthly limit reached",
+    "monthlyUsage": "Monthly Usage",
+    "llmApiCalls": "LLM API Calls",
+    "storage": "Storage (MB)",
+    "billingHistory": "Billing History",
+    "managePayment": "Manage Payment Methods",
+    "noBillingHistory": "No billing history yet",
+    "invoicesAppear": "Your invoices will appear here when you upgrade to a paid plan",
+    "upgradePlan": "Upgrade Plan",
+    "readyForMore": "Ready for more?",
+    "upgradePromo": "Upgrade to PRO for 10x more LLM calls and 10x more storage",
+    "viewPricing": "View Pricing Plans",
+    "approachingLimit": "You're approaching your monthly limit!",
+    "upgradeRecommended": "Consider upgrading to avoid hitting limits",
+    "resourcesAvailable": "Plenty of resources available",
+    "loadError": "Failed to load usage statistics. Please try again later."
+  },
+  "storyBible": {
+    "title": "Story Bible",
+    "subtitle": "Manage characters, locations, threads, and world",
+    "deleteConfirm": "Are you sure you want to delete this item?",
+    "importError": "Import failed",
+    "searchPlaceholder": "Search {tab}...",
+    "noCharacters": "No characters found",
+    "createFirstCharacter": "Create your first character to get started",
+    "noLocations": "No locations found",
+    "createFirstLocation": "Create your first location to get started",
+    "noThreads": "No plot threads found",
+    "createFirstThread": "Create your first plot thread to get started",
+    "noMagic": "No magic systems found",
+    "createFirstMagic": "Create your first magic system to get started",
+    "noTimeline": "No timeline events found",
+    "createFirstEvent": "Create your first event to get started"
+  },
+  "aiStudio": {
+    "title": "AI Writing Studio",
+    "subtitle": "Multi-agent AI prose generation with RAG and iterative refinement",
+    "tokensUsed": "Tokens Used",
+    "cost": "Cost (USD)",
+    "quality": "Quality",
+    "presets": {
+      "fastDraft": "Fast Draft",
+      "fastDraftDesc": "Quick generation (~15s)",
+      "balanced": "Balanced",
+      "balancedDesc": "Great quality (~30s)",
+      "premiumQuality": "Premium Quality",
+      "premiumQualityDesc": "Best quality (~60s)",
+      "creative": "Creative",
+      "creativeDesc": "Maximum creativity (~45s)",
+      "precise": "Precise",
+      "preciseDesc": "Canon fidelity (~50s)"
+    },
+    "canonContext": "Canon Context",
+    "characters": "Characters",
+    "locations": "Locations",
+    "plotThreads": "Plot Threads",
+    "planningStructure": "Planning scene structure...",
+    "writingProse": "Writing prose...",
+    "refining": "Refining and polishing...",
+    "generatedProse": "Generated Prose",
+    "qualityScore": "Quality: {score}/10",
+    "refinements": "{count} refinements"
+  },
+  "characterArcs": {
+    "title": "Character Arc Tracking",
+    "subtitle": "Track character development and emotional journeys",
+    "overview": {
+      "characters": "Characters",
+      "totalArcs": "Total Arcs",
+      "onTrack": "On Track",
+      "averageProgress": "Average Progress"
+    },
+    "arcTypes": {
+      "positiveChange": "Positive Change",
+      "negativeChange": "Negative Change",
+      "flatArc": "Flat Arc",
+      "transformation": "Transformation",
+      "redemption": "Redemption",
+      "corruption": "Corruption",
+      "disillusionment": "Disillusionment",
+      "comingOfAge": "Coming of Age",
+      "tragic": "Tragic Arc"
+    },
+    "status": {
+      "onTrack": "On Track",
+      "offTrack": "Off Track"
+    },
+    "metrics": {
+      "pacing": "Pacing: {score}",
+      "consistency": "Consistency: {score}"
+    },
+    "tabs": {
+      "timeline": "Arc Timeline",
+      "emotional": "Emotional Journey",
+      "goals": "Goals & Milestones"
+    }
+  },
+  "write": {
+    "title": "Writing Studio",
+    "back": "Desktop",
+    "words": "{count} words",
+    "target": "{count} target",
+    "saved": "Saved",
+    "saving": "Saving...",
+    "unsaved": "Unsaved",
+    "aiCopilot": "AI Copilot",
+    "newChapter": "New Chapter",
+    "chapter": "Chapter {number}",
+    "scene": "Scene {number}",
+    "noChapters": "No chapters",
+    "createFirstChapter": "Create first chapter",
+    "chapterProgress": "Chapter progress",
+    "selectOrCreate": "Select a chapter or create a new one",
+    "startWriting": "Start writing your story...",
+    "chapterSaved": "Chapter saved!",
+    "focusMode": "Focus mode",
+    "focusModeHint": "Focus mode • Press ESC to exit"
+  },
+  "export": {
+    "title": "Export Manuscript",
+    "backToProject": "Back to Project",
+    "stats": {
+      "chapters": "Chapters",
+      "words": "Words",
+      "estimatedPages": "Est. Pages"
+    },
+    "availableFormats": "Available Export Formats",
+    "formats": {
+      "docx": {
+        "name": "Microsoft Word (.docx)",
+        "description": "Editable document with professional manuscript formatting",
+        "features": {
+          "editable": "Editable",
+          "toc": "Table of Contents",
+          "standard": "Standard Format"
+        }
+      },
+      "epub": {
+        "name": "EPUB (.epub)",
+        "description": "E-book format compatible with all major e-readers",
+        "features": {
+          "readers": "E-readers",
+          "responsive": "Responsive",
+          "navigation": "Navigation Menu"
+        }
+      },
+      "pdf": {
+        "name": "PDF (.pdf)",
+        "description": "Universal format, perfect for printing and archiving",
+        "features": {
+          "printReady": "Print-ready",
+          "pageNumbers": "Page Numbers",
+          "fixedLayout": "Fixed Layout"
+        }
+      }
+    },
+    "info": "All exports include cover page, chapter organization, and professional formatting. You can customize options like prologue, epilogue, and table of contents.",
+    "exportButton": "Export Manuscript"
+  },
+  "validation": {
+    "required": "This field is required",
+    "emailInvalid": "Invalid email address",
+    "passwordMin": "Password must be at least {min} characters",
+    "nameMin": "Name must be at least {min} characters",
+    "passwordMismatch": "Passwords do not match"
+  }
+}
