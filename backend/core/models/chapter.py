@@ -58,8 +58,8 @@ class Chapter(Base, TimestampMixin):
     version = Column(Integer, default=1, comment="Current version number")
     parent_version_id = Column(Integer, ForeignKey("chapters.id"), nullable=True, comment="Previous version")
 
-    # Metadata storage
-    metadata = Column(JSON, default=dict, comment="""
+    # Metadata storage (renamed from 'metadata' to avoid SQLAlchemy conflict)
+    chapter_metadata = Column(JSON, default=dict, comment="""
         {
             'location_ids': [int],
             'character_ids': [int],
@@ -126,8 +126,8 @@ class WritingSession(Base, TimestampMixin):
     keystrokes = Column(Integer, default=0, comment="Total keystrokes")
     ai_generations = Column(Integer, default=0, comment="Number of AI assists used")
 
-    # Environment
-    metadata = Column(JSON, default=dict, comment="""
+    # Environment (renamed from 'metadata' to avoid SQLAlchemy conflict)
+    session_metadata = Column(JSON, default=dict, comment="""
         {
             'device': 'string',
             'session_notes': 'string',

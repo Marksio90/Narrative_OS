@@ -96,8 +96,8 @@ class TimelineEvent(Base, TimestampMixin):
     related_locations = Column(JSON, default=list, comment="Location IDs")
     related_events = Column(JSON, default=list, comment="Other timeline event IDs")
 
-    # Source-specific metadata
-    metadata = Column(JSON, default=dict, comment="""
+    # Source-specific metadata (renamed from 'metadata' to avoid SQLAlchemy conflict)
+    event_metadata = Column(JSON, default=dict, comment="""
         Flexible storage for source-specific data:
         {
             'chapter': {
