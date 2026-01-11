@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import {
   User, MapPin, Sparkles, Book, Clock, Wand2,
   Plus, Search, Filter, ArrowUpDown, Edit2, Trash2,
@@ -119,6 +120,8 @@ type Tab = 'characters' | 'locations' | 'threads' | 'magic' | 'timeline'
 export default function StoryBiblePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('storyBible')
+  const tCommon = useTranslations('common')
   const [activeTab, setActiveTab] = useState<Tab>('characters')
   const [searchQuery, setSearchQuery] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -264,18 +267,18 @@ export default function StoryBiblePage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Ładowanie Biblii Fabuły...</p>
+          <p className="mt-4 text-gray-600">{tCommon('loading')}</p>
         </div>
       </div>
     )
   }
 
   const tabs = [
-    { id: 'characters' as Tab, name: 'Postacie', icon: User, count: characters.length },
-    { id: 'locations' as Tab, name: 'Lokacje', icon: MapPin, count: locations.length },
-    { id: 'threads' as Tab, name: 'Wątki Fabularne', icon: Sparkles, count: threads.length },
-    { id: 'magic' as Tab, name: 'Magia i Zasady', icon: Wand2, count: magicSystems.length },
-    { id: 'timeline' as Tab, name: 'Oś Czasu', icon: Clock, count: timelineEvents.length },
+    { id: 'characters' as Tab, name: t('characters'), icon: User, count: characters.length },
+    { id: 'locations' as Tab, name: t('locations'), icon: MapPin, count: locations.length },
+    { id: 'threads' as Tab, name: t('plotThreads'), icon: Sparkles, count: threads.length },
+    { id: 'magic' as Tab, name: t('magicRules'), icon: Wand2, count: magicSystems.length },
+    { id: 'timeline' as Tab, name: t('timeline'), icon: Clock, count: timelineEvents.length },
   ]
 
   const handleAddNew = () => {
@@ -297,7 +300,7 @@ export default function StoryBiblePage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Czy na pewno chcesz usunąć ten element?')) return
+    if (!confirm(t('deleteConfirm'))) return
 
     try {
       let endpoint = ''
@@ -348,21 +351,21 @@ export default function StoryBiblePage() {
         window.URL.revokeObjectURL(url)
         document.body.removeChild(a)
       } else {
-        alert('Błąd podczas eksportu')
+        alert(t('exportError'))
       }
     } catch (error) {
       console.error('Error exporting canon:', error)
-      alert('Błąd podczas eksportu')
+      alert(t('exportError'))
     }
   }
 
   const handleImport = async () => {
     if (!importFile) {
-      alert('Wybierz plik do importu')
+      alert(t('selectFile'))
       return
     }
 
-    if (importOverwrite && !confirm('UWAGA: Tryb nadpisywania usunie WSZYSTKIE istniejące dane! Czy jesteś pewien?')) {
+    if (importOverwrite && !confirm(t('overwriteWarning'))) {
       return
     }
 
@@ -384,7 +387,7 @@ export default function StoryBiblePage() {
         body: JSON.stringify({
           entities: importData.entities,
           overwrite: importOverwrite,
-          commit_message: `Import z ${importFile.name}`
+          commit_message: `${t('importFrom')} ${importFile.name}`
         }),
       })
 
@@ -404,7 +407,7 @@ export default function StoryBiblePage() {
           }, 3000)
         }
       } else {
-        setImportResult({ success: false, errors: [result.detail || 'Import nie powiódł się'] })
+        setImportResult({ success: false, errors: [result.detail || t('importFailed')] })
       }
     } catch (error) {
       console.error('Error importing canon:', error)
@@ -423,52 +426,52 @@ export default function StoryBiblePage() {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 flex items-center space-x-3">
                 <Book className="h-8 w-8 text-indigo-600" />
-                <span>Biblia Fabuły</span>
+                <span>{t('title')}</span>
               </h1>
               <p className="mt-1 text-sm text-gray-600">
-                Twój kanon, postacie, świat i wątki fabularne
+                {t('subtitle')}
               </p>
             </div>
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setShowAITools(true)}
                 className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition shadow-sm"
-                title="AI narzędzia: sprawdzanie spójności i sugestie"
+                title={t('aiToolsTitle')}
               >
                 <Sparkles className="h-5 w-5" />
-                <span>AI Narzędzia</span>
+                <span>{t('aiTools')}</span>
               </button>
               <button
                 onClick={() => setShowRelationshipsGraph(true)}
                 className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
-                title="Zobacz graf relacji między postaciami"
+                title={t('relationshipsGraphTitle')}
               >
                 <Network className="h-5 w-5" />
-                <span>Graf Relacji</span>
+                <span>{t('relationshipsGraph')}</span>
               </button>
               <div className="w-px h-8 bg-gray-300"></div>
               <button
                 onClick={handleExport}
                 className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition shadow-sm"
-                title="Eksportuj całą biblię fabuły jako JSON"
+                title={t('exportTitle')}
               >
                 <Download className="h-5 w-5" />
-                <span>Eksportuj</span>
+                <span>{t('export')}</span>
               </button>
               <button
                 onClick={() => setShowImportModal(true)}
                 className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition shadow-sm"
-                title="Importuj biblię fabuły z JSON"
+                title={t('importTitle')}
               >
                 <Upload className="h-5 w-5" />
-                <span>Importuj</span>
+                <span>{t('import')}</span>
               </button>
               <button
                 onClick={handleAddNew}
                 className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-sm"
               >
                 <Plus className="h-5 w-5" />
-                <span>Dodaj Nowy</span>
+                <span>{t('addNew')}</span>
               </button>
             </div>
           </div>
@@ -509,7 +512,7 @@ export default function StoryBiblePage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder={`Szukaj ${tabs.find(t => t.id === activeTab)?.name?.toLowerCase() || activeTab}...`}
+              placeholder={`${t('search')} ${tabs.find(t => t.id === activeTab)?.name?.toLowerCase() || activeTab}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -517,11 +520,11 @@ export default function StoryBiblePage() {
           </div>
           <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
             <Filter className="h-5 w-5 text-gray-600" />
-            <span className="text-sm font-medium text-gray-700">Filter</span>
+            <span className="text-sm font-medium text-gray-700">{t('filter')}</span>
           </button>
           <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
             <ArrowUpDown className="h-5 w-5 text-gray-600" />
-            <span className="text-sm font-medium text-gray-700">Sort</span>
+            <span className="text-sm font-medium text-gray-700">{t('sort')}</span>
           </button>
         </div>
       </div>
