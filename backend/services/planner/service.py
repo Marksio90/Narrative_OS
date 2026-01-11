@@ -7,7 +7,7 @@ from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 
-from core.models.planner import BookArc, ChapterPlanPlan, Scene
+from core.models.planner import BookArc, ChapterPlan, Scene
 
 
 class PlannerService:

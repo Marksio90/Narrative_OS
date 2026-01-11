@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 from enum import Enum
 
 from core.llm import get_llm, LLMMessage, LLMConfig
-from core.models.planner import Scene, ChapterPlanPlan
+from core.models.planner import Scene, ChapterPlan
 from services.qc.service import QCService
 from services.canon.promise_ledger import PromiseLedgerService
 
