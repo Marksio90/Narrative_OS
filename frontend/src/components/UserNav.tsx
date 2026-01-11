@@ -3,11 +3,14 @@
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { User, Settings, LogOut, CreditCard, BarChart3 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import * as Avatar from '@radix-ui/react-avatar'
 
 export default function UserNav() {
   const { data: session, status } = useSession()
+  const tAuth = useTranslations('auth')
+  const tNav = useTranslations('navigation')
 
   if (status === 'loading') {
     return (
@@ -22,13 +25,13 @@ export default function UserNav() {
           href="/login"
           className="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
         >
-          Sign in
+          {tAuth('signIn')}
         </Link>
         <Link
           href="/register"
           className="text-sm font-medium px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
         >
-          Get started
+          {tAuth('getStarted')}
         </Link>
       </div>
     )
@@ -113,7 +116,7 @@ export default function UserNav() {
               className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer outline-none"
             >
               <User className="h-4 w-4" />
-              <span>Profile</span>
+              <span>{tNav('profile')}</span>
             </Link>
           </DropdownMenu.Item>
 
@@ -123,7 +126,7 @@ export default function UserNav() {
               className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer outline-none"
             >
               <BarChart3 className="h-4 w-4" />
-              <span>Usage & Billing</span>
+              <span>{tAuth('usageBilling')}</span>
             </Link>
           </DropdownMenu.Item>
 
@@ -133,7 +136,7 @@ export default function UserNav() {
               className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer outline-none"
             >
               <CreditCard className="h-4 w-4" />
-              <span>Upgrade Plan</span>
+              <span>{tAuth('upgradePlan')}</span>
             </Link>
           </DropdownMenu.Item>
 
@@ -143,7 +146,7 @@ export default function UserNav() {
               className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 rounded hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer outline-none"
             >
               <Settings className="h-4 w-4" />
-              <span>Settings</span>
+              <span>{tNav('settings')}</span>
             </Link>
           </DropdownMenu.Item>
 
@@ -154,7 +157,7 @@ export default function UserNav() {
             className="flex items-center space-x-3 px-3 py-2 text-sm text-red-600 dark:text-red-400 rounded hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer outline-none"
           >
             <LogOut className="h-4 w-4" />
-            <span>Sign out</span>
+            <span>{tAuth('signOut')}</span>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
