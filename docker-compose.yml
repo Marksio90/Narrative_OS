@@ -14,7 +14,7 @@ services:
     networks:
       - narrative_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U narrative"]
+      test: ["CMD-SHELL", "pg_isready -U narrative -d narrative_os"]
       interval: 10s
       timeout: 5s
       retries: 5
