@@ -1,13 +1,13 @@
 """
 Planner Service
 
-3-level story planning: Book Arc → Chapters → Scenes
+3-level story planning: Book Arc → ChapterPlans → Scenes
 """
 from typing import List, Optional, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import and_
 
-from core.models.planner import BookArc, Chapter, Scene
+from core.models.planner import BookArc, ChapterPlan, Scene
 
 
 class PlannerService:
@@ -16,7 +16,7 @@ class PlannerService:
 
     Three levels:
     1. Book Arc: Overall structure, acts, story beats
-    2. Chapters: Individual chapters with goals and conflicts
+    2. ChapterPlans: Individual chapters with goals and conflicts
     3. Scenes: Scene cards (building blocks of chapters)
     """
 
@@ -111,26 +111,26 @@ class PlannerService:
             "issues": issues,
         }
 
-    # ===== Chapters =====
+    # ===== ChapterPlans =====
 
     def create_chapter(
         self,
         project_id: int,
         chapter_number: int,
         data: Dict[str, Any],
-    ) -> Chapter:
+    ) -> ChapterPlan:
         """
         Create chapter
 
         Args:
             project_id: Project ID
-            chapter_number: Chapter number
-            data: Chapter data (goal, stakes, conflict, etc.)
+            chapter_number: ChapterPlan number
+            data: ChapterPlan data (goal, stakes, conflict, etc.)
 
         Returns:
             Created chapter
         """
-        chapter = Chapter(
+        chapter = ChapterPlan(
             project_id=project_id,
             chapter_number=chapter_number,
             **data,
@@ -144,25 +144,25 @@ class PlannerService:
         self,
         project_id: int,
         chapter_number: int,
-    ) -> Optional[Chapter]:
+    ) -> Optional[ChapterPlan]:
         """Get chapter by number"""
-        return self.db.query(Chapter).filter(
+        return self.db.query(ChapterPlan).filter(
             and_(
-                Chapter.project_id == project_id,
-                Chapter.chapter_number == chapter_number,
+                ChapterPlan.project_id == project_id,
+                ChapterPlan.chapter_number == chapter_number,
             )
         ).first()
 
-    def get_chapter_by_id(self, chapter_id: int) -> Optional[Chapter]:
+    def get_chapter_by_id(self, chapter_id: int) -> Optional[ChapterPlan]:
         """Get chapter by ID"""
-        return self.db.query(Chapter).filter(Chapter.id == chapter_id).first()
+        return self.db.query(ChapterPlan).filter(ChapterPlan.id == chapter_id).first()
 
     def list_chapters(
         self,
         project_id: int,
         status: Optional[str] = None,
         limit: int = 100,
-    ) -> List[Chapter]:
+    ) -> List[ChapterPlan]:
         """
         List chapters for a project
 
@@ -174,23 +174,23 @@ class PlannerService:
         Returns:
             List of chapters
         """
-        query = self.db.query(Chapter).filter(Chapter.project_id == project_id)
+        query = self.db.query(ChapterPlan).filter(ChapterPlan.project_id == project_id)
 
         if status:
-            query = query.filter(Chapter.status == status)
+            query = query.filter(ChapterPlan.status == status)
 
-        query = query.order_by(Chapter.chapter_number)
+        query = query.order_by(ChapterPlan.chapter_number)
         return query.limit(limit).all()
 
     def update_chapter(
         self,
         chapter_id: int,
         data: Dict[str, Any],
-    ) -> Chapter:
+    ) -> ChapterPlan:
         """Update chapter"""
         chapter = self.get_chapter_by_id(chapter_id)
         if not chapter:
-            raise ValueError(f"Chapter {chapter_id} not found")
+            raise ValueError(f"ChapterPlan {chapter_id} not found")
 
         for key, value in data.items():
             if hasattr(chapter, key) and value is not None:
@@ -229,13 +229,13 @@ class PlannerService:
         """
         chapter = self.get_chapter_by_id(chapter_id)
         if not chapter:
-            return {"valid": False, "errors": ["Chapter not found"]}
+            return {"valid": False, "errors": ["ChapterPlan not found"]}
 
         issues = []
 
         # Check goal
         if not chapter.goal or len(chapter.goal.strip()) < 10:
-            issues.append("Chapter goal too short or missing")
+            issues.append("ChapterPlan goal too short or missing")
 
         # Check conflict
         if not chapter.conflict:
@@ -247,7 +247,7 @@ class PlannerService:
 
         # Check word count
         if chapter.word_count > chapter.target_word_count * 1.5:
-            issues.append(f"Chapter too long ({chapter.word_count} vs target {chapter.target_word_count})")
+            issues.append(f"ChapterPlan too long ({chapter.word_count} vs target {chapter.target_word_count})")
 
         return {
             "valid": len(issues) == 0,
@@ -298,7 +298,7 @@ class PlannerService:
         List scenes for a chapter
 
         Args:
-            chapter_id: Chapter ID
+            chapter_id: ChapterPlan ID
 
         Returns:
             List of scenes in order
@@ -387,7 +387,7 @@ class PlannerService:
         Returns:
             {
                 "arc": BookArc,
-                "chapters": [Chapter],
+                "chapters": [ChapterPlan],
                 "total_scenes": int,
                 "total_words": int,
             }
@@ -407,7 +407,7 @@ class PlannerService:
             "completion": self._calculate_completion(chapters),
         }
 
-    def _calculate_completion(self, chapters: List[Chapter]) -> Dict[str, Any]:
+    def _calculate_completion(self, chapters: List[ChapterPlan]) -> Dict[str, Any]:
         """Calculate project completion metrics"""
         if not chapters:
             return {"percent": 0, "by_status": {}}
@@ -436,7 +436,7 @@ class PlannerService:
         Reorder scenes within a chapter
 
         Args:
-            chapter_id: Chapter ID
+            chapter_id: ChapterPlan ID
             scene_order: List of scene IDs in desired order
 
         Returns:

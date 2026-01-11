@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 from enum import Enum
 
 from core.llm import get_llm, LLMMessage, LLMConfig
-from core.models.planner import Scene, Chapter
+from core.models.planner import Scene, ChapterPlan
 from services.qc.service import QCService
 from services.canon.promise_ledger import PromiseLedgerService
 
@@ -103,7 +103,7 @@ class DraftService:
             raise ValueError(f"Scene {scene_id} not found")
 
         # Get chapter for context
-        chapter = self.db.query(Chapter).filter(Chapter.id == scene.chapter_id).first()
+        chapter = self.db.query(ChapterPlan).filter(ChapterPlan.id == scene.chapter_id).first()
 
         # Stage 1: Generate prose
         prose = await self._generate_prose(scene, chapter, canon_context, style_profile)
@@ -159,7 +159,7 @@ class DraftService:
     async def _generate_prose(
         self,
         scene: Scene,
-        chapter: Optional[Chapter],
+        chapter: Optional[ChapterPlan],
         canon_context: Dict[str, Any],
         style_profile: Optional[Dict[str, Any]],
     ) -> str:
@@ -246,7 +246,7 @@ class DraftService:
     def _build_generation_request(
         self,
         scene: Scene,
-        chapter: Optional[Chapter],
+        chapter: Optional[ChapterPlan],
         canon_context: Dict[str, Any],
     ) -> str:
         """Build generation request from scene card"""
@@ -408,7 +408,7 @@ Only extract facts that are NEW and SPECIFIC.
 
         return facts
 
-    # ===== Chapter Generation =====
+    # ===== ChapterPlan Generation =====
 
     async def generate_chapter(
         self,
@@ -420,7 +420,7 @@ Only extract facts that are NEW and SPECIFIC.
         Generate prose for entire chapter (scene by scene)
 
         Args:
-            chapter_id: Chapter ID
+            chapter_id: ChapterPlan ID
             canon_context: Canon context
             style_profile: Style overrides
 
@@ -428,9 +428,9 @@ Only extract facts that are NEW and SPECIFIC.
             Complete chapter result with all scenes
         """
         # Get chapter and scenes
-        chapter = self.db.query(Chapter).filter(Chapter.id == chapter_id).first()
+        chapter = self.db.query(ChapterPlan).filter(ChapterPlan.id == chapter_id).first()
         if not chapter:
-            raise ValueError(f"Chapter {chapter_id} not found")
+            raise ValueError(f"ChapterPlan {chapter_id} not found")
 
         scenes = (
             self.db.query(Scene)

@@ -14,7 +14,8 @@ from .canon import (
     Thread,
     StyleProfile,
 )
-from .planner import BookArc, Chapter, Scene, CanonContract
+from .chapter import Chapter, ChapterVersion, WritingSession
+from .planner import BookArc, ChapterPlan, Scene, CanonContract
 from .consequences import StoryEvent, Consequence, EventEntity
 from .character_arcs import (
     CharacterArc,
@@ -74,9 +75,13 @@ __all__ = [
     "Promise",
     "Thread",
     "StyleProfile",
+    # Manuscript
+    "Chapter",
+    "ChapterVersion",
+    "WritingSession",
     # Planner
     "BookArc",
-    "Chapter",
+    "ChapterPlan",
     "Scene",
     "CanonContract",
     # Consequences
