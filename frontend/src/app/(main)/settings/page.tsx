@@ -6,6 +6,8 @@
 
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
+import { useLocale } from '@/lib/locale-provider'
 import {
   Bell,
   Moon,
@@ -20,6 +22,9 @@ import {
 
 export default function SettingsPage() {
   const { data: session } = useSession()
+  const { locale, setLocale } = useLocale()
+  const t = useTranslations('settings')
+  const tCommon = useTranslations('common')
   const [isLoading, setIsLoading] = useState(false)
   const [settings, setSettings] = useState({
     // Notifications
@@ -29,7 +34,6 @@ export default function SettingsPage() {
 
     // Preferences
     theme: 'system', // 'light', 'dark', 'system'
-    language: 'en',
 
     // Privacy
     publicProfile: false,
@@ -41,10 +45,10 @@ export default function SettingsPage() {
     try {
       // TODO: Call API to save settings
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      alert('Ustawienia zapisane pomyślnie!')
+      alert(t('saveSuccess'))
     } catch (error) {
       console.error('Error saving settings:', error)
-      alert('Nie udało się zapisać ustawień')
+      alert(t('saveError'))
     } finally {
       setIsLoading(false)
     }
@@ -54,10 +58,10 @@ export default function SettingsPage() {
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Ustawienia
+          {t('title')}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Zarządzaj preferencjami aplikacji i powiadomieniami
+          {t('subtitle')}
         </p>
       </div>
 
@@ -67,7 +71,7 @@ export default function SettingsPage() {
           <div className="flex items-center space-x-3 mb-6">
             <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Powiadomienia
+              {t('notifications.title')}
             </h2>
           </div>
 
@@ -77,10 +81,10 @@ export default function SettingsPage() {
                 <Mail className="h-5 w-5 text-gray-500 mt-1" />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Powiadomienia Email
+                    {t('notifications.email')}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Otrzymuj powiadomienia email o swoich projektach
+                    {t('notifications.emailDescription')}
                   </p>
                 </div>
               </div>
@@ -213,15 +217,19 @@ export default function SettingsPage() {
                 Język
               </label>
               <select
-                value={settings.language}
-                onChange={(e) => setSettings({ ...settings, language: e.target.value })}
+                value={locale}
+                onChange={(e) => setLocale(e.target.value as 'pl' | 'en' | 'fr' | 'de' | 'es')}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               >
-                <option value="en">English</option>
-                <option value="pl">Polski</option>
-                <option value="es">Español</option>
-                <option value="fr">Français</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="es">🇪🇸 Español</option>
               </select>
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Zmiana języka zostanie zastosowana natychmiast
+              </p>
             </div>
           </div>
         </div>
