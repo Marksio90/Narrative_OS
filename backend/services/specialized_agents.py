@@ -13,7 +13,7 @@ from typing import Dict, Any, List, Optional
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
 
-from backend.core.models import (
+from core.models import (
     Agent, AgentTask, AgentType, Character, Chapter,
     BookArc, CharacterArc, StoryEvent, Consequence
 )
