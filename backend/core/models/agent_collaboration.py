@@ -19,8 +19,8 @@ from datetime import datetime
 import enum
 from typing import Optional, Dict, Any, List
 
-from backend.core.database import Base
-from backend.core.models.mixins import TimestampMixin
+from ..database.base import Base
+from .base import TimestampMixin
 
 
 # ==================== ENUMS ====================
