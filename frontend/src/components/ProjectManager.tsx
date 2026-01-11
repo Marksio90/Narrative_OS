@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import {
   BookOpen,
   Plus,
@@ -60,6 +61,8 @@ export default function ProjectManager({
   onSelectProject,
   currentProjectId,
 }: ProjectManagerProps) {
+  const t = useTranslations('projects')
+  const tCommon = useTranslations('common')
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
@@ -257,10 +260,10 @@ export default function ProjectManager({
           <div>
             <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
               <BookOpen className="w-10 h-10 text-purple-400" />
-              Moje Projekty
+              {t('title')}
             </h1>
             <p className="text-gray-400">
-              Zarządzaj swoimi książkami i wybierz workspace do pracy
+              {t('subtitle')}
             </p>
           </div>
 
@@ -269,7 +272,7 @@ export default function ProjectManager({
             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-purple-500/50"
           >
             <Plus className="w-5 h-5" />
-            Nowy Projekt
+            {t('newProject')}
           </button>
         </div>
 
@@ -352,7 +355,7 @@ export default function ProjectManager({
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-400 mt-4">Ładowanie projektów...</p>
+            <p className="text-gray-400 mt-4">{tCommon('loading')}</p>
           </div>
         ) : filteredProjects.length === 0 ? (
           <div className="text-center py-12">
@@ -362,7 +365,7 @@ export default function ProjectManager({
               onClick={() => setShowCreateModal(true)}
               className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
-              Stwórz pierwszy projekt
+              {t('newProject')}
             </button>
           </div>
         ) : viewMode === 'grid' ? (
@@ -438,7 +441,7 @@ export default function ProjectManager({
                             className="w-full px-4 py-2 text-left text-red-400 hover:bg-gray-700 flex items-center gap-2"
                           >
                             <Trash2 className="w-4 h-4" />
-                            Usuń
+                            {t('deleteProject')}
                           </button>
                         </div>
                       )}
@@ -448,7 +451,7 @@ export default function ProjectManager({
                   {/* Progress Bar */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between text-sm mb-2">
-                      <span className="text-gray-400">Postęp</span>
+                      <span className="text-gray-400">{t('progress')}</span>
                       <span className="text-purple-400 font-semibold">
                         {project.stats?.completion_percent || 0}%
                       </span>
@@ -466,13 +469,13 @@ export default function ProjectManager({
                     <div className="flex items-center gap-2 text-sm">
                       <FileText className="w-4 h-4 text-blue-400" />
                       <span className="text-gray-400">
-                        {project.stats?.current_word_count?.toLocaleString() || 0} słów
+                        {project.stats?.current_word_count?.toLocaleString() || 0} {t('currentWords')}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Target className="w-4 h-4 text-green-400" />
                       <span className="text-gray-400">
-                        {project.target_word_count?.toLocaleString() || 0} cel
+                        {project.target_word_count?.toLocaleString() || 0} {t('targetWords')}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
@@ -493,10 +496,10 @@ export default function ProjectManager({
                   <div className="pt-4 border-t border-gray-700 flex items-center justify-between text-xs text-gray-500">
                     <div className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
-                      <span>
+                      <span title={t('lastUpdated')}>
                         {project.stats?.last_edited
                           ? new Date(project.stats.last_edited).toLocaleDateString('pl-PL')
-                          : 'Brak edycji'}
+                          : '-'}
                       </span>
                     </div>
                     {currentProjectId === project.id && (
@@ -534,7 +537,7 @@ export default function ProjectManager({
                     )}
                   </div>
                   <div className="flex items-center gap-6 text-sm text-gray-400">
-                    <span>{project.stats?.current_word_count?.toLocaleString() || 0} słów</span>
+                    <span>{project.stats?.current_word_count?.toLocaleString() || 0} {t('currentWords')}</span>
                     <span>{project.stats?.characters_count || 0} postaci</span>
                     <span>{project.stats?.locations_count || 0} lokacji</span>
                     <span>{project.stats?.completion_percent || 0}% ukończone</span>
@@ -560,7 +563,7 @@ export default function ProjectManager({
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-3">
                 <Sparkles className="w-7 h-7 text-purple-400" />
-                Nowy Projekt
+                {t('newProject')}
               </h2>
               <button
                 onClick={() => setShowCreateModal(false)}
@@ -587,7 +590,7 @@ export default function ProjectManager({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Gatunek</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">{t('genre')}</label>
                   <input
                     type="text"
                     value={newProject.genre}
@@ -599,7 +602,7 @@ export default function ProjectManager({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Cel słów
+                    {t('targetWords')}
                   </label>
                   <input
                     type="number"
@@ -629,13 +632,13 @@ export default function ProjectManager({
                   disabled={!newProject.title.trim()}
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-purple-500/50"
                 >
-                  Stwórz Projekt
+                  {t('newProject')}
                 </button>
                 <button
                   onClick={() => setShowCreateModal(false)}
                   className="px-6 py-3 bg-gray-700 text-white rounded-lg font-semibold hover:bg-gray-600 transition-colors"
                 >
-                  Anuluj
+                  {tCommon('cancel')}
                 </button>
               </div>
             </div>

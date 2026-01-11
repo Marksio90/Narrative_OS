@@ -51,7 +51,33 @@
     "dontHaveAccount": "Nie masz konta?",
     "or": "lub",
     "continueWithGoogle": "Kontynuuj z Google",
-    "continueWithGithub": "Kontynuuj z Github"
+    "continueWithGithub": "Kontynuuj z Github",
+    "welcomeBack": "Witaj ponownie",
+    "loginDescription": "Zaloguj się aby kontynuować pisanie swojej historii",
+    "orContinueWithEmail": "Lub kontynuuj z emailem",
+    "emailPlaceholder": "ty@przykład.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "Logowanie...",
+    "noAccount": "Nie masz konta?",
+    "signUpFree": "Zarejestruj się za darmo",
+    "invalidCredentials": "Nieprawidłowy email lub hasło",
+    "fullNamePlaceholder": "Jan Kowalski",
+    "agreeToTerms": "Zgadzam się z",
+    "terms": "Regulaminem",
+    "and": "i",
+    "privacy": "Polityką Prywatności",
+    "creatingAccount": "Tworzenie konta...",
+    "createAccount": "Utwórz konto",
+    "whatYouGet": "Co otrzymujesz:",
+    "freeCallsPerMonth": "100 darmowych wywołań LLM miesięcznie",
+    "unlimitedProjects": "Nieograniczone projekty i jednostki kanonu",
+    "aiQualityControl": "Kontrola jakości oparta na AI",
+    "startJourney": "Rozpocznij swoją podróż",
+    "joinAuthors": "Dołącz do tysięcy autorów piszących lepsze historie",
+    "orRegisterWithEmail": "Lub zarejestruj się z emailem",
+    "fullName": "Imię i Nazwisko",
+    "registrationSuccessLoginFailed": "Rejestracja powiodła się, ale logowanie nie powiodło się. Spróbuj się zalogować.",
+    "errorOccurred": "Wystąpił błąd. Spróbuj ponownie."
   },
   "profile": {
     "title": "Ustawienia Profilu",
@@ -172,6 +198,8 @@
   "characterArcs": {
     "title": "Śledzenie Łuków Postaci",
     "subtitle": "Śledź rozwój postaci i emocjonalne podróże",
+    "newArc": "Nowy Łuk",
+    "aiAnalysis": "Analiza AI",
     "overview": {
       "characters": "Postacie",
       "totalArcs": "Całkowita Liczba Łuków",
@@ -201,6 +229,19 @@
       "timeline": "Oś Czasu Łuku",
       "emotional": "Podróż Emocjonalna",
       "goals": "Cele i Kamienie Milowe"
+    },
+    "arcCard": {
+      "progress": "Postęp",
+      "onTrack": "Na dobrej drodze",
+      "offTrack": "Poza planem"
+    },
+    "character": {
+      "trackedArcs": "{count} śledzonych łuków",
+      "selectMessage": "Wybierz postać, aby zobaczyć jej łuki fabularne"
+    },
+    "arcUnit": {
+      "singular": "łuk",
+      "plural": "łuków"
     }
   },
   "write": {

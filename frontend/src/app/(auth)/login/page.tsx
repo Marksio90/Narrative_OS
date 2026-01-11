@@ -2,26 +2,35 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Mail, Lock, Loader2, Github, Chrome } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Button from '@/components/Button'
 import Input from '@/components/Input'
 
-const loginSchema = z.object({
-  email: z.string().email('Nieprawidłowy adres email'),
-  password: z.string().min(8, 'Hasło musi mieć co najmniej 8 znaków'),
-})
-
-type LoginFormData = z.infer<typeof loginSchema>
+type LoginFormData = {
+  email: string
+  password: string
+}
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  const tAuth = useTranslations('auth')
+  const tValidation = useTranslations('validation')
+  const tCommon = useTranslations('common')
+
+  const loginSchema = z.object({
+    email: z.string().email(tValidation('emailInvalid')),
+    password: z.string().min(8, tValidation('passwordMin', { min: 8 })),
+  })
 
   const {
     register,
@@ -43,17 +52,17 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setError('Nieprawidłowy email lub hasło')
+        setError(tAuth('invalidCredentials'))
         setIsLoading(false)
         return
       }
 
       // Redirect to callback URL or home
-      const callbackUrl = searchParams?.get('callbackUrl') || '/'
+      const callbackUrl = searchParams.get('callbackUrl') || '/'
       router.push(callbackUrl)
       router.refresh()
     } catch (err) {
-      setError('Wystąpił błąd. Spróbuj ponownie.')
+      setError(tCommon('error'))
       setIsLoading(false)
     }
   }
@@ -61,7 +70,7 @@ export default function LoginPage() {
   const handleSocialLogin = (provider: 'google' | 'github') => {
     setIsLoading(true)
     signIn(provider, {
-      callbackUrl: searchParams?.get('callbackUrl') || '/',
+      callbackUrl: searchParams.get('callbackUrl') || '/',
     })
   }
 
@@ -74,10 +83,10 @@ export default function LoginPage() {
             <span className="text-2xl font-bold text-white">N</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Witaj ponownie
+            {tAuth('welcomeBack')}
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Zaloguj się aby kontynuować pisanie historii
+            {tAuth('loginDescription')}
           </p>
         </div>
 
@@ -93,7 +102,7 @@ export default function LoginPage() {
               disabled={isLoading}
             >
               <Chrome className="h-5 w-5" />
-              <span>Kontynuuj z Google</span>
+              <span>{tAuth('continueWithGoogle')}</span>
             </Button>
 
             <Button
@@ -104,7 +113,7 @@ export default function LoginPage() {
               disabled={isLoading}
             >
               <Github className="h-5 w-5" />
-              <span>Kontynuuj z GitHub</span>
+              <span>{tAuth('continueWithGithub')}</span>
             </Button>
           </div>
 
@@ -115,7 +124,7 @@ export default function LoginPage() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white/80 dark:bg-gray-800/80 text-gray-500">
-                Lub kontynuuj z emailem
+                {tAuth('orContinueWithEmail')}
               </span>
             </div>
           </div>
@@ -130,14 +139,14 @@ export default function LoginPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
-                Email
+                {tAuth('email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   {...register('email')}
                   type="email"
-                  placeholder="ty@przykład.com"
+                  placeholder={tAuth('emailPlaceholder')}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   disabled={isLoading}
                 />
@@ -151,14 +160,14 @@ export default function LoginPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
-                Hasło
+                {tAuth('password')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   {...register('password')}
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={tAuth('passwordPlaceholder')}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                   disabled={isLoading}
                 />
@@ -177,7 +186,7 @@ export default function LoginPage() {
                   className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-gray-600 dark:text-gray-400">
-                  Zapamiętaj mnie
+                  {tAuth('rememberMe')}
                 </span>
               </label>
 
@@ -185,7 +194,7 @@ export default function LoginPage() {
                 href="/forgot-password"
                 className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
               >
-                Zapomniałeś hasła?
+                {tAuth('forgotPassword')}
               </Link>
             </div>
 
@@ -197,10 +206,10 @@ export default function LoginPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Logowanie...</span>
+                  <span>{tAuth('signingIn')}</span>
                 </>
               ) : (
-                <span>Zaloguj się</span>
+                <span>{tAuth('signIn')}</span>
               )}
             </Button>
           </form>
@@ -208,12 +217,12 @@ export default function LoginPage() {
 
         {/* Sign up link */}
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Nie masz konta?{' '}
+          {tAuth('noAccount')}{' '}
           <Link
             href="/register"
             className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            Zarejestruj się za darmo
+            {tAuth('signUpFree')}
           </Link>
         </p>
       </div>

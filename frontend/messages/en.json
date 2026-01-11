@@ -51,7 +51,33 @@
     "dontHaveAccount": "Don't have an account?",
     "or": "or",
     "continueWithGoogle": "Continue with Google",
-    "continueWithGithub": "Continue with Github"
+    "continueWithGithub": "Continue with Github",
+    "welcomeBack": "Welcome back",
+    "loginDescription": "Sign in to continue writing your story",
+    "orContinueWithEmail": "Or continue with email",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "signUpFree": "Sign up for free",
+    "invalidCredentials": "Invalid email or password",
+    "fullNamePlaceholder": "John Doe",
+    "agreeToTerms": "I agree to the",
+    "terms": "Terms of Service",
+    "and": "and",
+    "privacy": "Privacy Policy",
+    "creatingAccount": "Creating account...",
+    "createAccount": "Create account",
+    "whatYouGet": "What you get:",
+    "freeCallsPerMonth": "100 free LLM calls per month",
+    "unlimitedProjects": "Unlimited projects and canon units",
+    "aiQualityControl": "AI-powered quality control",
+    "startJourney": "Start your journey",
+    "joinAuthors": "Join thousands of authors writing better stories",
+    "orRegisterWithEmail": "Or register with email",
+    "fullName": "Full Name",
+    "registrationSuccessLoginFailed": "Registration successful, but login failed. Try signing in.",
+    "errorOccurred": "An error occurred. Please try again."
   },
   "profile": {
     "title": "Profile Settings",
@@ -172,6 +198,8 @@
   "characterArcs": {
     "title": "Character Arc Tracking",
     "subtitle": "Track character development and emotional journeys",
+    "newArc": "New Arc",
+    "aiAnalysis": "AI Analysis",
     "overview": {
       "characters": "Characters",
       "totalArcs": "Total Arcs",
@@ -201,6 +229,19 @@
       "timeline": "Arc Timeline",
       "emotional": "Emotional Journey",
       "goals": "Goals & Milestones"
+    },
+    "arcCard": {
+      "progress": "Progress",
+      "onTrack": "On track",
+      "offTrack": "Off track"
+    },
+    "character": {
+      "trackedArcs": "{count} tracked arcs",
+      "selectMessage": "Select a character to see their character arcs"
+    },
+    "arcUnit": {
+      "singular": "arc",
+      "plural": "arcs"
     }
   },
   "write": {

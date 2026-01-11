@@ -4,11 +4,14 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth-context'
 import ProjectManager from '@/components/ProjectManager'
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 export default function ProjectsPage() {
   const { user, accessToken } = useAuth()
   const router = useRouter()
   const [currentProjectId, setCurrentProjectId] = useState<number | undefined>()
+  const t = useTranslations('projects')
+  const tCommon = useTranslations('common')
 
   useEffect(() => {
     if (!user) {
@@ -36,7 +39,7 @@ export default function ProjectsPage() {
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-400 mt-4">Ładowanie...</p>
+          <p className="text-gray-400 mt-4">{tCommon('loading')}</p>
         </div>
       </div>
     )

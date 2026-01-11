@@ -51,7 +51,33 @@
     "dontHaveAccount": "Haben Sie noch kein Konto?",
     "or": "oder",
     "continueWithGoogle": "Mit Google fortfahren",
-    "continueWithGithub": "Mit Github fortfahren"
+    "continueWithGithub": "Mit Github fortfahren",
+    "welcomeBack": "Willkommen zurück",
+    "loginDescription": "Melden Sie sich an, um weiter an Ihrer Geschichte zu schreiben",
+    "orContinueWithEmail": "Oder fortfahren mit E-Mail",
+    "emailPlaceholder": "sie@beispiel.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "Anmeldung...",
+    "noAccount": "Haben Sie noch kein Konto?",
+    "signUpFree": "Kostenlos registrieren",
+    "invalidCredentials": "Ungültige E-Mail-Adresse oder Passwort",
+    "fullNamePlaceholder": "Max Mustermann",
+    "agreeToTerms": "Ich stimme den",
+    "terms": "Nutzungsbedingungen",
+    "and": "und",
+    "privacy": "Datenschutzrichtlinie",
+    "creatingAccount": "Konto wird erstellt...",
+    "createAccount": "Konto erstellen",
+    "whatYouGet": "Das erhalten Sie:",
+    "freeCallsPerMonth": "100 kostenlose LLM-Aufrufe pro Monat",
+    "unlimitedProjects": "Unbegrenzte Projekte und Kanoneinheiten",
+    "aiQualityControl": "KI-gestützte Qualitätskontrolle",
+    "startJourney": "Beginnen Sie Ihre Reise",
+    "joinAuthors": "Treten Sie Tausenden von Autoren bei, die bessere Geschichten schreiben",
+    "orRegisterWithEmail": "Oder registrieren Sie sich mit E-Mail",
+    "fullName": "Vollständiger Name",
+    "registrationSuccessLoginFailed": "Registrierung erfolgreich, aber Anmeldung fehlgeschlagen. Versuchen Sie sich anzumelden.",
+    "errorOccurred": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
   },
   "profile": {
     "title": "Profileinstellungen",
@@ -172,6 +198,8 @@
   "characterArcs": {
     "title": "Charakterbogen-Verfolgung",
     "subtitle": "Verfolgen Sie Charakterentwicklung und emotionale Reisen",
+    "newArc": "Neuer Bogen",
+    "aiAnalysis": "KI-Analyse",
     "overview": {
       "characters": "Charaktere",
       "totalArcs": "Gesamte Bögen",
@@ -201,6 +229,19 @@
       "timeline": "Bogen-Zeitachse",
       "emotional": "Emotionale Reise",
       "goals": "Ziele & Meilensteine"
+    },
+    "arcCard": {
+      "progress": "Fortschritt",
+      "onTrack": "Auf Kurs",
+      "offTrack": "Vom Kurs abgekommen"
+    },
+    "character": {
+      "trackedArcs": "{count} verfolgter Bögen",
+      "selectMessage": "Wählen Sie einen Charakter aus, um seine Charakterbögen zu sehen"
+    },
+    "arcUnit": {
+      "singular": "Bogen",
+      "plural": "Bögen"
     }
   },
   "write": {
