@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { AlertTriangle, AlertCircle, Info, XCircle, CheckCircle, X, RefreshCw } from 'lucide-react'
 
 interface Conflict {
@@ -30,21 +31,21 @@ const SEVERITY_CONFIG = {
     color: 'text-red-600',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
-    label: 'Critical'
+    label: 'Krytyczny'
   },
   error: {
     icon: AlertCircle,
     color: 'text-orange-600',
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-200',
-    label: 'Error'
+    label: 'Błąd'
   },
   warning: {
     icon: AlertTriangle,
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
-    label: 'Warning'
+    label: 'Ostrzeżenie'
   },
   info: {
     icon: Info,
@@ -56,11 +57,11 @@ const SEVERITY_CONFIG = {
 }
 
 const CONFLICT_TYPE_LABELS: Record<string, string> = {
-  overlap: 'Event Overlap',
-  character_conflict: 'Character Conflict',
-  pacing_issue: 'Pacing Issue',
-  continuity_error: 'Continuity Error',
-  inconsistency: 'Inconsistency'
+  overlap: 'Nakładanie Wydarzeń',
+  character_conflict: 'Konflikt Postaci',
+  pacing_issue: 'Problem Tempa',
+  continuity_error: 'Błąd Ciągłości',
+  inconsistency: 'Niespójność'
 }
 
 export default function ConflictPanel({
@@ -83,25 +84,25 @@ export default function ConflictPanel({
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900">Conflicts</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Konflikty</h3>
           <button
             onClick={onDetectNew}
             className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm"
           >
             <RefreshCw className="w-4 h-4" />
-            Detect
+            Wykryj
           </button>
         </div>
 
         {/* Summary */}
         <div className="grid grid-cols-2 gap-2">
           <div className="bg-gray-50 rounded-lg p-2">
-            <div className="text-xs text-gray-600">Total</div>
+            <div className="text-xs text-gray-600">Łącznie</div>
             <div className="text-xl font-bold text-gray-900">{totalConflicts}</div>
           </div>
 
           <div className="bg-red-50 rounded-lg p-2">
-            <div className="text-xs text-red-600">Critical + Errors</div>
+            <div className="text-xs text-red-600">Krytyczne + Błędy</div>
             <div className="text-xl font-bold text-red-600">
               {groupedConflicts.critical.length + groupedConflicts.error.length}
             </div>
@@ -114,13 +115,13 @@ export default function ConflictPanel({
         {totalConflicts === 0 ? (
           <div className="flex flex-col items-center justify-center h-full p-8 text-center">
             <CheckCircle className="w-16 h-16 text-green-500 mb-4" />
-            <h4 className="text-lg font-semibold text-gray-900 mb-2">No Conflicts Found</h4>
-            <p className="text-sm text-gray-600">Your timeline is looking good!</p>
+            <h4 className="text-lg font-semibold text-gray-900 mb-2">Nie Znaleziono Konfliktów</h4>
+            <p className="text-sm text-gray-600">Twoja oś czasu wygląda dobrze!</p>
             <button
               onClick={onDetectNew}
               className="mt-4 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition-colors text-sm font-medium"
             >
-              Run Detection
+              Uruchom Wykrywanie
             </button>
           </div>
         ) : (
@@ -131,7 +132,7 @@ export default function ConflictPanel({
                 <div className="flex items-center gap-2 mb-2">
                   <XCircle className="w-4 h-4 text-red-600" />
                   <span className="text-sm font-semibold text-gray-900">
-                    Critical ({groupedConflicts.critical.length})
+                    Krytyczne ({groupedConflicts.critical.length})
                   </span>
                 </div>
                 <div className="space-y-2">
@@ -153,7 +154,7 @@ export default function ConflictPanel({
                 <div className="flex items-center gap-2 mb-2">
                   <AlertCircle className="w-4 h-4 text-orange-600" />
                   <span className="text-sm font-semibold text-gray-900">
-                    Errors ({groupedConflicts.error.length})
+                    Błędy ({groupedConflicts.error.length})
                   </span>
                 </div>
                 <div className="space-y-2">
@@ -175,7 +176,7 @@ export default function ConflictPanel({
                 <div className="flex items-center gap-2 mb-2">
                   <AlertTriangle className="w-4 h-4 text-yellow-600" />
                   <span className="text-sm font-semibold text-gray-900">
-                    Warnings ({groupedConflicts.warning.length})
+                    Ostrzeżenia ({groupedConflicts.warning.length})
                   </span>
                 </div>
                 <div className="space-y-2">
@@ -261,8 +262,8 @@ function ConflictCard({
               {conflict.chapter_start !== undefined && (
                 <span className="text-xs text-gray-600">
                   {conflict.chapter_end && conflict.chapter_end !== conflict.chapter_start
-                    ? `Ch. ${conflict.chapter_start}-${conflict.chapter_end}`
-                    : `Ch. ${conflict.chapter_start}`
+                    ? `Rozdz. ${conflict.chapter_start}-${conflict.chapter_end}`
+                    : `Rozdz. ${conflict.chapter_start}`
                   }
                 </span>
               )}
@@ -296,7 +297,7 @@ function ConflictCard({
           {/* Suggestions */}
           {conflict.suggestions && conflict.suggestions.length > 0 && (
             <div>
-              <div className="text-xs font-semibold text-gray-900 mb-2">Suggestions:</div>
+              <div className="text-xs font-semibold text-gray-900 mb-2">Sugestie:</div>
               <ul className="space-y-1">
                 {conflict.suggestions.map((suggestion, index) => (
                   <li key={index} className="text-sm text-gray-700 flex items-start gap-2">
@@ -315,7 +316,7 @@ function ConflictCard({
               className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
             >
               <CheckCircle className="w-4 h-4 inline mr-1" />
-              Resolve
+              Rozwiąż
             </button>
 
             <button
@@ -323,7 +324,7 @@ function ConflictCard({
               className="flex-1 px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
             >
               <X className="w-4 h-4 inline mr-1" />
-              Ignore
+              Ignoruj
             </button>
           </div>
         </div>

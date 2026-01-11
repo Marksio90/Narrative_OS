@@ -24,34 +24,34 @@ interface LayerFilterPanelProps {
 
 const LAYER_CONFIG = {
   plot: {
-    label: 'Plot',
+    label: 'Fabuła',
     color: '#3B82F6',
     icon: Star,
-    description: 'Main plot events and story beats'
+    description: 'Główne wydarzenia fabularne i punkty opowieści'
   },
   character: {
-    label: 'Character',
+    label: 'Postać',
     color: '#8B5CF6',
     icon: User,
-    description: 'Character arc milestones'
+    description: 'Kamienie milowe łuku postaci'
   },
   theme: {
-    label: 'Theme',
+    label: 'Temat',
     color: '#EC4899',
     icon: Sparkles,
-    description: 'Thematic moments and symbolism'
+    description: 'Momenty tematyczne i symbolika'
   },
   technical: {
-    label: 'Technical',
+    label: 'Techniczny',
     color: '#6B7280',
     icon: BookOpen,
-    description: 'Chapter structure'
+    description: 'Struktura rozdziałów'
   },
   consequence: {
-    label: 'Consequence',
+    label: 'Konsekwencja',
     color: '#F59E0B',
     icon: GitBranch,
-    description: 'Consequences and ripple effects'
+    description: 'Konsekwencje i efekty falowania'
   }
 }
 
@@ -89,14 +89,14 @@ export default function LayerFilterPanel({
     <div className="p-4 space-y-6">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Filters</h3>
-        <p className="text-sm text-gray-600">Customize timeline view</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Filtry</h3>
+        <p className="text-sm text-gray-600">Dostosuj widok osi czasu</p>
       </div>
 
       {/* Timeline Layers */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-semibold text-gray-900">Timeline Layers</h4>
+          <h4 className="text-sm font-semibold text-gray-900">Warstwy Osi Czasu</h4>
           <button
             onClick={() => {
               const allLayers = Object.keys(LAYER_CONFIG)
@@ -109,7 +109,7 @@ export default function LayerFilterPanel({
             }}
             className="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
           >
-            {filters.layers.length === Object.keys(LAYER_CONFIG).length ? 'Clear All' : 'Select All'}
+            {filters.layers.length === Object.keys(LAYER_CONFIG).length ? 'Wyczyść Wszystko' : 'Zaznacz Wszystko'}
           </button>
         </div>
 
@@ -171,20 +171,20 @@ export default function LayerFilterPanel({
       {/* Chapter Range */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h4 className="text-sm font-semibold text-gray-900">Chapter Range</h4>
+          <h4 className="text-sm font-semibold text-gray-900">Zakres Rozdziałów</h4>
           {filters.chapterRange && (
             <button
               onClick={clearChapterRange}
               className="text-xs text-gray-600 hover:text-gray-900"
             >
-              Clear
+              Wyczyść
             </button>
           )}
         </div>
 
         <div className="space-y-3">
           <div>
-            <label className="block text-xs text-gray-600 mb-1">Start Chapter</label>
+            <label className="block text-xs text-gray-600 mb-1">Początkowy Rozdział</label>
             <input
               type="number"
               min={stats?.chapter_range?.[0] || 1}
@@ -197,7 +197,7 @@ export default function LayerFilterPanel({
           </div>
 
           <div>
-            <label className="block text-xs text-gray-600 mb-1">End Chapter</label>
+            <label className="block text-xs text-gray-600 mb-1">Końcowy Rozdział</label>
             <input
               type="number"
               min={stats?.chapter_range?.[0] || 1}
@@ -212,14 +212,14 @@ export default function LayerFilterPanel({
 
         {stats?.chapter_range && (
           <div className="mt-2 text-xs text-gray-500">
-            Story spans chapters {stats.chapter_range[0]} - {stats.chapter_range[1]}
+            Historia obejmuje rozdziały {stats.chapter_range[0]} - {stats.chapter_range[1]}
           </div>
         )}
       </div>
 
       {/* Display Options */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3">Display Options</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-3">Opcje Wyświetlania</h4>
 
         <div className="space-y-2">
           <label className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
@@ -233,8 +233,8 @@ export default function LayerFilterPanel({
               className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
             />
             <div>
-              <div className="text-sm font-medium text-gray-900">Major Beats Only</div>
-              <div className="text-xs text-gray-500">Show only significant story events</div>
+              <div className="text-sm font-medium text-gray-900">Tylko Główne Punkty</div>
+              <div className="text-xs text-gray-500">Pokaż tylko znaczące wydarzenia historii</div>
             </div>
           </label>
         </div>
@@ -242,7 +242,7 @@ export default function LayerFilterPanel({
 
       {/* Event Type Filters */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3">Event Types</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-3">Typy Wydarzeń</h4>
 
         <div className="space-y-2">
           {stats?.events_by_type && Object.entries(stats.events_by_type).map(([type, count]) => (
@@ -270,7 +270,7 @@ export default function LayerFilterPanel({
           })}
           className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
         >
-          Reset All Filters
+          Resetuj Wszystkie Filtry
         </button>
       </div>
     </div>
