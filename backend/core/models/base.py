@@ -63,8 +63,8 @@ class Project(Base, TimestampMixin):
     # Status
     status = Column(String(50), default="draft")  # draft, in_progress, completed
 
-    # Metadata
-    metadata = Column(JSON, default=dict)
+    # Project metadata (renamed from 'metadata' to avoid SQLAlchemy conflict)
+    project_metadata = Column(JSON, default=dict)
 
 
 class User(Base, TimestampMixin):

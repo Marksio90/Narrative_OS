@@ -53,7 +53,7 @@ def get_project_stats(db: Session, project_id: int) -> ProjectStats:
         return ProjectStats()
 
     # Calculate word count from metadata (mock for now)
-    current_word_count = project.metadata.get("current_word_count", 0)
+    current_word_count = project.project_metadata.get("current_word_count", 0)
 
     # Calculate completion
     completion_percent = 0.0
@@ -62,7 +62,7 @@ def get_project_stats(db: Session, project_id: int) -> ProjectStats:
 
     return ProjectStats(
         current_word_count=current_word_count,
-        chapters_count=project.metadata.get("chapters_count", 0),
+        chapters_count=project.project_metadata.get("chapters_count", 0),
         characters_count=characters_count,
         locations_count=locations_count,
         threads_count=threads_count,
@@ -122,7 +122,7 @@ async def list_projects(
             "genre": project.genre,
             "target_word_count": project.target_word_count,
             "status": project.status,
-            "metadata": project.metadata,
+            "metadata": project.project_metadata,
             "owner_id": project.owner_id,
             "created_at": project.created_at,
             "updated_at": project.updated_at,
@@ -175,7 +175,7 @@ async def create_project(
         genre=new_project.genre,
         target_word_count=new_project.target_word_count,
         status=new_project.status,
-        metadata=new_project.metadata,
+        metadata=new_project.project_metadata,
         owner_id=new_project.owner_id,
         created_at=new_project.created_at,
         updated_at=new_project.updated_at,
@@ -210,7 +210,7 @@ async def get_project(
         genre=project.genre,
         target_word_count=project.target_word_count,
         status=project.status,
-        metadata=project.metadata,
+        metadata=project.project_metadata,
         owner_id=project.owner_id,
         created_at=project.created_at,
         updated_at=project.updated_at,
@@ -256,7 +256,7 @@ async def update_project(
         genre=project.genre,
         target_word_count=project.target_word_count,
         status=project.status,
-        metadata=project.metadata,
+        metadata=project.project_metadata,
         owner_id=project.owner_id,
         created_at=project.created_at,
         updated_at=project.updated_at,
@@ -327,7 +327,7 @@ async def duplicate_project(
         status="draft",
         owner_id=user.id,
         metadata={
-            **source_project.metadata,
+            **source_project.project_metadata,
             "duplicated_from": project_id,
             "duplicated_at": datetime.utcnow().isoformat(),
             "current_word_count": 0,
@@ -418,7 +418,7 @@ async def duplicate_project(
         genre=new_project.genre,
         target_word_count=new_project.target_word_count,
         status=new_project.status,
-        metadata=new_project.metadata,
+        metadata=new_project.project_metadata,
         owner_id=new_project.owner_id,
         created_at=new_project.created_at,
         updated_at=new_project.updated_at,
@@ -465,7 +465,7 @@ async def archive_project(
         genre=project.genre,
         target_word_count=project.target_word_count,
         status=project.status,
-        metadata=project.metadata,
+        metadata=project.project_metadata,
         owner_id=project.owner_id,
         created_at=project.created_at,
         updated_at=project.updated_at,
