@@ -1,7 +1,8 @@
 """
 Export all models
 """
-from .base import Base, Project, User, CanonVersion, TimestampMixin, CanonEntityMixin
+from .base import Base, Project, CanonVersion, TimestampMixin, CanonEntityMixin
+from .user import User, SubscriptionTier, CollaboratorRole, ProjectCollaborator, OAuthAccount
 from .canon import (
     Character,
     Location,
@@ -58,6 +59,11 @@ __all__ = [
     "CanonVersion",
     "TimestampMixin",
     "CanonEntityMixin",
+    # User & Auth
+    "SubscriptionTier",
+    "CollaboratorRole",
+    "ProjectCollaborator",
+    "OAuthAccount",
     # Canon
     "Character",
     "Location",
