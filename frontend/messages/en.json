@@ -22,6 +22,8 @@
     "desktop": "Desktop",
     "projects": "Projects",
     "storyBible": "Story Bible",
+    "planner": "Planner",
+    "aiStudio": "AI Studio",
     "write": "Write",
     "timeline": "Timeline",
     "agents": "Agents",
@@ -34,6 +36,11 @@
     "login": "Sign In",
     "register": "Sign Up",
     "logout": "Logout",
+    "signIn": "Sign in",
+    "getStarted": "Get started",
+    "signOut": "Sign out",
+    "usageBilling": "Usage & Billing",
+    "upgradePlan": "Upgrade Plan",
     "email": "Email Address",
     "password": "Password",
     "confirmPassword": "Confirm Password",
@@ -264,5 +271,140 @@
     "passwordMin": "Password must be at least {min} characters",
     "nameMin": "Name must be at least {min} characters",
     "passwordMismatch": "Passwords do not match"
+  },
+  "desktop": {
+    "title": "Narrative OS",
+    "selectProject": "Select project",
+    "quickActions": "Quick actions",
+    "welcome": "Welcome, {username}! 👋",
+    "todayWritten": "Written today",
+    "words": "words",
+    "streak": "Streak",
+    "streakDays": "days in a row 🔥",
+    "projectProgress": "Project progress",
+    "completed": "Completed",
+    "chapters": "chapters",
+    "quickStart": "Quick Start",
+    "newChapter": "New Chapter",
+    "startWriting": "Start writing",
+    "manageCanon": "Manage canon",
+    "aiAssistant": "AI Assistant",
+    "generateAnalyze": "Generate and analyze",
+    "statistics": "Statistics",
+    "analyzeProgress": "Analyze progress",
+    "recentActivity": "Recent Activity",
+    "weeklyActivity": "Activity this week",
+    "addedCharacter": "Added character \"{name}\"",
+    "completedChapter": "Completed chapter {number}",
+    "aiCheckedConsistency": "AI checked consistency",
+    "exportedStoryBible": "Exported story bible",
+    "hoursAgo": "{count} hours ago",
+    "yesterday": "yesterday",
+    "daysAgo": "{count} days ago",
+    "searchPlaceholder": "Search actions, chapters, characters...",
+    "days": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
+  },
+  "agents": {
+    "title": "Agent Collaboration",
+    "subtitle": "Multi-agent AI collaboration system",
+    "initializeTeam": "Initialize Agent Team",
+    "createTask": "Create Task",
+    "loading": "Loading Agent Dashboard...",
+    "noAgents": "No agents yet",
+    "taskQueue": "Task Queue",
+    "stats": {
+      "totalAgents": "Total Agents",
+      "active": "Active",
+      "busy": "Busy",
+      "totalTasks": "Total Tasks",
+      "successRate": "Success Rate",
+      "satisfaction": "Satisfaction"
+    },
+    "agentTypes": {
+      "plotting": "Plotting",
+      "character": "Character",
+      "dialogue": "Dialogue",
+      "continuity": "Continuity",
+      "qc": "Quality Control",
+      "pacing": "Pacing",
+      "theme": "Theme",
+      "worldbuilding": "World Building"
+    },
+    "status": {
+      "pending": "Pending",
+      "assigned": "Assigned",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "blocked": "Blocked"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    }
+  },
+  "analytics": {
+    "title": "Writing Statistics",
+    "subtitle": "Track your progress and productivity",
+    "backToDesktop": "Back to Desktop",
+    "timeRange": {
+      "week": "Last week",
+      "month": "Last month",
+      "year": "Last year"
+    },
+    "metrics": {
+      "totalWords": "Total words",
+      "currentStreak": "Current streak",
+      "dailyAverage": "Daily average",
+      "bestDay": "Best day"
+    },
+    "writingActivity": "Writing activity",
+    "sessionsOverview": "Sessions overview",
+    "recentSessions": "Recent writing sessions",
+    "session": "Session",
+    "duration": "Duration",
+    "wordsWritten": "Words written"
+  },
+  "timeline": {
+    "title": "Timeline Visualizer",
+    "subtitle": "Manage the chronology of events in your story",
+    "addEvent": "Add Event",
+    "filters": "Filters",
+    "layers": "Layers",
+    "conflicts": "Conflicts",
+    "noEvents": "No timeline events",
+    "createFirstEvent": "Create your first event"
+  },
+  "consequences": {
+    "title": "Consequences Simulator",
+    "subtitle": "Analyze the impact of plot events",
+    "analyze": "Analyze",
+    "event": "Event",
+    "impact": "Impact",
+    "affected": "Affected elements",
+    "noEvents": "No events to analyze"
+  },
+  "projects": {
+    "title": "Projects",
+    "subtitle": "Manage your writing projects",
+    "newProject": "New Project",
+    "openProject": "Open Project",
+    "deleteProject": "Delete Project",
+    "lastUpdated": "Last updated",
+    "progress": "Progress",
+    "genre": "Genre",
+    "targetWords": "Target words",
+    "currentWords": "Current words"
   }
 }

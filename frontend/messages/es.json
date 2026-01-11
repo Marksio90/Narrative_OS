@@ -22,6 +22,8 @@
     "desktop": "Escritorio",
     "projects": "Proyectos",
     "storyBible": "Biblia de la Historia",
+    "planner": "Planificador",
+    "aiStudio": "Estudio IA",
     "write": "Escribir",
     "timeline": "Línea de tiempo",
     "agents": "Agentes",
@@ -34,6 +36,11 @@
     "login": "Iniciar sesión",
     "register": "Registrarse",
     "logout": "Cerrar sesión",
+    "signIn": "Iniciar sesión",
+    "getStarted": "Comenzar",
+    "signOut": "Cerrar sesión",
+    "usageBilling": "Uso y Facturación",
+    "upgradePlan": "Actualizar Plan",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "confirmPassword": "Confirmar contraseña",
@@ -264,5 +271,140 @@
     "passwordMin": "La contraseña debe tener al menos {min} caracteres",
     "nameMin": "El nombre debe tener al menos {min} caracteres",
     "passwordMismatch": "Las contraseñas no coinciden"
+  },
+  "desktop": {
+    "title": "Narrative OS",
+    "selectProject": "Selecciona proyecto",
+    "quickActions": "Acciones rápidas",
+    "welcome": "¡Bienvenido, {username}! 👋",
+    "todayWritten": "Escrito hoy",
+    "words": "palabras",
+    "streak": "Racha",
+    "streakDays": "días seguidos 🔥",
+    "projectProgress": "Progreso del proyecto",
+    "completed": "Completado",
+    "chapters": "capítulos",
+    "quickStart": "Inicio rápido",
+    "newChapter": "Nuevo capítulo",
+    "startWriting": "Comienza a escribir",
+    "manageCanon": "Gestionar canon",
+    "aiAssistant": "Asistente IA",
+    "generateAnalyze": "Generar y analizar",
+    "statistics": "Estadísticas",
+    "analyzeProgress": "Analizar progreso",
+    "recentActivity": "Actividad reciente",
+    "weeklyActivity": "Actividad de esta semana",
+    "addedCharacter": "Personaje agregado \"{name}\"",
+    "completedChapter": "Capítulo completado {number}",
+    "aiCheckedConsistency": "IA verificó coherencia",
+    "exportedStoryBible": "Biblia de la historia exportada",
+    "hoursAgo": "{count} horas atrás",
+    "yesterday": "ayer",
+    "daysAgo": "{count} días atrás",
+    "searchPlaceholder": "Busca acciones, capítulos, personajes...",
+    "days": {
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mié",
+      "thu": "Jue",
+      "fri": "Vie",
+      "sat": "Sáb",
+      "sun": "Dom"
+    }
+  },
+  "agents": {
+    "title": "Colaboración de agentes",
+    "subtitle": "Sistema multiagente de colaboración IA",
+    "initializeTeam": "Inicializar equipo de agentes",
+    "createTask": "Crear tarea",
+    "loading": "Cargando panel de agentes...",
+    "noAgents": "No hay agentes todavía",
+    "taskQueue": "Cola de tareas",
+    "stats": {
+      "totalAgents": "Total de agentes",
+      "active": "Activos",
+      "busy": "Ocupados",
+      "totalTasks": "Total de tareas",
+      "successRate": "Tasa de éxito",
+      "satisfaction": "Satisfacción"
+    },
+    "agentTypes": {
+      "plotting": "Trama",
+      "character": "Personaje",
+      "dialogue": "Diálogo",
+      "continuity": "Continuidad",
+      "qc": "Control de calidad",
+      "pacing": "Ritmo",
+      "theme": "Tema",
+      "worldbuilding": "Construcción del mundo"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "assigned": "Asignado",
+      "in_progress": "En progreso",
+      "completed": "Completado",
+      "failed": "Fallido",
+      "cancelled": "Cancelado",
+      "blocked": "Bloqueado"
+    },
+    "priority": {
+      "low": "Bajo",
+      "medium": "Medio",
+      "high": "Alto",
+      "critical": "Crítico"
+    }
+  },
+  "analytics": {
+    "title": "Estadísticas de escritura",
+    "subtitle": "Rastrear tu progreso y productividad",
+    "backToDesktop": "Volver al escritorio",
+    "timeRange": {
+      "week": "La semana pasada",
+      "month": "El mes pasado",
+      "year": "El año pasado"
+    },
+    "metrics": {
+      "totalWords": "Número total de palabras",
+      "currentStreak": "Racha actual",
+      "dailyAverage": "Promedio diario",
+      "bestDay": "Mejor día"
+    },
+    "writingActivity": "Actividad de escritura",
+    "sessionsOverview": "Resumen de sesiones",
+    "recentSessions": "Sesiones de escritura recientes",
+    "session": "Sesión",
+    "duration": "Duración",
+    "wordsWritten": "Palabras escritas"
+  },
+  "timeline": {
+    "title": "Visualizador de línea de tiempo",
+    "subtitle": "Gestionar la cronología de eventos en tu historia",
+    "addEvent": "Agregar evento",
+    "filters": "Filtros",
+    "layers": "Capas",
+    "conflicts": "Conflictos",
+    "noEvents": "Sin eventos en la línea de tiempo",
+    "createFirstEvent": "Crea tu primer evento"
+  },
+  "consequences": {
+    "title": "Simulador de consecuencias",
+    "subtitle": "Analizar el impacto de los eventos de la trama",
+    "analyze": "Analizar",
+    "event": "Evento",
+    "impact": "Impacto",
+    "affected": "Elementos afectados",
+    "noEvents": "Sin eventos para analizar"
+  },
+  "projects": {
+    "title": "Proyectos",
+    "subtitle": "Gestionar tus proyectos de escritura",
+    "newProject": "Nuevo proyecto",
+    "openProject": "Abrir proyecto",
+    "deleteProject": "Eliminar proyecto",
+    "lastUpdated": "Última actualización",
+    "progress": "Progreso",
+    "genre": "Género",
+    "targetWords": "Objetivo de palabras",
+    "currentWords": "Palabras actuales"
   }
 }

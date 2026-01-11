@@ -22,6 +22,8 @@
     "desktop": "Pulpit",
     "projects": "Projekty",
     "storyBible": "Biblia Fabuły",
+    "planner": "Planer",
+    "aiStudio": "AI Studio",
     "write": "Pisz",
     "timeline": "Oś Czasu",
     "agents": "Agenci",
@@ -34,6 +36,11 @@
     "login": "Zaloguj się",
     "register": "Zarejestruj się",
     "logout": "Wyloguj",
+    "signIn": "Zaloguj się",
+    "getStarted": "Rozpocznij",
+    "signOut": "Wyloguj się",
+    "usageBilling": "Użycie i Rozliczenia",
+    "upgradePlan": "Uaktualnij Plan",
     "email": "Adres Email",
     "password": "Hasło",
     "confirmPassword": "Potwierdź Hasło",
@@ -264,5 +271,140 @@
     "passwordMin": "Hasło musi mieć co najmniej {min} znaków",
     "nameMin": "Imię musi mieć co najmniej {min} znaki",
     "passwordMismatch": "Hasła nie pasują do siebie"
+  },
+  "desktop": {
+    "title": "Narrative OS",
+    "selectProject": "Wybierz projekt",
+    "quickActions": "Szybkie akcje",
+    "welcome": "Witaj, {username}! 👋",
+    "todayWritten": "Dziś napisane",
+    "words": "słów",
+    "streak": "Passa",
+    "streakDays": "dni z rzędu 🔥",
+    "projectProgress": "Postęp projektu",
+    "completed": "Ukończone",
+    "chapters": "rozdziałów",
+    "quickStart": "Szybki Start",
+    "newChapter": "Nowy Rozdział",
+    "startWriting": "Rozpocznij pisanie",
+    "manageCanon": "Zarządzaj kanonem",
+    "aiAssistant": "AI Asystent",
+    "generateAnalyze": "Generuj i analizuj",
+    "statistics": "Statystyki",
+    "analyzeProgress": "Analizuj postępy",
+    "recentActivity": "Ostatnia Aktywność",
+    "weeklyActivity": "Aktywność w tym tygodniu",
+    "addedCharacter": "Dodano postać \"{name}\"",
+    "completedChapter": "Ukończono rozdział {number}",
+    "aiCheckedConsistency": "AI sprawdził spójność",
+    "exportedStoryBible": "Eksport biblii fabuły",
+    "hoursAgo": "{count} godziny temu",
+    "yesterday": "wczoraj",
+    "daysAgo": "{count} dni temu",
+    "searchPlaceholder": "Szukaj akcji, rozdziałów, postaci...",
+    "days": {
+      "mon": "Pon",
+      "tue": "Wt",
+      "wed": "Śr",
+      "thu": "Czw",
+      "fri": "Pt",
+      "sat": "Sob",
+      "sun": "Niedz"
+    }
+  },
+  "agents": {
+    "title": "Współpraca Agentów",
+    "subtitle": "Multi-agentowy system współpracy AI",
+    "initializeTeam": "Zainicjuj Zespół Agentów",
+    "createTask": "Utwórz Zadanie",
+    "loading": "Ładowanie Dashboardu Agentów...",
+    "noAgents": "Nie ma jeszcze agentów",
+    "taskQueue": "Kolejka Zadań",
+    "stats": {
+      "totalAgents": "Łącznie Agentów",
+      "active": "Aktywni",
+      "busy": "Zajęci",
+      "totalTasks": "Łącznie Zadań",
+      "successRate": "Wskaźnik Sukcesu",
+      "satisfaction": "Zadowolenie"
+    },
+    "agentTypes": {
+      "plotting": "Fabuła",
+      "character": "Postać",
+      "dialogue": "Dialog",
+      "continuity": "Ciągłość",
+      "qc": "Kontrola Jakości",
+      "pacing": "Tempo",
+      "theme": "Temat",
+      "worldbuilding": "Świat"
+    },
+    "status": {
+      "pending": "Oczekujące",
+      "assigned": "Przydzielone",
+      "in_progress": "W trakcie",
+      "completed": "Ukończone",
+      "failed": "Nieudane",
+      "cancelled": "Anulowane",
+      "blocked": "Zablokowane"
+    },
+    "priority": {
+      "low": "Niski",
+      "medium": "Średni",
+      "high": "Wysoki",
+      "critical": "Krytyczny"
+    }
+  },
+  "analytics": {
+    "title": "Statystyki Pisania",
+    "subtitle": "Śledź swoje postępy i produktywność",
+    "backToDesktop": "Powrót do Desktop",
+    "timeRange": {
+      "week": "Ostatni tydzień",
+      "month": "Ostatni miesiąc",
+      "year": "Ostatni rok"
+    },
+    "metrics": {
+      "totalWords": "Całkowita liczba słów",
+      "currentStreak": "Aktualna passa",
+      "dailyAverage": "Średnia dzienna",
+      "bestDay": "Najlepszy dzień"
+    },
+    "writingActivity": "Aktywność pisania",
+    "sessionsOverview": "Podsumowanie sesji",
+    "recentSessions": "Ostatnie sesje pisania",
+    "session": "Sesja",
+    "duration": "Czas trwania",
+    "wordsWritten": "Napisane słowa"
+  },
+  "timeline": {
+    "title": "Wizualizator Osi Czasu",
+    "subtitle": "Zarządzaj chronologią wydarzeń w swojej historii",
+    "addEvent": "Dodaj Wydarzenie",
+    "filters": "Filtry",
+    "layers": "Warstwy",
+    "conflicts": "Konflikty",
+    "noEvents": "Brak wydarzeń na osi czasu",
+    "createFirstEvent": "Utwórz swoje pierwsze wydarzenie"
+  },
+  "consequences": {
+    "title": "Symulator Konsekwencji",
+    "subtitle": "Analizuj wpływ wydarzeń fabularnych",
+    "analyze": "Analizuj",
+    "event": "Wydarzenie",
+    "impact": "Wpływ",
+    "affected": "Dotknięte elementy",
+    "noEvents": "Brak wydarzeń do analizy"
+  },
+  "projects": {
+    "title": "Projekty",
+    "subtitle": "Zarządzaj swoimi projektami pisarskimi",
+    "newProject": "Nowy Projekt",
+    "openProject": "Otwórz Projekt",
+    "deleteProject": "Usuń Projekt",
+    "lastUpdated": "Ostatnia aktualizacja",
+    "progress": "Postęp",
+    "genre": "Gatunek",
+    "targetWords": "Cel słów",
+    "currentWords": "Aktualne słowa"
   }
 }

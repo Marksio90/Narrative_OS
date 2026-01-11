@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import { ReactNode } from 'react'
 import { BookOpen, Users, FileEdit, Target, Home, Book } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import UserNav from './UserNav'
 
 interface LayoutProps {
@@ -8,6 +11,8 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const tNav = useTranslations('navigation')
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <nav className="border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
@@ -26,28 +31,28 @@ export default function Layout({ children }: LayoutProps) {
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <Home className="h-4 w-4" />
-                <span className="hidden md:inline">Home</span>
+                <span className="hidden md:inline">{tNav('home')}</span>
               </Link>
               <Link
                 href="/projects"
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <BookOpen className="h-4 w-4" />
-                <span className="hidden md:inline">Projects</span>
+                <span className="hidden md:inline">{tNav('projects')}</span>
               </Link>
               <Link
                 href="/story-bible"
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <Book className="h-4 w-4" />
-                <span className="hidden md:inline">Story Bible</span>
+                <span className="hidden md:inline">{tNav('storyBible')}</span>
               </Link>
               <Link
                 href="/planner"
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition"
               >
                 <Users className="h-4 w-4" />
-                <span className="hidden md:inline">Planner</span>
+                <span className="hidden md:inline">{tNav('planner')}</span>
               </Link>
               <Link
                 href="/ai-studio"
@@ -56,7 +61,7 @@ export default function Layout({ children }: LayoutProps) {
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                 </svg>
-                <span className="hidden md:inline font-medium">AI Studio</span>
+                <span className="hidden md:inline font-medium">{tNav('aiStudio')}</span>
               </Link>
 
               {/* User Navigation */}
