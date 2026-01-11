@@ -160,7 +160,7 @@ export default function AIStudioPage() {
 
   const handleGenerate = async () => {
     setIsGenerating(true)
-    setGenerationProgress('Planning scene structure...')
+    setGenerationProgress('Planowanie struktury sceny...')
 
     try {
       const accessToken = (session?.user as any)?.accessToken
@@ -191,11 +191,11 @@ export default function AIStudioPage() {
         throw new Error('Generation failed')
       }
 
-      setGenerationProgress('Writing prose...')
+      setGenerationProgress('Pisanie prozy...')
 
       const data = await response.json()
 
-      setGenerationProgress('Refining and polishing...')
+      setGenerationProgress('Udoskonalanie i polerowanie...')
 
       // Simulate progressive refinement
       setTimeout(() => {
@@ -208,7 +208,7 @@ export default function AIStudioPage() {
 
     } catch (error) {
       console.error('Generation error:', error)
-      alert('Generation failed. Please try again.')
+      alert('Generowanie nie powiodło się. Spróbuj ponownie.')
       setIsGenerating(false)
       setGenerationProgress('')
     }
@@ -217,18 +217,18 @@ export default function AIStudioPage() {
   const presets = [
     {
       id: 'fast_draft',
-      name: 'Fast Draft',
+      name: 'Szybki Szkic',
       icon: Zap,
       color: 'yellow',
-      description: 'Quick generation (~15s)',
+      description: 'Szybkie generowanie (~15s)',
       model: 'GPT-4o Mini',
     },
     {
       id: 'balanced',
-      name: 'Balanced',
+      name: 'Zrównoważony',
       icon: Target,
       color: 'blue',
-      description: 'Great quality (~30s)',
+      description: 'Świetna jakość (~30s)',
       model: 'Claude Sonnet',
     },
     {
@@ -236,23 +236,23 @@ export default function AIStudioPage() {
       name: 'Premium',
       icon: Sparkles,
       color: 'purple',
-      description: 'Best quality (~60s)',
+      description: 'Najlepsza jakość (~60s)',
       model: 'Claude Opus',
     },
     {
       id: 'creative_burst',
-      name: 'Creative',
+      name: 'Kreatywny',
       icon: Wand2,
       color: 'pink',
-      description: 'Experimental ideas',
+      description: 'Eksperymentalne pomysły',
       model: 'GPT-4o',
     },
     {
       id: 'canon_strict',
-      name: 'Canon Strict',
+      name: 'Ścisły Kanon',
       icon: Brain,
       color: 'green',
-      description: 'Maximum consistency',
+      description: 'Maksymalna spójność',
       model: 'Claude Opus',
     },
   ]
@@ -269,10 +269,10 @@ export default function AIStudioPage() {
           </div>
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              AI Writing Studio
+              Studio Pisania AI
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Multi-agent AI prose generation with RAG and iterative refinement
+              Wieloagentowe generowanie prozy AI z RAG i iteracyjnym udoskonalaniem
             </p>
           </div>
         </div>
@@ -283,7 +283,7 @@ export default function AIStudioPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center space-x-2 mb-1">
             <Zap className="h-4 w-4 text-yellow-500" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">Tokens Used</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">Użyte Tokeny</span>
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {totalTokens.toLocaleString()}
@@ -293,7 +293,7 @@ export default function AIStudioPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center space-x-2 mb-1">
             <DollarSign className="h-4 w-4 text-green-500" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">Cost (USD)</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">Koszt (USD)</span>
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             ${totalCost.toFixed(3)}
@@ -303,7 +303,7 @@ export default function AIStudioPage() {
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex items-center space-x-2 mb-1">
             <TrendingUp className="h-4 w-4 text-blue-500" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">Quality</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">Jakość</span>
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
             {result ? `${result.quality_score.toFixed(1)}/10` : '--'}
@@ -317,7 +317,7 @@ export default function AIStudioPage() {
           {/* Preset Selection */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Generation Preset
+              Preset Generowania
             </h3>
 
             <div className="space-y-2">
@@ -376,11 +376,11 @@ export default function AIStudioPage() {
               <div className="flex items-center space-x-2">
                 <BookOpen className="h-5 w-5 text-indigo-600" />
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Canon Context
+                  Kontekst Kanonu
                 </h3>
                 {(selectedCharacterIds.length + selectedLocationIds.length + selectedThreadIds.length) > 0 && (
                   <span className="px-2 py-0.5 text-xs bg-indigo-100 text-indigo-700 rounded-full">
-                    {selectedCharacterIds.length + selectedLocationIds.length + selectedThreadIds.length} selected
+                    {selectedCharacterIds.length + selectedLocationIds.length + selectedThreadIds.length} wybrano
                   </span>
                 )}
               </div>
@@ -392,7 +392,7 @@ export default function AIStudioPage() {
                 {isLoadingCanon ? (
                   <div className="text-center py-4">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
-                    <p className="text-sm text-gray-600 mt-2">Loading canon...</p>
+                    <p className="text-sm text-gray-600 mt-2">Ładowanie kanonu...</p>
                   </div>
                 ) : (
                   <>
@@ -402,7 +402,7 @@ export default function AIStudioPage() {
                         <div className="flex items-center space-x-2 mb-2">
                           <User className="h-4 w-4 text-purple-600" />
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Characters ({selectedCharacterIds.length}/{characters.length})
+                            Postacie ({selectedCharacterIds.length}/{characters.length})
                           </span>
                         </div>
                         <div className="space-y-1 max-h-40 overflow-y-auto">
@@ -435,7 +435,7 @@ export default function AIStudioPage() {
                         <div className="flex items-center space-x-2 mb-2">
                           <MapPin className="h-4 w-4 text-emerald-600" />
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Locations ({selectedLocationIds.length}/{locations.length})
+                            Lokacje ({selectedLocationIds.length}/{locations.length})
                           </span>
                         </div>
                         <div className="space-y-1 max-h-40 overflow-y-auto">
@@ -468,7 +468,7 @@ export default function AIStudioPage() {
                         <div className="flex items-center space-x-2 mb-2">
                           <Sparkles className="h-4 w-4 text-amber-600" />
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Plot Threads ({selectedThreadIds.length}/{threads.length})
+                            Wątki Fabularne ({selectedThreadIds.length}/{threads.length})
                           </span>
                         </div>
                         <div className="space-y-1 max-h-40 overflow-y-auto">
@@ -498,9 +498,9 @@ export default function AIStudioPage() {
                     {characters.length === 0 && locations.length === 0 && threads.length === 0 && (
                       <div className="text-center py-4">
                         <BookOpen className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                        <p className="text-sm text-gray-600">No canon entities found</p>
+                        <p className="text-sm text-gray-600">Nie znaleziono elementów kanonu</p>
                         <p className="text-xs text-gray-500 mt-1">
-                          Visit Story Bible to add characters, locations, and threads
+                          Odwiedź Biblię Fabuły, aby dodać postacie, lokacje i wątki
                         </p>
                       </div>
                     )}
@@ -519,13 +519,13 @@ export default function AIStudioPage() {
           {/* Scene Parameters */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Scene Parameters
+              Parametry Sceny
             </h3>
 
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Target Word Count
+                  Docelowa Liczba Słów
                 </label>
                 <input
                   type="number"
@@ -537,20 +537,20 @@ export default function AIStudioPage() {
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  100-5000 words
+                  100-5000 słów
                 </p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  POV Character
+                  Postać POV
                 </label>
                 <select
                   value={povCharacterId || ''}
                   onChange={(e) => setPovCharacterId(e.target.value ? parseInt(e.target.value) : null)}
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                 >
-                  <option value="">Auto-detect</option>
+                  <option value="">Automatyczne wykrywanie</option>
                   <option value="1">Sarah Chen</option>
                   <option value="2">Marcus Stone</option>
                   <option value="3">Dr. Elena Rodriguez</option>
@@ -565,13 +565,13 @@ export default function AIStudioPage() {
           {/* Input Area */}
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Scene Description
+              Opis Sceny
             </h3>
 
             <textarea
               value={sceneDescription}
               onChange={(e) => setSceneDescription(e.target.value)}
-              placeholder="Describe what happens in this scene... (e.g., 'Sarah discovers the hidden door behind the bookshelf and ventures into the dark passage')"
+              placeholder="Opisz, co dzieje się w tej scenie... (np. 'Sarah odkrywa ukryte drzwi za regałem i zapuszcza się w ciemny korytarz')"
               className="w-full h-32 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white resize-none"
             />
 
@@ -579,7 +579,7 @@ export default function AIStudioPage() {
               <div className="text-sm text-gray-600 dark:text-gray-400">
                 {selectedPreset && (
                   <span>
-                    Using <span className="font-medium">{selectedPreset.name}</span> preset
+                    Używam presetu <span className="font-medium">{selectedPreset.name}</span>
                   </span>
                 )}
               </div>
@@ -592,12 +592,12 @@ export default function AIStudioPage() {
                 {isGenerating ? (
                   <>
                     <RefreshCw className="h-5 w-5 animate-spin" />
-                    <span>Generating...</span>
+                    <span>Generowanie...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="h-5 w-5" />
-                    <span>Generate Scene</span>
+                    <span>Generuj Scenę</span>
                   </>
                 )}
               </button>
@@ -614,7 +614,7 @@ export default function AIStudioPage() {
                     {generationProgress}
                   </p>
                   <p className="text-sm text-purple-700 dark:text-purple-300">
-                    Multi-agent AI system at work...
+                    Wieloagentowy system AI w pracy...
                   </p>
                 </div>
               </div>
@@ -630,11 +630,11 @@ export default function AIStudioPage() {
                   <div className="flex items-center space-x-3">
                     <Sparkles className="h-5 w-5" />
                     <div>
-                      <h3 className="font-semibold">Generated Prose</h3>
+                      <h3 className="font-semibold">Wygenerowana Proza</h3>
                       <p className="text-sm text-purple-100">
-                        Quality: {result.quality_score.toFixed(1)}/10 •
-                        {result.refinement_iterations} refinement{result.refinement_iterations !== 1 ? 's' : ''} •
-                        {result.tokens_used.toLocaleString()} tokens
+                        Jakość: {result.quality_score.toFixed(1)}/10 •
+                        {result.refinement_iterations} udoskonaleń •
+                        {result.tokens_used.toLocaleString()} tokenów
                       </p>
                     </div>
                   </div>
@@ -643,13 +643,13 @@ export default function AIStudioPage() {
                     <button
                       onClick={() => navigator.clipboard.writeText(result.text)}
                       className="p-2 hover:bg-white/20 rounded-lg transition"
-                      title="Copy to clipboard"
+                      title="Kopiuj do schowka"
                     >
                       <Copy className="h-5 w-5" />
                     </button>
                     <button
                       className="p-2 hover:bg-white/20 rounded-lg transition"
-                      title="Download"
+                      title="Pobierz"
                     >
                       <Download className="h-5 w-5" />
                     </button>
@@ -678,19 +678,19 @@ export default function AIStudioPage() {
                     </p>
                   </div>
                   <div>
-                    <span className="text-gray-600 dark:text-gray-400">Words:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Słowa:</span>
                     <p className="font-medium text-gray-900 dark:text-white">
                       {result.text.split(' ').length}
                     </p>
                   </div>
                   <div>
-                    <span className="text-gray-600 dark:text-gray-400">Cost:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Koszt:</span>
                     <p className="font-medium text-gray-900 dark:text-white">
                       ${result.cost.toFixed(4)}
                     </p>
                   </div>
                   <div>
-                    <span className="text-gray-600 dark:text-gray-400">Iterations:</span>
+                    <span className="text-gray-600 dark:text-gray-400">Iteracje:</span>
                     <p className="font-medium text-gray-900 dark:text-white">
                       {result.refinement_iterations}
                     </p>
@@ -714,10 +714,10 @@ export default function AIStudioPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white">
-                        Voice Consistency Analysis
+                        Analiza Spójności Głosu
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Check dialogue consistency with character fingerprints
+                        Sprawdź spójność dialogu z odciskami palców postaci
                       </p>
                     </div>
                   </div>
