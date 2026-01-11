@@ -13,8 +13,8 @@ import { User, Mail, Camera, Save, Loader2 } from 'lucide-react'
 import * as Avatar from '@radix-ui/react-avatar'
 
 const profileSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
+  name: z.string().min(2, 'Imię musi mieć co najmniej 2 znaki'),
+  email: z.string().email('Nieprawidłowy adres email'),
 })
 
 type ProfileFormData = z.infer<typeof profileSchema>
@@ -60,13 +60,13 @@ export default function ProfilePage() {
           },
         })
 
-        alert('Profile updated successfully!')
+        alert('Profil zaktualizowany pomyślnie!')
       } else {
-        throw new Error('Failed to update profile')
+        throw new Error('Nie udało się zaktualizować profilu')
       }
     } catch (error) {
       console.error('Error updating profile:', error)
-      alert('Failed to update profile. Please try again.')
+      alert('Nie udało się zaktualizować profilu. Spróbuj ponownie.')
     } finally {
       setIsLoading(false)
     }
@@ -100,10 +100,10 @@ export default function ProfilePage() {
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Profile Settings
+          Ustawienia Profilu
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Manage your account information and preferences
+          Zarządzaj informacjami o koncie i preferencjami
         </p>
       </div>
 
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                   : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
               }`}
             >
-              {subscriptionTier.toUpperCase()} Plan
+              Plan {subscriptionTier.toUpperCase()}
             </span>
           </div>
 
@@ -160,7 +160,7 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <User className="inline h-4 w-4 mr-1" />
-                Full Name
+                Pełne Imię
               </label>
               <input
                 type="text"
@@ -176,7 +176,7 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Mail className="inline h-4 w-4 mr-1" />
-                Email Address
+                Adres Email
               </label>
               <input
                 type="email"
@@ -191,7 +191,7 @@ export default function ProfilePage() {
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Member since {new Date(user.email || '').toLocaleDateString()}
+                Członek od {new Date(user.email || '').toLocaleDateString()}
               </p>
               <button
                 type="submit"
@@ -201,12 +201,12 @@ export default function ProfilePage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Saving...</span>
+                    <span>Zapisywanie...</span>
                   </>
                 ) : (
                   <>
                     <Save className="h-4 w-4" />
-                    <span>Save Changes</span>
+                    <span>Zapisz Zmiany</span>
                   </>
                 )}
               </button>
@@ -218,13 +218,13 @@ export default function ProfilePage() {
       {/* Danger zone */}
       <div className="mt-8 bg-red-50 dark:bg-red-900/20 rounded-lg shadow-sm border border-red-200 dark:border-red-800 p-6">
         <h3 className="text-lg font-semibold text-red-900 dark:text-red-200 mb-2">
-          Danger Zone
+          Strefa Zagrożenia
         </h3>
         <p className="text-sm text-red-700 dark:text-red-300 mb-4">
-          Once you delete your account, there is no going back. Please be certain.
+          Po usunięciu konta nie ma odwrotu. Upewnij się, że jesteś pewien.
         </p>
         <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-          Delete Account
+          Usuń Konto
         </button>
       </div>
     </div>

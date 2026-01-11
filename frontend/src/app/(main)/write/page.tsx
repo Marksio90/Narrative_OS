@@ -384,14 +384,14 @@ export default function WritingStudioPage() {
               className="flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
             >
               <ChevronLeft className="w-4 h-4 text-gray-300" />
-              <span className="text-sm text-gray-300">Desktop</span>
+              <span className="text-sm text-gray-300">Pulpit</span>
             </button>
 
             <div className="h-6 w-px bg-gray-700"></div>
 
             <h1 className="text-xl font-bold text-white flex items-center gap-2">
               <FileText className="w-6 h-6 text-purple-400" />
-              Writing Studio
+              Studio Pisania
             </h1>
           </div>
 
@@ -455,7 +455,7 @@ export default function WritingStudioPage() {
               }`}
             >
               <Sparkles className="w-4 h-4" />
-              AI Copilot
+              Asystent AI
             </button>
 
             <button

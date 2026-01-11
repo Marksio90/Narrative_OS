@@ -33,13 +33,13 @@ export default function ProjectExportPage() {
         className="inline-flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Back to Project</span>
+        <span>Powrót do Projektu</span>
       </Link>
 
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Export Manuscript
+          Eksportuj Manuskrypt
         </h1>
         <p className="text-gray-600 dark:text-gray-400">{project.title}</p>
       </div>
@@ -47,19 +47,19 @@ export default function ProjectExportPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Chapters</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Rozdziały</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {project.chapterCount}
           </p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Words</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Słowa</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {project.wordCount.toLocaleString()}
           </p>
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Est. Pages</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Szac. Strony</p>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {project.estimatedPages}
           </p>
@@ -69,7 +69,7 @@ export default function ProjectExportPage() {
       {/* Export formats */}
       <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Available Export Formats
+          Dostępne Formaty Eksportu
         </h2>
 
         <div className="space-y-4">
@@ -83,17 +83,17 @@ export default function ProjectExportPage() {
                 Microsoft Word (.docx)
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Editable document with professional manuscript formatting
+                Edytowalny dokument z profesjonalnym formatowaniem manuskryptu
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Editable
+                  Edytowalny
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Table of Contents
+                  Spis Treści
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Standard Format
+                  Standardowy Format
                 </span>
               </div>
             </div>
@@ -109,17 +109,17 @@ export default function ProjectExportPage() {
                 EPUB (.epub)
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                E-book format compatible with all major e-readers
+                Format e-booka kompatybilny ze wszystkimi głównymi czytnikami
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  E-readers
+                  Czytniki
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Responsive
+                  Responsywny
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Navigation Menu
+                  Menu Nawigacji
                 </span>
               </div>
             </div>
@@ -135,17 +135,17 @@ export default function ProjectExportPage() {
                 PDF (.pdf)
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Universal format, perfect for printing and archiving
+                Uniwersalny format, idealny do drukowania i archiwizacji
               </p>
               <div className="flex flex-wrap gap-2">
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Print-ready
+                  Gotowy do druku
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Page Numbers
+                  Numery Stron
                 </span>
                 <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  Fixed Layout
+                  Stały Układ
                 </span>
               </div>
             </div>
@@ -158,8 +158,8 @@ export default function ProjectExportPage() {
         <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
         <div className="flex-1">
           <p className="text-sm text-blue-900 dark:text-blue-200">
-            All exports include cover page, chapter organization, and professional formatting.
-            You can customize options like prologue, epilogue, and table of contents.
+            Wszystkie eksporty zawierają stronę tytułową, organizację rozdziałów i profesjonalne formatowanie.
+            Możesz dostosować opcje takie jak prolog, epilog i spis treści.
           </p>
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function ProjectExportPage() {
         className="w-full flex items-center justify-center space-x-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-medium text-lg shadow-lg"
       >
         <Download className="h-5 w-5" />
-        <span>Export Manuscript</span>
+        <span>Eksportuj Manuskrypt</span>
       </button>
 
       {/* Export Modal */}

@@ -41,10 +41,10 @@ export default function SettingsPage() {
     try {
       // TODO: Call API to save settings
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      alert('Settings saved successfully!')
+      alert('Ustawienia zapisane pomyślnie!')
     } catch (error) {
       console.error('Error saving settings:', error)
-      alert('Failed to save settings')
+      alert('Nie udało się zapisać ustawień')
     } finally {
       setIsLoading(false)
     }
@@ -54,10 +54,10 @@ export default function SettingsPage() {
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Settings
+          Ustawienia
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Manage your application preferences and notifications
+          Zarządzaj preferencjami aplikacji i powiadomieniami
         </p>
       </div>
 
@@ -67,7 +67,7 @@ export default function SettingsPage() {
           <div className="flex items-center space-x-3 mb-6">
             <Bell className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Notifications
+              Powiadomienia
             </h2>
           </div>
 
@@ -77,10 +77,10 @@ export default function SettingsPage() {
                 <Mail className="h-5 w-5 text-gray-500 mt-1" />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Email Notifications
+                    Powiadomienia Email
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Receive email updates about your projects
+                    Otrzymuj powiadomienia email o swoich projektach
                   </p>
                 </div>
               </div>
@@ -102,10 +102,10 @@ export default function SettingsPage() {
                 <Smartphone className="h-5 w-5 text-gray-500 mt-1" />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Push Notifications
+                    Powiadomienia Push
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Get push notifications on your devices
+                    Otrzymuj powiadomienia push na swoich urządzeniach
                   </p>
                 </div>
               </div>
@@ -127,10 +127,10 @@ export default function SettingsPage() {
                 <Mail className="h-5 w-5 text-gray-500 mt-1" />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Weekly Digest
+                    Tygodniowe Podsumowanie
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Receive a weekly summary of your progress
+                    Otrzymuj cotygodniowe podsumowanie postępów
                   </p>
                 </div>
               </div>
@@ -154,14 +154,14 @@ export default function SettingsPage() {
           <div className="flex items-center space-x-3 mb-6">
             <Sun className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Appearance
+              Wygląd
             </h2>
           </div>
 
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                Theme
+                Motyw
               </label>
               <div className="grid grid-cols-3 gap-4">
                 <button
@@ -174,7 +174,7 @@ export default function SettingsPage() {
                 >
                   <Sun className="h-6 w-6 mb-2 text-yellow-500" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    Light
+                    Jasny
                   </span>
                 </button>
 
@@ -188,7 +188,7 @@ export default function SettingsPage() {
                 >
                   <Moon className="h-6 w-6 mb-2 text-purple-500" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    Dark
+                    Ciemny
                   </span>
                 </button>
 
@@ -202,7 +202,7 @@ export default function SettingsPage() {
                 >
                   <Globe className="h-6 w-6 mb-2 text-blue-500" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    System
+                    Systemowy
                   </span>
                 </button>
               </div>
@@ -210,7 +210,7 @@ export default function SettingsPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Language
+                Język
               </label>
               <select
                 value={settings.language}
@@ -231,7 +231,7 @@ export default function SettingsPage() {
           <div className="flex items-center space-x-3 mb-6">
             <Shield className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Privacy
+              Prywatność
             </h2>
           </div>
 
@@ -239,10 +239,10 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  Public Profile
+                  Publiczny Profil
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Allow others to view your profile
+                  Zezwalaj innym na przeglądanie twojego profilu
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -261,10 +261,10 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  Show Activity
+                  Pokaż Aktywność
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Display your recent activity to collaborators
+                  Wyświetlaj swoją ostatnią aktywność współpracownikom
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -292,12 +292,12 @@ export default function SettingsPage() {
             {isLoading ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <span>Saving...</span>
+                <span>Zapisywanie...</span>
               </>
             ) : (
               <>
                 <Save className="h-5 w-5" />
-                <span>Save Changes</span>
+                <span>Zapisz Zmiany</span>
               </>
             )}
           </button>
