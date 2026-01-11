@@ -297,7 +297,7 @@ export default function StoryBiblePage() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Are you sure you want to delete this item?')) return
+    if (!confirm('Czy na pewno chcesz usunąć ten element?')) return
 
     try {
       let endpoint = ''
@@ -404,7 +404,7 @@ export default function StoryBiblePage() {
           }, 3000)
         }
       } else {
-        setImportResult({ success: false, errors: [result.detail || 'Import failed'] })
+        setImportResult({ success: false, errors: [result.detail || 'Import nie powiódł się'] })
       }
     } catch (error) {
       console.error('Error importing canon:', error)
@@ -509,7 +509,7 @@ export default function StoryBiblePage() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder={`Search ${activeTab}...`}
+              placeholder={`Szukaj ${tabs.find(t => t.id === activeTab)?.name?.toLowerCase() || activeTab}...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
@@ -866,8 +866,8 @@ function CharactersTab({
     return (
       <div className="text-center py-12">
         <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600">No characters found</p>
-        <p className="text-sm text-gray-500 mt-1">Create your first character to get started</p>
+        <p className="text-gray-600">Nie znaleziono postaci</p>
+        <p className="text-sm text-gray-500 mt-1">Utwórz swoją pierwszą postać, aby rozpocząć</p>
       </div>
     )
   }
@@ -1003,8 +1003,8 @@ function LocationsTab({
     return (
       <div className="text-center py-12">
         <MapPin className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600">No locations found</p>
-        <p className="text-sm text-gray-500 mt-1">Create your first location to build your world</p>
+        <p className="text-gray-600">Nie znaleziono lokacji</p>
+        <p className="text-sm text-gray-500 mt-1">Utwórz swoją pierwszą lokację, aby zbudować swój świat</p>
       </div>
     )
   }
@@ -1111,8 +1111,8 @@ function ThreadsTab({
     return (
       <div className="text-center py-12">
         <Sparkles className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600">No plot threads found</p>
-        <p className="text-sm text-gray-500 mt-1">Create your first plot thread to track story arcs</p>
+        <p className="text-gray-600">Nie znaleziono wątków fabularnych</p>
+        <p className="text-sm text-gray-500 mt-1">Utwórz swój pierwszy wątek fabularny, aby śledzić łuki fabuły</p>
       </div>
     )
   }
@@ -1227,8 +1227,8 @@ function MagicTab({
     return (
       <div className="text-center py-12">
         <Wand2 className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600">No magic systems found</p>
-        <p className="text-sm text-gray-500 mt-1">Create your first magic system to define the rules of your world</p>
+        <p className="text-gray-600">Nie znaleziono systemów magii</p>
+        <p className="text-sm text-gray-500 mt-1">Utwórz swój pierwszy system magii, aby zdefiniować zasady swojego świata</p>
       </div>
     )
   }
@@ -1373,8 +1373,8 @@ function TimelineTab({
     return (
       <div className="text-center py-12">
         <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600">No timeline events found</p>
-        <p className="text-sm text-gray-500 mt-1">Create your first event to build your story's chronology</p>
+        <p className="text-gray-600">Nie znaleziono wydarzeń na osi czasu</p>
+        <p className="text-sm text-gray-500 mt-1">Utwórz swoje pierwsze wydarzenie, aby zbudować chronologię historii</p>
       </div>
     )
   }
