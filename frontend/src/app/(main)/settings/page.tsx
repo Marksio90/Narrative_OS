@@ -106,10 +106,10 @@ export default function SettingsPage() {
                 <Smartphone className="h-5 w-5 text-gray-500 mt-1" />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Powiadomienia Push
+                    {t('notifications.push')}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Otrzymuj powiadomienia push na swoich urządzeniach
+                    {t('notifications.pushDescription')}
                   </p>
                 </div>
               </div>
@@ -131,10 +131,10 @@ export default function SettingsPage() {
                 <Mail className="h-5 w-5 text-gray-500 mt-1" />
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Tygodniowe Podsumowanie
+                    {t('notifications.weeklyDigest')}
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Otrzymuj cotygodniowe podsumowanie postępów
+                    {t('notifications.weeklyDigestDescription')}
                   </p>
                 </div>
               </div>
@@ -158,14 +158,14 @@ export default function SettingsPage() {
           <div className="flex items-center space-x-3 mb-6">
             <Sun className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Wygląd
+              {t('appearance.title')}
             </h2>
           </div>
 
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                Motyw
+                {t('appearance.theme')}
               </label>
               <div className="grid grid-cols-3 gap-4">
                 <button
@@ -178,7 +178,7 @@ export default function SettingsPage() {
                 >
                   <Sun className="h-6 w-6 mb-2 text-yellow-500" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    Jasny
+                    {t('appearance.light')}
                   </span>
                 </button>
 
@@ -192,7 +192,7 @@ export default function SettingsPage() {
                 >
                   <Moon className="h-6 w-6 mb-2 text-purple-500" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    Ciemny
+                    {t('appearance.dark')}
                   </span>
                 </button>
 
@@ -206,7 +206,7 @@ export default function SettingsPage() {
                 >
                   <Globe className="h-6 w-6 mb-2 text-blue-500" />
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
-                    Systemowy
+                    {t('appearance.system')}
                   </span>
                 </button>
               </div>
@@ -214,7 +214,7 @@ export default function SettingsPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Język
+                {t('appearance.language')}
               </label>
               <select
                 value={locale}
@@ -239,7 +239,7 @@ export default function SettingsPage() {
           <div className="flex items-center space-x-3 mb-6">
             <Shield className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Prywatność
+              {t('privacy.title')}
             </h2>
           </div>
 
@@ -247,10 +247,10 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  Publiczny Profil
+                  {t('privacy.publicProfile')}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Zezwalaj innym na przeglądanie twojego profilu
+                  {t('privacy.publicProfileDescription')}
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -269,10 +269,10 @@ export default function SettingsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  Pokaż Aktywność
+                  {t('privacy.showActivity')}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Wyświetlaj swoją ostatnią aktywność współpracownikom
+                  {t('privacy.showActivityDescription')}
                 </p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -300,12 +300,12 @@ export default function SettingsPage() {
             {isLoading ? (
               <>
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <span>Zapisywanie...</span>
+                <span>{tCommon('loading')}</span>
               </>
             ) : (
               <>
                 <Save className="h-5 w-5" />
-                <span>Zapisz Zmiany</span>
+                <span>{tCommon('save')}</span>
               </>
             )}
           </button>
