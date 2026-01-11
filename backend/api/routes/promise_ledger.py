@@ -5,7 +5,7 @@ Endpoints for automatic promise detection and tracking
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 
 from core.database.base import get_db
 from services.canon.promise_ledger import PromiseLedgerService
