@@ -51,7 +51,33 @@
     "dontHaveAccount": "¿No tienes una cuenta?",
     "or": "o",
     "continueWithGoogle": "Continuar con Google",
-    "continueWithGithub": "Continuar con Github"
+    "continueWithGithub": "Continuar con Github",
+    "welcomeBack": "Bienvenido de nuevo",
+    "loginDescription": "Inicia sesión para continuar escribiendo tu historia",
+    "orContinueWithEmail": "O continúa con correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "Iniciando sesión...",
+    "noAccount": "¿No tienes una cuenta?",
+    "signUpFree": "Regístrate gratis",
+    "invalidCredentials": "Correo electrónico o contraseña inválidos",
+    "fullNamePlaceholder": "Juan Pérez",
+    "agreeToTerms": "Estoy de acuerdo con",
+    "terms": "los Términos de Servicio",
+    "and": "y",
+    "privacy": "Política de Privacidad",
+    "creatingAccount": "Creando cuenta...",
+    "createAccount": "Crear cuenta",
+    "whatYouGet": "Lo que obtienes:",
+    "freeCallsPerMonth": "100 llamadas LLM gratuitas por mes",
+    "unlimitedProjects": "Proyectos e unidades de canon ilimitadas",
+    "aiQualityControl": "Control de calidad impulsado por IA",
+    "startJourney": "Comienza tu viaje",
+    "joinAuthors": "Únete a miles de autores escribiendo mejores historias",
+    "orRegisterWithEmail": "O regístrate con correo electrónico",
+    "fullName": "Nombre completo",
+    "registrationSuccessLoginFailed": "Registro exitoso, pero el inicio de sesión falló. Intenta iniciar sesión.",
+    "errorOccurred": "Ocurrió un error. Por favor, inténtalo de nuevo."
   },
   "profile": {
     "title": "Configuración del perfil",
@@ -172,6 +198,8 @@
   "characterArcs": {
     "title": "Seguimiento de arcos de personajes",
     "subtitle": "Rastrea el desarrollo de personajes y viajes emocionales",
+    "newArc": "Nuevo arco",
+    "aiAnalysis": "Análisis de IA",
     "overview": {
       "characters": "Personajes",
       "totalArcs": "Arcos totales",
@@ -201,6 +229,19 @@
       "timeline": "Línea de tiempo del arco",
       "emotional": "Viaje emocional",
       "goals": "Objetivos e hitos"
+    },
+    "arcCard": {
+      "progress": "Progreso",
+      "onTrack": "En camino",
+      "offTrack": "Fuera de camino"
+    },
+    "character": {
+      "trackedArcs": "{count} arcos rastreados",
+      "selectMessage": "Selecciona un personaje para ver sus arcos de personaje"
+    },
+    "arcUnit": {
+      "singular": "arco",
+      "plural": "arcos"
     }
   },
   "write": {

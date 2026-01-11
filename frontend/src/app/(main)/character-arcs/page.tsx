@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { TrendingUp, User, Target, Heart, BarChart3, Sparkles, Plus } from 'lucide-react'
 import CharacterArcTimeline from '@/components/CharacterArcTimeline'
 import EmotionalStateTracker from '@/components/EmotionalStateTracker'
@@ -38,6 +39,9 @@ interface ArcSummary {
 }
 
 export default function CharacterArcsPage() {
+  const t = useTranslations('characterArcs')
+  const tCommon = useTranslations('common')
+
   const [characters, setCharacters] = useState<Character[]>([])
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null)
   const [arcs, setArcs] = useState<CharacterArc[]>([])
@@ -103,15 +107,15 @@ export default function CharacterArcsPage() {
 
   const getArcTypeLabel = (arcType: string) => {
     const labels: Record<string, string> = {
-      positive_change: 'Pozytywna Zmiana',
-      negative_change: 'Negatywna Zmiana',
-      flat_arc: 'Płaski Łuk',
-      transformation: 'Transformacja',
-      redemption: 'Odkupienie',
-      corruption: 'Korupcja',
-      disillusionment: 'Rozczarowanie',
-      coming_of_age: 'Dojrzewanie',
-      tragic: 'Łuk Tragiczny',
+      positive_change: t('arcTypes.positiveChange'),
+      negative_change: t('arcTypes.negativeChange'),
+      flat_arc: t('arcTypes.flatArc'),
+      transformation: t('arcTypes.transformation'),
+      redemption: t('arcTypes.redemption'),
+      corruption: t('arcTypes.corruption'),
+      disillusionment: t('arcTypes.disillusionment'),
+      coming_of_age: t('arcTypes.comingOfAge'),
+      tragic: t('arcTypes.tragic'),
     }
     return labels[arcType] || arcType
   }
@@ -134,7 +138,7 @@ export default function CharacterArcsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Ładowanie łuków postaci...</div>
+        <div className="text-gray-600">{tCommon('loading')}</div>
       </div>
     )
   }
@@ -150,8 +154,8 @@ export default function CharacterArcsPage() {
                 <TrendingUp className="w-6 h-6 text-purple-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Śledzenie Łuków Postaci</h1>
-                <p className="text-sm text-gray-600">Śledź rozwój postaci i emocjonalne podróże</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+                <p className="text-sm text-gray-600">{t('subtitle')}</p>
               </div>
             </div>
             <button
@@ -159,7 +163,7 @@ export default function CharacterArcsPage() {
               className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Nowy Łuk
+              {t('newArc')}
             </button>
           </div>
         </div>
@@ -171,7 +175,7 @@ export default function CharacterArcsPage() {
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
             <div className="flex items-center gap-3 mb-2">
               <User className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-medium text-gray-600">Postacie</span>
+              <span className="text-sm font-medium text-gray-600">{t('overview.characters')}</span>
             </div>
             <div className="text-3xl font-bold text-gray-900">{characters.length}</div>
           </div>
@@ -179,7 +183,7 @@ export default function CharacterArcsPage() {
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
             <div className="flex items-center gap-3 mb-2">
               <TrendingUp className="w-5 h-5 text-purple-600" />
-              <span className="text-sm font-medium text-gray-600">Całkowita Liczba Łuków</span>
+              <span className="text-sm font-medium text-gray-600">{t('overview.totalArcs')}</span>
             </div>
             <div className="text-3xl font-bold text-gray-900">
               {arcSummaries.reduce((sum, s) => sum + s.arc_count, 0)}
@@ -189,7 +193,7 @@ export default function CharacterArcsPage() {
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
             <div className="flex items-center gap-3 mb-2">
               <Target className="w-5 h-5 text-green-600" />
-              <span className="text-sm font-medium text-gray-600">Na Dobrej Drodze</span>
+              <span className="text-sm font-medium text-gray-600">{t('overview.onTrack')}</span>
             </div>
             <div className="text-3xl font-bold text-green-600">
               {arcSummaries.reduce((sum, s) => sum + s.on_track_count, 0)}
@@ -199,7 +203,7 @@ export default function CharacterArcsPage() {
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
             <div className="flex items-center gap-3 mb-2">
               <BarChart3 className="w-5 h-5 text-orange-600" />
-              <span className="text-sm font-medium text-gray-600">Średni Postęp</span>
+              <span className="text-sm font-medium text-gray-600">{t('overview.averageProgress')}</span>
             </div>
             <div className="text-3xl font-bold text-gray-900">
               {arcSummaries.length > 0
@@ -217,7 +221,7 @@ export default function CharacterArcsPage() {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
               <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                <h3 className="text-sm font-semibold text-gray-900">Postacie</h3>
+                <h3 className="text-sm font-semibold text-gray-900">{t('overview.characters')}</h3>
               </div>
               <div className="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
                 {characters.map((character) => {
@@ -263,14 +267,14 @@ export default function CharacterArcsPage() {
                     <div>
                       <h2 className="text-xl font-bold text-gray-900">{selectedCharacter.name}</h2>
                       <p className="text-sm text-gray-600 mt-1">
-                        Śledzonych: {arcs.length} {arcs.length === 1 ? 'łuk' : 'łuków'}
+                        {t('character.trackedArcs')} {arcs.length} {arcs.length === 1 ? t('arcUnit.singular') : t('arcUnit.plural')}
                       </p>
                     </div>
                     <button
                       className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm"
                     >
                       <Sparkles className="w-4 h-4" />
-                      Analiza AI
+                      {t('aiAnalysis')}
                     </button>
                   </div>
 
@@ -295,7 +299,7 @@ export default function CharacterArcsPage() {
                               arc.is_on_track ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'
                             }`}
                           >
-                            {arc.is_on_track ? '✓ Na Dobrej Drodze' : '⚠ Poza Planem'}
+                            {arc.is_on_track ? `✓ ${t('status.onTrack')}` : `⚠ ${t('status.offTrack')}`}
                           </div>
                         </div>
 
@@ -306,7 +310,7 @@ export default function CharacterArcsPage() {
                         {/* Progress Bar */}
                         <div className="mb-3">
                           <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                            <span>Postęp</span>
+                            <span>{t('arcCard.progress')}</span>
                             <span className="font-medium">{Math.round(arc.completion_percentage)}%</span>
                           </div>
                           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -322,13 +326,13 @@ export default function CharacterArcsPage() {
                           {arc.pacing_score !== null && arc.pacing_score !== undefined && (
                             <div className="flex items-center gap-1">
                               <BarChart3 className="w-3 h-3 text-gray-400" />
-                              <span className="text-gray-600">Tempo: {arc.pacing_score.toFixed(1)}</span>
+                              <span className="text-gray-600">{t('metrics.pacing', { score: arc.pacing_score.toFixed(1) })}</span>
                             </div>
                           )}
                           {arc.consistency_score !== null && arc.consistency_score !== undefined && (
                             <div className="flex items-center gap-1">
                               <Target className="w-3 h-3 text-gray-400" />
-                              <span className="text-gray-600">Spójność: {arc.consistency_score.toFixed(1)}</span>
+                              <span className="text-gray-600">{t('metrics.consistency', { score: arc.consistency_score.toFixed(1) })}</span>
                             </div>
                           )}
                         </div>
@@ -349,7 +353,7 @@ export default function CharacterArcsPage() {
                             : 'border-transparent text-gray-600 hover:text-gray-900'
                         }`}
                       >
-                        Oś Czasu Łuku
+                        {t('tabs.timeline')}
                       </button>
                       <button
                         onClick={() => setActiveTab('emotional')}
@@ -359,7 +363,7 @@ export default function CharacterArcsPage() {
                             : 'border-transparent text-gray-600 hover:text-gray-900'
                         }`}
                       >
-                        Podróż Emocjonalna
+                        {t('tabs.emotional')}
                       </button>
                       <button
                         onClick={() => setActiveTab('goals')}
@@ -369,7 +373,7 @@ export default function CharacterArcsPage() {
                             : 'border-transparent text-gray-600 hover:text-gray-900'
                         }`}
                       >
-                        Cele i Kamienie Milowe
+                        {t('tabs.goals')}
                       </button>
                     </div>
                   </div>
@@ -390,7 +394,7 @@ export default function CharacterArcsPage() {
             ) : (
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                 <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Wybierz postać, aby zobaczyć rozwój jej łuku fabularnego</p>
+                <p className="text-gray-600">{t('character.selectMessage')}</p>
               </div>
             )}
           </div>

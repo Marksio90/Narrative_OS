@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Calendar, RefreshCw, AlertTriangle, Bookmark, Eye, Filter, Settings } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import InteractiveTimeline from '@/components/InteractiveTimeline'
 import TimelineControls from '@/components/TimelineControls'
 import ConflictPanel from '@/components/ConflictPanel'
@@ -48,6 +49,9 @@ interface Conflict {
 }
 
 export default function TimelinePage() {
+  const t = useTranslations('timeline')
+  const tCommon = useTranslations('common')
+
   const [events, setEvents] = useState<TimelineEvent[]>([])
   const [conflicts, setConflicts] = useState<Conflict[]>([])
   const [stats, setStats] = useState<TimelineStats | null>(null)
@@ -185,7 +189,7 @@ export default function TimelinePage() {
   if (loading && events.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Ładowanie osi czasu...</div>
+        <div className="text-gray-600">{tCommon('loading')}</div>
       </div>
     )
   }
@@ -201,8 +205,8 @@ export default function TimelinePage() {
                 <Calendar className="w-6 h-6 text-indigo-600" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Wizualizator Osi Czasu</h1>
-                <p className="text-sm text-gray-600">Interaktywna oś czasu historii z wykrywaniem konfliktów</p>
+                <h1 className="text-2xl font-bold text-gray-900">{t('title')}</h1>
+                <p className="text-sm text-gray-600">{t('subtitle')}</p>
               </div>
             </div>
 
@@ -217,7 +221,7 @@ export default function TimelinePage() {
                 }`}
               >
                 <Filter className="w-4 h-4" />
-                Filtry
+                {t('filters')}
               </button>
 
               <button
@@ -229,7 +233,7 @@ export default function TimelinePage() {
                 }`}
               >
                 <AlertTriangle className="w-4 h-4" />
-                Konflikty ({conflicts.length})
+                {t('conflicts')} ({conflicts.length})
               </button>
 
               <button

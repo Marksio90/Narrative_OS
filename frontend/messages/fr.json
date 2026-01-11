@@ -51,7 +51,33 @@
     "dontHaveAccount": "Vous n'avez pas de compte?",
     "or": "ou",
     "continueWithGoogle": "Continuer avec Google",
-    "continueWithGithub": "Continuer avec Github"
+    "continueWithGithub": "Continuer avec Github",
+    "welcomeBack": "Bienvenue",
+    "loginDescription": "Connectez-vous pour continuer à écrire votre histoire",
+    "orContinueWithEmail": "Ou continuez avec un e-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "passwordPlaceholder": "••••••••",
+    "signingIn": "Connexion...",
+    "noAccount": "Vous n'avez pas de compte?",
+    "signUpFree": "S'inscrire gratuitement",
+    "invalidCredentials": "Adresse e-mail ou mot de passe invalide",
+    "fullNamePlaceholder": "Jean Dupont",
+    "agreeToTerms": "J'accepte les",
+    "terms": "Conditions d'utilisation",
+    "and": "et",
+    "privacy": "Politique de confidentialité",
+    "creatingAccount": "Création du compte...",
+    "createAccount": "Créer un compte",
+    "whatYouGet": "Ce que vous obtenez:",
+    "freeCallsPerMonth": "100 appels LLM gratuits par mois",
+    "unlimitedProjects": "Projets et unités de canon illimités",
+    "aiQualityControl": "Contrôle de qualité alimenté par l'IA",
+    "startJourney": "Commencez votre voyage",
+    "joinAuthors": "Rejoignez des milliers d'auteurs écrivant de meilleures histoires",
+    "orRegisterWithEmail": "Ou inscrivez-vous avec un e-mail",
+    "fullName": "Nom complet",
+    "registrationSuccessLoginFailed": "Inscription réussie, mais la connexion a échoué. Essayez de vous connecter.",
+    "errorOccurred": "Une erreur est survenue. Veuillez réessayer."
   },
   "profile": {
     "title": "Paramètres du profil",
@@ -172,6 +198,8 @@
   "characterArcs": {
     "title": "Suivi des arcs de personnages",
     "subtitle": "Suivez le développement des personnages et les parcours émotionnels",
+    "newArc": "Nouvel arc",
+    "aiAnalysis": "Analyse IA",
     "overview": {
       "characters": "Personnages",
       "totalArcs": "Total des arcs",
@@ -201,6 +229,19 @@
       "timeline": "Chronologie de l'arc",
       "emotional": "Parcours émotionnel",
       "goals": "Objectifs et jalons"
+    },
+    "arcCard": {
+      "progress": "Progrès",
+      "onTrack": "Sur la bonne voie",
+      "offTrack": "Hors piste"
+    },
+    "character": {
+      "trackedArcs": "{count} arcs suivi",
+      "selectMessage": "Sélectionnez un personnage pour voir ses arcs de personnage"
+    },
+    "arcUnit": {
+      "singular": "arc",
+      "plural": "arcs"
     }
   },
   "write": {

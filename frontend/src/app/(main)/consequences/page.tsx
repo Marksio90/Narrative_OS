@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import axios from 'axios'
 import {
   GitBranch,
@@ -78,6 +79,8 @@ interface ConsequenceStats {
 }
 
 export default function ConsequencesPage() {
+  const t = useTranslations('consequences')
+  const tCommon = useTranslations('common')
   const { data: session } = useSession()
   const queryClient = useQueryClient()
   const [projectId] = useState(1) // TODO: Get from context
@@ -193,10 +196,10 @@ export default function ConsequencesPage() {
             </div>
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                Symulator Konsekwencji
+                {t('title')}
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                Śledź wydarzenia i przewiduj ich wpływ na fabułę
+                {t('subtitle')}
               </p>
             </div>
           </div>
@@ -420,7 +423,7 @@ export default function ConsequencesPage() {
           {filteredConsequences.length === 0 && (
             <div className="p-12 text-center">
               <GitBranch className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-              <p className="text-gray-500">Brak konsekwencji spełniających kryteria filtrów</p>
+              <p className="text-gray-500">{t('noEvents')}</p>
             </div>
           )}
         </div>
