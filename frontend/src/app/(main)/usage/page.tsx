@@ -6,6 +6,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslations } from 'next-intl'
 import { Zap, HardDrive, Calendar, TrendingUp, Loader2, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 
@@ -50,11 +51,13 @@ function ProgressBar({
   max,
   label,
   color = 'blue',
+  warningText,
 }: {
   value: number
   max: number
   label: string
   color?: 'blue' | 'purple' | 'green' | 'yellow' | 'red'
+  warningText?: string
 }) {
   const percentage = Math.min((value / max) * 100, 100)
   const isNearLimit = percentage > 80
@@ -83,9 +86,9 @@ function ProgressBar({
           style={{ width: `${percentage}%` }}
         />
       </div>
-      {isNearLimit && (
+      {isNearLimit && warningText && (
         <p className="text-sm text-red-600 dark:text-red-400">
-          Zbliżasz się do miesięcznego limitu!
+          {warningText}
         </p>
       )}
     </div>
@@ -128,6 +131,8 @@ function StatCard({
 export default function UsagePage() {
   const { data: session } = useSession()
   const accessToken = (session?.user as any)?.accessToken
+  const t = useTranslations('usage')
+  const tCommon = useTranslations('common')
 
   const { data: stats, isLoading, error } = useQuery({
     queryKey: ['usage-stats', session?.user?.id],
@@ -139,7 +144,10 @@ export default function UsagePage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto" />
+          <p className="text-gray-600 dark:text-gray-400 mt-4">{tCommon('loading')}</p>
+        </div>
       </div>
     )
   }
@@ -149,7 +157,7 @@ export default function UsagePage() {
       <div className="max-w-4xl mx-auto">
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
           <p className="text-red-800 dark:text-red-200">
-            Nie udało się załadować statystyk użycia. Spróbuj ponownie później.
+            {t('loadError')}
           </p>
         </div>
       </div>
@@ -162,10 +170,10 @@ export default function UsagePage() {
     <div className="max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Użycie i Rozliczenia
+          {t('title')}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Śledź miesięczne użycie i zarządzaj subskrypcją
+          {t('subtitle')}
         </p>
       </div>
 
@@ -174,12 +182,12 @@ export default function UsagePage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold mb-1">
-              Plan {subscriptionTier.toUpperCase()}
+              {subscriptionTier.toUpperCase()} Plan
             </h2>
             <p className="text-blue-100">
               {stats?.upgrade_recommended
-                ? 'Rozważ uaktualnienie, aby uniknąć osiągnięcia limitów'
-                : 'Dużo dostępnych zasobów'}
+                ? t('upgradeRecommended')
+                : t('resourcesAvailable')}
             </p>
           </div>
           {subscriptionTier !== 'studio' && (
@@ -187,7 +195,7 @@ export default function UsagePage() {
               href="/pricing"
               className="px-6 py-3 bg-white text-blue-600 rounded-lg font-medium hover:bg-blue-50 transition"
             >
-              Uaktualnij Plan
+              {t('upgradePlan')}
             </Link>
           )}
         </div>
@@ -197,41 +205,43 @@ export default function UsagePage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <StatCard
           icon={Zap}
-          title="Wywołania LLM"
+          title={t('llmCalls')}
           value={stats?.llm_calls.toLocaleString() || '0'}
-          subtitle={`z ${stats?.llm_calls_limit.toLocaleString() || '0'} w tym miesiącu`}
+          subtitle={`of ${stats?.llm_calls_limit.toLocaleString() || '0'} this month`}
         />
         <StatCard
           icon={HardDrive}
-          title="Użyta Przestrzeń"
+          title={t('storageUsed')}
           value={`${stats?.storage_used_mb.toFixed(1) || '0'} MB`}
-          subtitle={`z ${stats?.storage_limit_mb.toLocaleString() || '0'} MB dostępnych`}
+          subtitle={`of ${stats?.storage_limit_mb.toLocaleString() || '0'} MB available`}
         />
         <StatCard
           icon={Calendar}
-          title="Status Generowania"
-          value={stats?.can_generate ? 'Aktywny' : 'Ograniczony'}
-          subtitle={stats?.can_generate ? 'Gotowy do generowania' : 'Osiągnięto miesięczny limit'}
+          title={t('generationStatus')}
+          value={stats?.can_generate ? t('active') : t('limited')}
+          subtitle={stats?.can_generate ? t('readyToGenerate') : t('limitReached')}
         />
       </div>
 
       {/* Usage progress bars */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-          Miesięczne Użycie
+          {t('monthlyUsage')}
         </h3>
         <div className="space-y-6">
           <ProgressBar
             value={stats?.llm_calls || 0}
             max={stats?.llm_calls_limit || 100}
-            label="Wywołania API LLM"
+            label={t('llmApiCalls')}
             color="blue"
+            warningText={t('approachingLimit')}
           />
           <ProgressBar
             value={stats?.storage_used_mb || 0}
             max={stats?.storage_limit_mb || 100}
-            label="Przestrzeń (MB)"
+            label={t('storage')}
             color="purple"
+            warningText={t('approachingLimit')}
           />
         </div>
       </div>
@@ -240,22 +250,22 @@ export default function UsagePage() {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Historia Rozliczeń
+            {t('billingHistory')}
           </h3>
           <Link
             href="/settings/billing"
             className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            Zarządzaj Metodami Płatności
+            {t('managePayment')}
           </Link>
         </div>
 
         {/* Placeholder for billing history */}
         <div className="text-center py-12 text-gray-500 dark:text-gray-400">
           <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p>Brak historii rozliczeń</p>
+          <p>{t('noBillingHistory')}</p>
           <p className="text-sm mt-2">
-            Twoje faktury pojawią się tutaj po przejściu na plan płatny
+            {t('invoicesAppear')}
           </p>
         </div>
       </div>
@@ -264,16 +274,16 @@ export default function UsagePage() {
       {subscriptionTier === 'free' && (
         <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-lg border border-purple-200 dark:border-purple-800 p-8 text-center">
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Gotowy na więcej?
+            {t('readyForMore')}
           </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Przejdź na PRO dla 10x więcej wywołań LLM i 10x więcej przestrzeni
+            {t('upgradePromo')}
           </p>
           <Link
             href="/pricing"
             className="inline-flex items-center space-x-2 px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-medium"
           >
-            <span>Zobacz Plany Cenowe</span>
+            <span>{t('viewPricing')}</span>
           </Link>
         </div>
       )}
