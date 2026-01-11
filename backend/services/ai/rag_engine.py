@@ -9,10 +9,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, and_
 import openai
 
-from core.models.characters import Character
-from core.models.locations import Location
-from core.models.threads import Thread
-from core.models.promises import Promise
+from core.models.canon import Character, Location, Thread, Promise
 
 
 @dataclass

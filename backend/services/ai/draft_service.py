@@ -290,7 +290,7 @@ class DraftService:
 
         # POV character info
         if pov_character_id:
-            from core.models.characters import Character
+            from core.models.canon import Character
             pov_char = self.db.execute(
                 select(Character).where(Character.id == pov_character_id)
             ).scalar_one_or_none()
