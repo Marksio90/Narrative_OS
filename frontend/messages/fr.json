@@ -1,0 +1,268 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "info": "Information"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "desktop": "Bureau",
+    "projects": "Projets",
+    "storyBible": "Bible de l'Histoire",
+    "write": "Écrire",
+    "timeline": "Chronologie",
+    "agents": "Agents",
+    "analytics": "Analytiques",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "logout": "Déconnexion"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom",
+    "forgotPassword": "Mot de passe oublié?",
+    "rememberMe": "Se souvenir de moi",
+    "alreadyHaveAccount": "Vous avez déjà un compte?",
+    "dontHaveAccount": "Vous n'avez pas de compte?",
+    "or": "ou",
+    "continueWithGoogle": "Continuer avec Google",
+    "continueWithGithub": "Continuer avec Github"
+  },
+  "profile": {
+    "title": "Paramètres du profil",
+    "subtitle": "Gérez les informations de votre compte et vos préférences",
+    "fullName": "Nom complet",
+    "emailAddress": "Adresse e-mail",
+    "memberSince": "Membre depuis",
+    "saveChanges": "Enregistrer les modifications",
+    "saving": "Enregistrement...",
+    "dangerZone": "Zone dangereuse",
+    "dangerZoneWarning": "Une fois que vous supprimez votre compte, il n'y a pas de retour en arrière. Soyez certain.",
+    "deleteAccount": "Supprimer le compte",
+    "updateSuccess": "Profil mis à jour avec succès!",
+    "updateError": "Échec de la mise à jour du profil. Veuillez réessayer."
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Gérez vos préférences d'application et notifications",
+    "notifications": {
+      "title": "Notifications",
+      "email": "Notifications par e-mail",
+      "emailDescription": "Recevez des mises à jour par e-mail sur vos projets",
+      "push": "Notifications push",
+      "pushDescription": "Recevez des notifications push sur vos appareils",
+      "weeklyDigest": "Résumé hebdomadaire",
+      "weeklyDigestDescription": "Recevez un résumé hebdomadaire de vos progrès"
+    },
+    "appearance": {
+      "title": "Apparence",
+      "theme": "Thème",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système",
+      "language": "Langue"
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "publicProfile": "Profil public",
+      "publicProfileDescription": "Permettre aux autres de voir votre profil",
+      "showActivity": "Afficher l'activité",
+      "showActivityDescription": "Afficher votre activité récente aux collaborateurs"
+    },
+    "saveSuccess": "Paramètres enregistrés avec succès!",
+    "saveError": "Échec de l'enregistrement des paramètres"
+  },
+  "usage": {
+    "title": "Utilisation et facturation",
+    "subtitle": "Suivez votre utilisation mensuelle et gérez votre abonnement",
+    "llmCalls": "Appels LLM",
+    "storageUsed": "Stockage utilisé",
+    "generationStatus": "Statut de génération",
+    "active": "Actif",
+    "limited": "Limité",
+    "readyToGenerate": "Prêt à générer",
+    "limitReached": "Limite mensuelle atteinte",
+    "monthlyUsage": "Utilisation mensuelle",
+    "llmApiCalls": "Appels API LLM",
+    "storage": "Stockage (MB)",
+    "billingHistory": "Historique de facturation",
+    "managePayment": "Gérer les méthodes de paiement",
+    "noBillingHistory": "Pas encore d'historique de facturation",
+    "invoicesAppear": "Vos factures apparaîtront ici lorsque vous passerez à un plan payant",
+    "upgradePlan": "Mettre à niveau le plan",
+    "readyForMore": "Prêt pour plus?",
+    "upgradePromo": "Passez à PRO pour 10x plus d'appels LLM et 10x plus de stockage",
+    "viewPricing": "Voir les plans tarifaires",
+    "approachingLimit": "Vous approchez de votre limite mensuelle!",
+    "upgradeRecommended": "Envisagez de passer à un plan supérieur pour éviter d'atteindre les limites",
+    "resourcesAvailable": "Beaucoup de ressources disponibles",
+    "loadError": "Échec du chargement des statistiques d'utilisation. Veuillez réessayer plus tard."
+  },
+  "storyBible": {
+    "title": "Bible de l'Histoire",
+    "subtitle": "Gérez les personnages, les lieux, les fils et le monde",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cet élément?",
+    "importError": "L'importation a échoué",
+    "searchPlaceholder": "Rechercher {tab}...",
+    "noCharacters": "Aucun personnage trouvé",
+    "createFirstCharacter": "Créez votre premier personnage pour commencer",
+    "noLocations": "Aucun lieu trouvé",
+    "createFirstLocation": "Créez votre premier lieu pour commencer",
+    "noThreads": "Aucun fil narratif trouvé",
+    "createFirstThread": "Créez votre premier fil narratif pour commencer",
+    "noMagic": "Aucun système de magie trouvé",
+    "createFirstMagic": "Créez votre premier système de magie pour commencer",
+    "noTimeline": "Aucun événement de chronologie trouvé",
+    "createFirstEvent": "Créez votre premier événement pour commencer"
+  },
+  "aiStudio": {
+    "title": "Studio d'écriture IA",
+    "subtitle": "Génération de prose IA multi-agents avec RAG et raffinement itératif",
+    "tokensUsed": "Jetons utilisés",
+    "cost": "Coût (USD)",
+    "quality": "Qualité",
+    "presets": {
+      "fastDraft": "Brouillon rapide",
+      "fastDraftDesc": "Génération rapide (~15s)",
+      "balanced": "Équilibré",
+      "balancedDesc": "Excellente qualité (~30s)",
+      "premiumQuality": "Qualité premium",
+      "premiumQualityDesc": "Meilleure qualité (~60s)",
+      "creative": "Créatif",
+      "creativeDesc": "Créativité maximale (~45s)",
+      "precise": "Précis",
+      "preciseDesc": "Fidélité au canon (~50s)"
+    },
+    "canonContext": "Contexte du canon",
+    "characters": "Personnages",
+    "locations": "Lieux",
+    "plotThreads": "Fils narratifs",
+    "planningStructure": "Planification de la structure de la scène...",
+    "writingProse": "Écriture de la prose...",
+    "refining": "Raffinement et polissage...",
+    "generatedProse": "Prose générée",
+    "qualityScore": "Qualité: {score}/10",
+    "refinements": "{count} raffinements"
+  },
+  "characterArcs": {
+    "title": "Suivi des arcs de personnages",
+    "subtitle": "Suivez le développement des personnages et les parcours émotionnels",
+    "overview": {
+      "characters": "Personnages",
+      "totalArcs": "Total des arcs",
+      "onTrack": "Sur la bonne voie",
+      "averageProgress": "Progrès moyen"
+    },
+    "arcTypes": {
+      "positiveChange": "Changement positif",
+      "negativeChange": "Changement négatif",
+      "flatArc": "Arc plat",
+      "transformation": "Transformation",
+      "redemption": "Rédemption",
+      "corruption": "Corruption",
+      "disillusionment": "Désillusion",
+      "comingOfAge": "Passage à l'âge adulte",
+      "tragic": "Arc tragique"
+    },
+    "status": {
+      "onTrack": "Sur la bonne voie",
+      "offTrack": "Hors piste"
+    },
+    "metrics": {
+      "pacing": "Rythme: {score}",
+      "consistency": "Cohérence: {score}"
+    },
+    "tabs": {
+      "timeline": "Chronologie de l'arc",
+      "emotional": "Parcours émotionnel",
+      "goals": "Objectifs et jalons"
+    }
+  },
+  "write": {
+    "title": "Studio d'écriture",
+    "back": "Bureau",
+    "words": "{count} mots",
+    "target": "{count} objectif",
+    "saved": "Enregistré",
+    "saving": "Enregistrement...",
+    "unsaved": "Non enregistré",
+    "aiCopilot": "Copilote IA",
+    "newChapter": "Nouveau chapitre",
+    "chapter": "Chapitre {number}",
+    "scene": "Scène {number}",
+    "noChapters": "Aucun chapitre",
+    "createFirstChapter": "Créer le premier chapitre",
+    "chapterProgress": "Progrès du chapitre",
+    "selectOrCreate": "Sélectionnez un chapitre ou créez-en un nouveau",
+    "startWriting": "Commencez à écrire votre histoire...",
+    "chapterSaved": "Chapitre enregistré!",
+    "focusMode": "Mode concentration",
+    "focusModeHint": "Mode concentration • Appuyez sur ESC pour quitter"
+  },
+  "export": {
+    "title": "Exporter le manuscrit",
+    "backToProject": "Retour au projet",
+    "stats": {
+      "chapters": "Chapitres",
+      "words": "Mots",
+      "estimatedPages": "Pages estimées"
+    },
+    "availableFormats": "Formats d'exportation disponibles",
+    "formats": {
+      "docx": {
+        "name": "Microsoft Word (.docx)",
+        "description": "Document éditable avec formatage professionnel de manuscrit",
+        "features": {
+          "editable": "Éditable",
+          "toc": "Table des matières",
+          "standard": "Format standard"
+        }
+      },
+      "epub": {
+        "name": "EPUB (.epub)",
+        "description": "Format de livre électronique compatible avec toutes les liseuses principales",
+        "features": {
+          "readers": "Liseuses",
+          "responsive": "Responsive",
+          "navigation": "Menu de navigation"
+        }
+      },
+      "pdf": {
+        "name": "PDF (.pdf)",
+        "description": "Format universel, parfait pour l'impression et l'archivage",
+        "features": {
+          "printReady": "Prêt à imprimer",
+          "pageNumbers": "Numéros de page",
+          "fixedLayout": "Mise en page fixe"
+        }
+      }
+    },
+    "info": "Toutes les exportations incluent une page de couverture, l'organisation des chapitres et un formatage professionnel. Vous pouvez personnaliser des options comme le prologue, l'épilogue et la table des matières.",
+    "exportButton": "Exporter le manuscrit"
+  },
+  "validation": {
+    "required": "Ce champ est requis",
+    "emailInvalid": "Adresse e-mail invalide",
+    "passwordMin": "Le mot de passe doit contenir au moins {min} caractères",
+    "nameMin": "Le nom doit contenir au moins {min} caractères",
+    "passwordMismatch": "Les mots de passe ne correspondent pas"
+  }
+}
