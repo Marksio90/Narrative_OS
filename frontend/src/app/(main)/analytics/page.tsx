@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/auth-context'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import {
   BarChart3,
   TrendingUp,
@@ -56,6 +57,8 @@ interface Session {
 export default function AnalyticsPage() {
   const { user, accessToken } = useAuth()
   const router = useRouter()
+  const t = useTranslations('analytics')
+  const tCommon = useTranslations('common')
 
   const [projectId, setProjectId] = useState<number | null>(null)
   const [stats, setStats] = useState<WritingStats | null>(null)
@@ -176,7 +179,7 @@ export default function AnalyticsPage() {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-400 mt-4">Ładowanie statystyk...</p>
+          <p className="text-gray-400 mt-4">{tCommon('loading')}</p>
         </div>
       </div>
     )
@@ -193,14 +196,14 @@ export default function AnalyticsPage() {
               className="flex items-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition-colors mb-4"
             >
               <ChevronLeft className="w-4 h-4 text-gray-300" />
-              <span className="text-sm text-gray-300">Powrót do Desktop</span>
+              <span className="text-sm text-gray-300">{t('backToDesktop')}</span>
             </button>
 
             <h1 className="text-4xl font-bold text-white mb-2 flex items-center gap-3">
               <BarChart3 className="w-10 h-10 text-purple-400" />
-              Statystyki Pisania
+              {t('title')}
             </h1>
-            <p className="text-gray-400">Śledź swoje postępy i produktywność</p>
+            <p className="text-gray-400">{t('subtitle')}</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -209,14 +212,14 @@ export default function AnalyticsPage() {
               onChange={(e) => setTimeRange(e.target.value as any)}
               className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
             >
-              <option value="week">Ostatni tydzień</option>
-              <option value="month">Ostatni miesiąc</option>
-              <option value="year">Ostatni rok</option>
+              <option value="week">{t('timeRange.week')}</option>
+              <option value="month">{t('timeRange.month')}</option>
+              <option value="year">{t('timeRange.year')}</option>
             </select>
 
             <button className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
               <Download className="w-4 h-4" />
-              Eksport
+              {tCommon('export')}
             </button>
           </div>
         </div>
@@ -231,10 +234,10 @@ export default function AnalyticsPage() {
               </div>
               <TrendingUp className="h-6 w-6 text-white opacity-50" />
             </div>
-            <p className="text-sm text-white opacity-80 mb-1">Całkowita liczba słów</p>
+            <p className="text-sm text-white opacity-80 mb-1">{t('metrics.totalWords')}</p>
             <p className="text-3xl font-bold text-white">{stats.total_words.toLocaleString()}</p>
             <p className="text-xs text-white opacity-70 mt-2">
-              +{stats.month_words.toLocaleString()} w tym miesiącu
+              +{stats.month_words.toLocaleString()} {tCommon('thisMonth')}
             </p>
           </div>
 
@@ -246,9 +249,9 @@ export default function AnalyticsPage() {
               </div>
               <Activity className="h-6 w-6 text-white opacity-50" />
             </div>
-            <p className="text-sm text-white opacity-80 mb-1">Aktualna passa</p>
+            <p className="text-sm text-white opacity-80 mb-1">{t('metrics.currentStreak')}</p>
             <p className="text-3xl font-bold text-white">{stats.streak_days}</p>
-            <p className="text-xs text-white opacity-70 mt-2">dni z rzędu 🔥</p>
+            <p className="text-xs text-white opacity-70 mt-2">{tCommon('daysInRow')}</p>
           </div>
 
           {/* Average */}
@@ -259,9 +262,9 @@ export default function AnalyticsPage() {
               </div>
               <BarChart3 className="h-6 w-6 text-white opacity-50" />
             </div>
-            <p className="text-sm text-white opacity-80 mb-1">Średnia dzienna</p>
+            <p className="text-sm text-white opacity-80 mb-1">{t('metrics.dailyAverage')}</p>
             <p className="text-3xl font-bold text-white">{stats.avg_words_per_day.toLocaleString()}</p>
-            <p className="text-xs text-white opacity-70 mt-2">słów/dzień</p>
+            <p className="text-xs text-white opacity-70 mt-2">{tCommon('wordsPerDay')}</p>
           </div>
 
           {/* Best Day */}
@@ -272,9 +275,9 @@ export default function AnalyticsPage() {
               </div>
               <CheckCircle2 className="h-6 w-6 text-white opacity-50" />
             </div>
-            <p className="text-sm text-white opacity-80 mb-1">Najlepszy dzień</p>
+            <p className="text-sm text-white opacity-80 mb-1">{t('metrics.bestDay')}</p>
             <p className="text-3xl font-bold text-white">{stats.best_day_words.toLocaleString()}</p>
-            <p className="text-xs text-white opacity-70 mt-2">słów w jednym dniu!</p>
+            <p className="text-xs text-white opacity-70 mt-2">{tCommon('wordsInOneDay')}</p>
           </div>
         </div>
 
@@ -284,7 +287,7 @@ export default function AnalyticsPage() {
           <div className="lg:col-span-2 bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-purple-400" />
-              Aktywność pisania
+              {t('writingActivity')}
             </h2>
 
             <div className="flex items-end justify-between space-x-2 h-64">
@@ -299,8 +302,8 @@ export default function AnalyticsPage() {
                       {/* Tooltip */}
                       <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         <div className="bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-xs text-white whitespace-nowrap shadow-xl">
-                          <p className="font-bold">{day.words_written} słów</p>
-                          <p className="text-gray-400">{day.minutes_spent} minut</p>
+                          <p className="font-bold">{day.words_written} {tCommon('words')}</p>
+                          <p className="text-gray-400">{day.minutes_spent} {tCommon('minutes')}</p>
                           <p className="text-gray-400">{date.toLocaleDateString('pl-PL')}</p>
                         </div>
                       </div>
@@ -322,30 +325,30 @@ export default function AnalyticsPage() {
           <div className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-blue-400" />
-              Podsumowanie sesji
+              {t('sessionsOverview')}
             </h2>
 
             <div className="space-y-4">
               <div className="p-4 bg-gray-700 rounded-lg">
-                <p className="text-sm text-gray-400 mb-1">Całkowite sesje</p>
+                <p className="text-sm text-gray-400 mb-1">{t('totalSessions')}</p>
                 <p className="text-2xl font-bold text-white">{stats.total_sessions}</p>
               </div>
 
               <div className="p-4 bg-gray-700 rounded-lg">
-                <p className="text-sm text-gray-400 mb-1">Ukończone rozdziały</p>
+                <p className="text-sm text-gray-400 mb-1">{tCommon('completedChapters')}</p>
                 <p className="text-2xl font-bold text-green-400">{stats.chapters_completed}</p>
               </div>
 
               <div className="p-4 bg-gray-700 rounded-lg">
-                <p className="text-sm text-gray-400 mb-1">Ten tydzień</p>
+                <p className="text-sm text-gray-400 mb-1">{tCommon('thisWeek')}</p>
                 <p className="text-2xl font-bold text-purple-400">{stats.week_words.toLocaleString()}</p>
-                <p className="text-xs text-gray-400 mt-1">słów</p>
+                <p className="text-xs text-gray-400 mt-1">{tCommon('words')}</p>
               </div>
 
               <div className="p-4 bg-gray-700 rounded-lg">
-                <p className="text-sm text-gray-400 mb-1">Ten miesiąc</p>
+                <p className="text-sm text-gray-400 mb-1">{tCommon('thisMonth')}</p>
                 <p className="text-2xl font-bold text-blue-400">{stats.month_words.toLocaleString()}</p>
-                <p className="text-xs text-gray-400 mt-1">słów</p>
+                <p className="text-xs text-gray-400 mt-1">{tCommon('words')}</p>
               </div>
             </div>
           </div>
@@ -355,18 +358,18 @@ export default function AnalyticsPage() {
         <div className="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-xl p-6 border border-gray-700">
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
             <Activity className="w-5 h-5 text-green-400" />
-            Ostatnie sesje pisania
+            {t('recentSessions')}
           </h2>
 
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-700">
-                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">Data</th>
-                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">Czas trwania</th>
-                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">Słowa dodane</th>
-                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">Słowa netto</th>
-                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">Produktywność</th>
+                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">{tCommon('date')}</th>
+                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">{t('duration')}</th>
+                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">{t('wordsWritten')}</th>
+                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">{t('netWords')}</th>
+                  <th className="text-left text-sm font-semibold text-gray-400 pb-3">{t('productivity')}</th>
                 </tr>
               </thead>
               <tbody>

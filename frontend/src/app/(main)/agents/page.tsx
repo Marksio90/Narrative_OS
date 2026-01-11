@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, Bot, CheckCircle2, XCircle, Clock, AlertCircle, TrendingUp, Users } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 // ==================== TYPES ====================
 
@@ -72,17 +73,6 @@ const AGENT_TYPE_COLORS: Record<string, string> = {
   worldbuilding: 'bg-teal-100 text-teal-700 border-teal-300',
 }
 
-const AGENT_TYPE_LABELS: Record<string, string> = {
-  plotting: 'Fabuła',
-  character: 'Postać',
-  dialogue: 'Dialog',
-  continuity: 'Ciągłość',
-  qc: 'Kontrola Jakości',
-  pacing: 'Tempo',
-  theme: 'Temat',
-  worldbuilding: 'Świat',
-}
-
 const PRIORITY_COLORS: Record<string, string> = {
   low: 'bg-gray-100 text-gray-600',
   medium: 'bg-blue-100 text-blue-600',
@@ -103,6 +93,9 @@ const STATUS_COLORS: Record<string, string> = {
 // ==================== MAIN COMPONENT ====================
 
 export default function AgentDashboard() {
+  const t = useTranslations('agents')
+  const tCommon = useTranslations('common')
+
   const [agents, setAgents] = useState<Agent[]>([])
   const [taskQueue, setTaskQueue] = useState<TaskQueue | null>(null)
   const [projectStats, setProjectStats] = useState<ProjectStats | null>(null)
@@ -197,7 +190,7 @@ export default function AgentDashboard() {
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Ładowanie Dashboardu Agentów...</p>
+          <p className="text-gray-600">{t('loading')}</p>
         </div>
       </div>
     )
@@ -215,9 +208,9 @@ export default function AgentDashboard() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Bot className="w-8 h-8 text-indigo-600" />
-              Współpraca Agentów
+              {t('title')}
             </h1>
-            <p className="text-gray-600 mt-1">Multi-agentowy system współpracy AI</p>
+            <p className="text-gray-600 mt-1">{t('subtitle')}</p>
           </div>
           <div className="flex gap-3">
             {agents.length === 0 && (
@@ -226,7 +219,7 @@ export default function AgentDashboard() {
                 className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center gap-2"
               >
                 <Users className="w-4 h-4" />
-                Zainicjuj Zespół Agentów
+                {t('initializeTeam')}
               </button>
             )}
             <button
@@ -234,7 +227,7 @@ export default function AgentDashboard() {
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              Utwórz Zadanie
+              {t('createTask')}
             </button>
           </div>
         </div>
@@ -246,7 +239,7 @@ export default function AgentDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Łącznie Agentów</p>
+                <p className="text-sm text-gray-600">{t('stats.totalAgents')}</p>
                 <p className="text-2xl font-bold text-gray-900">{projectStats.total_agents}</p>
               </div>
               <Bot className="w-8 h-8 text-indigo-600" />
@@ -256,7 +249,7 @@ export default function AgentDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Aktywni</p>
+                <p className="text-sm text-gray-600">{t('stats.active')}</p>
                 <p className="text-2xl font-bold text-green-600">{projectStats.active_agents}</p>
               </div>
               <CheckCircle2 className="w-8 h-8 text-green-600" />
@@ -266,7 +259,7 @@ export default function AgentDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Zajęci</p>
+                <p className="text-sm text-gray-600">{t('stats.busy')}</p>
                 <p className="text-2xl font-bold text-yellow-600">{projectStats.busy_agents}</p>
               </div>
               <Clock className="w-8 h-8 text-yellow-600" />
@@ -276,7 +269,7 @@ export default function AgentDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Łącznie Zadań</p>
+                <p className="text-sm text-gray-600">{t('stats.totalTasks')}</p>
                 <p className="text-2xl font-bold text-gray-900">{projectStats.total_tasks}</p>
               </div>
               <AlertCircle className="w-8 h-8 text-blue-600" />
@@ -286,7 +279,7 @@ export default function AgentDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Wskaźnik Sukcesu</p>
+                <p className="text-sm text-gray-600">{t('stats.successRate')}</p>
                 <p className="text-2xl font-bold text-green-600">{successRate}%</p>
               </div>
               <TrendingUp className="w-8 h-8 text-green-600" />
@@ -296,7 +289,7 @@ export default function AgentDashboard() {
           <div className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Zadowolenie</p>
+                <p className="text-sm text-gray-600">{t('stats.satisfaction')}</p>
                 <p className="text-2xl font-bold text-indigo-600">
                   {projectStats.average_satisfaction
                     ? (projectStats.average_satisfaction * 100).toFixed(0) + '%'
@@ -317,19 +310,19 @@ export default function AgentDashboard() {
             <div className="p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <Bot className="w-5 h-5" />
-                Agents ({agents.length})
+                {t('agentsTitle')} ({agents.length})
               </h2>
             </div>
             <div className="p-4 space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto">
               {agents.length === 0 ? (
                 <div className="text-center py-8">
                   <Bot className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600 mb-3">Nie ma jeszcze agentów</p>
+                  <p className="text-gray-600 mb-3">{t('noAgents')}</p>
                   <button
                     onClick={initializeAgents}
                     className="text-indigo-600 hover:text-indigo-700 text-sm font-medium"
                   >
-                    Zainicjuj Zespół Agentów
+                    {t('initializeTeam')}
                   </button>
                 </div>
               ) : (
@@ -364,21 +357,21 @@ export default function AgentDashboard() {
                     <div className={`inline-block px-2 py-1 rounded text-xs font-medium mb-2 ${
                       AGENT_TYPE_COLORS[agent.agent_type] || 'bg-gray-100 text-gray-700'
                     }`}>
-                      {AGENT_TYPE_LABELS[agent.agent_type] || agent.agent_type}
+                      {t(`agentTypes.${agent.agent_type}`)}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mt-2">
                       <div>
-                        <span className="text-green-600 font-medium">{agent.tasks_completed}</span> completed
+                        <span className="text-green-600 font-medium">{agent.tasks_completed}</span> {tCommon('completed')}
                       </div>
                       <div>
-                        <span className="text-red-600 font-medium">{agent.tasks_failed}</span> failed
+                        <span className="text-red-600 font-medium">{agent.tasks_failed}</span> {tCommon('failed')}
                       </div>
                     </div>
 
                     {agent.user_satisfaction_score && (
                       <div className="mt-2 text-xs text-gray-600">
-                        Zadowolenie: <span className="font-medium text-indigo-600">
+                        {t('satisfactionLabel')}: <span className="font-medium text-indigo-600">
                           {(agent.user_satisfaction_score * 100).toFixed(0)}%
                         </span>
                       </div>
@@ -397,23 +390,23 @@ export default function AgentDashboard() {
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                   <AlertCircle className="w-5 h-5" />
-                  Kolejka Zadań
+                  {t('taskQueue')}
                   {selectedAgent && (
                     <span className="text-sm font-normal text-gray-600">
-                      (filtrowane według agenta)
+                      ({t('filteredByAgent')})
                     </span>
                   )}
                 </h2>
                 {taskQueue && (
                   <div className="flex gap-4 text-sm">
                     <span className="text-gray-600">
-                      <span className="font-medium text-gray-900">{taskQueue.pending_count}</span> oczekujące
+                      <span className="font-medium text-gray-900">{taskQueue.pending_count}</span> {t('queueStats.pending')}
                     </span>
                     <span className="text-gray-600">
-                      <span className="font-medium text-yellow-600">{taskQueue.in_progress_count}</span> w trakcie
+                      <span className="font-medium text-yellow-600">{taskQueue.in_progress_count}</span> {t('queueStats.inProgress')}
                     </span>
                     <span className="text-gray-600">
-                      <span className="font-medium text-green-600">{taskQueue.completed_count}</span> ukończone
+                      <span className="font-medium text-green-600">{taskQueue.completed_count}</span> {t('queueStats.completed')}
                     </span>
                   </div>
                 )}
@@ -424,7 +417,7 @@ export default function AgentDashboard() {
               {taskQueue && taskQueue.tasks.length === 0 ? (
                 <div className="text-center py-12">
                   <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                  <p className="text-gray-600">Brak zadań w kolejce</p>
+                  <p className="text-gray-600">{t('noTasks')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -444,7 +437,7 @@ export default function AgentDashboard() {
                               onClick={() => startTask(task.id)}
                               className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded text-sm hover:bg-yellow-200"
                             >
-                              Rozpocznij
+                              {t('actions.start')}
                             </button>
                           )}
                           {task.status === 'in_progress' && (
@@ -452,7 +445,7 @@ export default function AgentDashboard() {
                               onClick={() => completeTask(task.id)}
                               className="px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200"
                             >
-                              Ukończ
+                              {t('actions.complete')}
                             </button>
                           )}
                         </div>
@@ -462,12 +455,12 @@ export default function AgentDashboard() {
                         <span className={`px-2 py-1 rounded font-medium ${
                           PRIORITY_COLORS[task.priority] || 'bg-gray-100 text-gray-600'
                         }`}>
-                          {task.priority}
+                          {t(`priority.${task.priority}`)}
                         </span>
                         <span className={`px-2 py-1 rounded font-medium ${
                           STATUS_COLORS[task.status] || 'bg-gray-100 text-gray-600'
                         }`}>
-                          {task.status.replace('_', ' ')}
+                          {t(`status.${task.status}`)}
                         </span>
                         {task.task_type && (
                           <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded">
@@ -476,7 +469,7 @@ export default function AgentDashboard() {
                         )}
                         {task.agent_id && (
                           <span className="text-gray-600">
-                            Agent: {agents.find(a => a.id === task.agent_id)?.name || task.agent_id}
+                            {t('agentLabel')}: {agents.find(a => a.id === task.agent_id)?.name || task.agent_id}
                           </span>
                         )}
                       </div>
