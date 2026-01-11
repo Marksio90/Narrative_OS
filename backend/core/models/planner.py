@@ -58,11 +58,12 @@ class BookArc(Base, TimestampMixin):
     validation_notes = Column(JSON, default=list)
 
 
-class Chapter(Base, TimestampMixin):
+class ChapterPlan(Base, TimestampMixin):
     """
-    Individual chapter with goal, conflict, and change
+    Individual chapter plan with goal, conflict, and change
+    (Story planning model - separate from actual manuscript chapters)
     """
-    __tablename__ = "chapters"
+    __tablename__ = "planned_chapters"
 
     id = Column(Integer, primary_key=True, index=True)
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
@@ -112,12 +113,12 @@ class Chapter(Base, TimestampMixin):
 
 class Scene(Base, TimestampMixin):
     """
-    Scene card - building block of chapters
+    Scene card - building block of chapter plans
     """
     __tablename__ = "scenes"
 
     id = Column(Integer, primary_key=True, index=True)
-    chapter_id = Column(Integer, ForeignKey("chapters.id"), nullable=False, index=True)
+    chapter_id = Column(Integer, ForeignKey("planned_chapters.id"), nullable=False, index=True)
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
 
     # Position
