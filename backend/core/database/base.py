@@ -36,10 +36,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # === ASYNC ENGINE (Modern - for new auth code) ===
 async_engine = create_async_engine(
     ASYNC_DATABASE_URL,
-    poolclass=QueuePool,
-    pool_size=5,
-    max_overflow=10,
-    pool_pre_ping=True,
+    poolclass=NullPool,  # Async engines require NullPool or AsyncAdaptedQueuePool
     echo=os.getenv("SQL_ECHO", "False").lower() == "true"
 )
 

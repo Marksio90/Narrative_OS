@@ -219,6 +219,19 @@ MODEL_CAPABILITIES = {
 }
 
 
+def get_ai_config(preset: str = "balanced") -> AIConfig:
+    """
+    Get AI configuration (default or preset)
+
+    Args:
+        preset: Name of preset configuration (default: "balanced")
+
+    Returns:
+        AIConfig instance
+    """
+    return get_preset(preset)
+
+
 def select_best_model(
     task_type: Literal["generation", "critique", "planning", "expansion"],
     quality_preference: Literal["fast", "balanced", "premium"],
