@@ -13,13 +13,13 @@ import api from '@/lib/api'
 
 const registerSchema = z
   .object({
-    name: z.string().min(2, 'Name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    name: z.string().min(2, 'Imię musi mieć co najmniej 2 znaki'),
+    email: z.string().email('Nieprawidłowy adres email'),
+    password: z.string().min(8, 'Hasło musi mieć co najmniej 8 znaków'),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: 'Hasła nie pasują',
     path: ['confirmPassword'],
   })
 
@@ -58,7 +58,7 @@ export default function RegisterPage() {
       })
 
       if (result?.error) {
-        setError('Registration successful, but login failed. Please try logging in.')
+        setError('Rejestracja powiodła się, ale logowanie nie powiodło się. Spróbuj się zalogować.')
         setIsLoading(false)
         return
       }
@@ -70,7 +70,7 @@ export default function RegisterPage() {
       if (err.response?.data?.detail) {
         setError(err.response.data.detail)
       } else {
-        setError('An error occurred. Please try again.')
+        setError('Wystąpił błąd. Spróbuj ponownie.')
       }
       setIsLoading(false)
     }
@@ -92,10 +92,10 @@ export default function RegisterPage() {
             <span className="text-2xl font-bold text-white">N</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Start your journey
+            Rozpocznij swoją podróż
           </h2>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Join thousands of authors writing better stories
+            Dołącz do tysięcy autorów piszących lepsze historie
           </p>
         </div>
 
@@ -111,7 +111,7 @@ export default function RegisterPage() {
               disabled={isLoading}
             >
               <Chrome className="h-5 w-5" />
-              <span>Continue with Google</span>
+              <span>Kontynuuj z Google</span>
             </Button>
 
             <Button
@@ -122,7 +122,7 @@ export default function RegisterPage() {
               disabled={isLoading}
             >
               <Github className="h-5 w-5" />
-              <span>Continue with GitHub</span>
+              <span>Kontynuuj z GitHub</span>
             </Button>
           </div>
 
@@ -133,7 +133,7 @@ export default function RegisterPage() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white/80 dark:bg-gray-800/80 text-gray-500">
-                Or register with email
+                Lub zarejestruj się z emailem
               </span>
             </div>
           </div>
@@ -148,14 +148,14 @@ export default function RegisterPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
-                Full Name
+                Imię i Nazwisko
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   {...register('name')}
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Jan Kowalski"
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                   disabled={isLoading}
                 />
@@ -176,7 +176,7 @@ export default function RegisterPage() {
                 <input
                   {...register('email')}
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="ty@przykład.com"
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                   disabled={isLoading}
                 />
@@ -190,7 +190,7 @@ export default function RegisterPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
-                Password
+                Hasło
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -211,7 +211,7 @@ export default function RegisterPage() {
 
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 block">
-                Confirm Password
+                Potwierdź Hasło
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -237,19 +237,19 @@ export default function RegisterPage() {
                 className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500 mt-1"
               />
               <label className="text-sm text-gray-600 dark:text-gray-400">
-                I agree to the{' '}
+                Zgadzam się z{' '}
                 <Link
                   href="/terms"
                   className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 font-medium"
                 >
-                  Terms of Service
+                  Regulaminem
                 </Link>{' '}
-                and{' '}
+                i{' '}
                 <Link
                   href="/privacy"
                   className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 font-medium"
                 >
-                  Privacy Policy
+                  Polityką Prywatności
                 </Link>
               </label>
             </div>
@@ -262,12 +262,12 @@ export default function RegisterPage() {
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  <span>Creating account...</span>
+                  <span>Tworzenie konta...</span>
                 </>
               ) : (
                 <>
                   <Check className="h-5 w-5" />
-                  <span>Create account</span>
+                  <span>Utwórz konto</span>
                 </>
               )}
             </Button>
@@ -276,20 +276,20 @@ export default function RegisterPage() {
           {/* Features List */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
             <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-              What you get:
+              Co otrzymujesz:
             </p>
             <ul className="space-y-2 text-xs text-gray-600 dark:text-gray-400">
               <li className="flex items-center space-x-2">
                 <Check className="h-3 w-3 text-green-600" />
-                <span>100 free LLM calls per month</span>
+                <span>100 darmowych wywołań LLM miesięcznie</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Check className="h-3 w-3 text-green-600" />
-                <span>Unlimited projects and canon entities</span>
+                <span>Nieograniczone projekty i jednostki kanonu</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Check className="h-3 w-3 text-green-600" />
-                <span>AI-powered quality control</span>
+                <span>Kontrola jakości oparta na AI</span>
               </li>
             </ul>
           </div>
@@ -297,12 +297,12 @@ export default function RegisterPage() {
 
         {/* Sign in link */}
         <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-          Already have an account?{' '}
+          Masz już konto?{' '}
           <Link
             href="/login"
             className="font-medium text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
           >
-            Sign in
+            Zaloguj się
           </Link>
         </p>
       </div>
