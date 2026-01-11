@@ -244,7 +244,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
   // ==================== RENDER ====================
 
   const getAgentName = (agentId: number | null) => {
-    if (!agentId) return 'Unknown'
+    if (!agentId) return 'Nieznany'
     return agents.find(a => a.id === agentId)?.name || `Agent ${agentId}`
   }
 
@@ -269,12 +269,12 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
               <MessageCircle className="w-5 h-5" />
-              Conversations
+              Konwersacje
             </h2>
             <button
               onClick={() => setShowNewConversation(true)}
               className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg"
-              title="New Conversation"
+              title="Nowa Konwersacja"
             >
               <MessageCircle className="w-5 h-5" />
             </button>
@@ -287,7 +287,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                 !showMemories ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-700'
               }`}
             >
-              Discussions
+              Dyskusje
             </button>
             <button
               onClick={() => setShowMemories(true)}
@@ -296,7 +296,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
               }`}
             >
               <Brain className="w-3 h-3" />
-              Memories
+              Pamięć
             </button>
           </div>
         </div>
@@ -307,7 +307,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
             conversations.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
                 <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                <p>No conversations yet</p>
+                <p>Brak konwersacji</p>
               </div>
             ) : (
               conversations.map(conv => (
@@ -339,14 +339,14 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
             <div className="space-y-3">
               <div className="mb-3">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Agent
+                  Wybierz Agenta
                 </label>
                 <select
                   value={selectedAgent || ''}
                   onChange={(e) => setSelectedAgent(Number(e.target.value))}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                 >
-                  <option value="">Choose agent...</option>
+                  <option value="">Wybierz agenta...</option>
                   {agents.map(agent => (
                     <option key={agent.id} value={agent.id}>
                       {agent.name}
@@ -359,7 +359,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                 <div className="text-center py-8 text-gray-500">
                   <Brain className="w-12 h-12 mx-auto mb-2 text-gray-400" />
                   <p className="text-sm">
-                    {selectedAgent ? 'No memories yet' : 'Select an agent'}
+                    {selectedAgent ? 'Brak wspomnień' : 'Wybierz agenta'}
                   </p>
                 </div>
               ) : (
@@ -405,26 +405,26 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                     {selectedConversation.title}
                   </h2>
                   <p className="text-sm text-gray-600">
-                    {selectedConversation.participant_agent_ids.length} agents participating
+                    {selectedConversation.participant_agent_ids.length} agentów uczestniczy
                   </p>
                 </div>
                 <div className="flex gap-2">
                   {selectedConversation.has_conflict ? (
                     <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-lg text-sm flex items-center gap-1">
                       <Vote className="w-4 h-4" />
-                      Voting Active
+                      Głosowanie Aktywne
                     </span>
                   ) : selectedConversation.is_resolved ? (
                     <span className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm flex items-center gap-1">
                       <CheckCircle className="w-4 h-4" />
-                      Resolved
+                      Rozwiązane
                     </span>
                   ) : (
                     <button
                       onClick={() => resolveConversation('Consensus reached')}
                       className="px-3 py-1 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"
                     >
-                      Resolve
+                      Rozwiąż
                     </button>
                   )}
                 </div>
@@ -436,14 +436,14 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
               <div className="bg-yellow-50 border-b border-yellow-200 p-4">
                 <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
                   <Vote className="w-5 h-5 text-orange-600" />
-                  Vote on Options
+                  Głosuj na Opcje
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   {selectedConversation.voting_options.map((option) => (
                     <div key={option.id} className="bg-white border border-gray-200 rounded-lg p-3">
                       <p className="text-sm text-gray-900 mb-2">{option.description}</p>
                       <p className="text-xs text-gray-600 mb-2">
-                        Proposed by {getAgentName(option.proposed_by_agent_id)}
+                        Zaproponowane przez {getAgentName(option.proposed_by_agent_id)}
                       </p>
                       <div className="flex gap-2">
                         {agents.map(agent => (
@@ -467,7 +467,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
               {selectedConversation.messages.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">
                   <MessageCircle className="w-12 h-12 mx-auto mb-2 text-gray-400" />
-                  <p>No messages yet</p>
+                  <p>Brak wiadomości</p>
                 </div>
               ) : (
                 selectedConversation.messages.map(message => (
@@ -510,7 +510,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                     onChange={(e) => setSelectedMessageAgent(Number(e.target.value))}
                     className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
                   >
-                    <option value="">Select agent...</option>
+                    <option value="">Wybierz agenta...</option>
                     {agents
                       .filter(a => selectedConversation.participant_agent_ids.includes(a.id))
                       .map(agent => (
@@ -524,7 +524,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                    placeholder="Type a message..."
+                    placeholder="Wpisz wiadomość..."
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                   <button
@@ -533,7 +533,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                     className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     <Send className="w-4 h-4" />
-                    Send
+                    Wyślij
                   </button>
                 </div>
               </div>
@@ -543,7 +543,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
           <div className="flex-1 flex items-center justify-center text-gray-500">
             <div className="text-center">
               <MessageCircle className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <p className="text-lg">Select a conversation or create a new one</p>
+              <p className="text-lg">Wybierz konwersację lub utwórz nową</p>
             </div>
           </div>
         )}
@@ -553,20 +553,20 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
       {showNewConversation && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">New Conversation</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Nowa Konwersacja</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tytuł</label>
                 <input
                   type="text"
                   id="conv-title"
-                  placeholder="Discussion topic..."
+                  placeholder="Temat dyskusji..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Agents (min 2)
+                  Wybierz Agentów (min 2)
                 </label>
                 <div className="space-y-2">
                   {agents.map(agent => (
@@ -582,7 +582,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                   onClick={() => setShowNewConversation(false)}
                   className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
                 >
-                  Cancel
+                  Anuluj
                 </button>
                 <button
                   onClick={() => {
@@ -595,7 +595,7 @@ export default function CollaborationWorkspace({ projectId, agents }: Collaborat
                   }}
                   className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
                 >
-                  Create
+                  Utwórz
                 </button>
               </div>
             </div>
