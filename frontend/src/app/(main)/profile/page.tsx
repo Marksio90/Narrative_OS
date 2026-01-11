@@ -9,20 +9,24 @@ import { useSession } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useTranslations } from 'next-intl'
 import { User, Mail, Camera, Save, Loader2 } from 'lucide-react'
 import * as Avatar from '@radix-ui/react-avatar'
 
-const profileSchema = z.object({
-  name: z.string().min(2, 'Imię musi mieć co najmniej 2 znaki'),
-  email: z.string().email('Nieprawidłowy adres email'),
-})
-
-type ProfileFormData = z.infer<typeof profileSchema>
-
 export default function ProfilePage() {
   const { data: session, update } = useSession()
+  const t = useTranslations('profile')
+  const tValidation = useTranslations('validation')
+  const tCommon = useTranslations('common')
   const [isLoading, setIsLoading] = useState(false)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
+
+  const profileSchema = z.object({
+    name: z.string().min(2, tValidation('nameMin', { min: 2 })),
+    email: z.string().email(tValidation('emailInvalid')),
+  })
+
+  type ProfileFormData = z.infer<typeof profileSchema>
 
   const {
     register,
@@ -60,13 +64,13 @@ export default function ProfilePage() {
           },
         })
 
-        alert('Profil zaktualizowany pomyślnie!')
+        alert(t('updateSuccess'))
       } else {
-        throw new Error('Nie udało się zaktualizować profilu')
+        throw new Error(t('updateError'))
       }
     } catch (error) {
       console.error('Error updating profile:', error)
-      alert('Nie udało się zaktualizować profilu. Spróbuj ponownie.')
+      alert(t('updateError'))
     } finally {
       setIsLoading(false)
     }
@@ -88,7 +92,10 @@ export default function ProfilePage() {
   if (!session) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-600 mx-auto" />
+          <p className="text-gray-600 dark:text-gray-400 mt-4">{tCommon('loading')}</p>
+        </div>
       </div>
     )
   }
@@ -100,10 +107,10 @@ export default function ProfilePage() {
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Ustawienia Profilu
+          {t('title')}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Zarządzaj informacjami o koncie i preferencjami
+          {t('subtitle')}
         </p>
       </div>
 
@@ -160,7 +167,7 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <User className="inline h-4 w-4 mr-1" />
-                Pełne Imię
+                {t('fullName')}
               </label>
               <input
                 type="text"
@@ -176,7 +183,7 @@ export default function ProfilePage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Mail className="inline h-4 w-4 mr-1" />
-                Adres Email
+                {t('emailAddress')}
               </label>
               <input
                 type="email"
@@ -191,7 +198,7 @@ export default function ProfilePage() {
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Członek od {new Date(user.email || '').toLocaleDateString()}
+                {t('memberSince')} {new Date(user.email || '').toLocaleDateString()}
               </p>
               <button
                 type="submit"
@@ -201,12 +208,12 @@ export default function ProfilePage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Zapisywanie...</span>
+                    <span>{t('saving')}</span>
                   </>
                 ) : (
                   <>
                     <Save className="h-4 w-4" />
-                    <span>Zapisz Zmiany</span>
+                    <span>{t('saveChanges')}</span>
                   </>
                 )}
               </button>
@@ -218,13 +225,13 @@ export default function ProfilePage() {
       {/* Danger zone */}
       <div className="mt-8 bg-red-50 dark:bg-red-900/20 rounded-lg shadow-sm border border-red-200 dark:border-red-800 p-6">
         <h3 className="text-lg font-semibold text-red-900 dark:text-red-200 mb-2">
-          Strefa Zagrożenia
+          {t('dangerZone')}
         </h3>
         <p className="text-sm text-red-700 dark:text-red-300 mb-4">
-          Po usunięciu konta nie ma odwrotu. Upewnij się, że jesteś pewien.
+          {t('dangerZoneWarning')}
         </p>
         <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-          Usuń Konto
+          {t('deleteAccount')}
         </button>
       </div>
     </div>
